@@ -12,7 +12,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "./ui/input-otp";
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
 
 export function OtpVerifyForm({
   className,
@@ -37,10 +37,7 @@ export function OtpVerifyForm({
               <div className="grid gap-6">
                 {/* email */}
                 <div className="grid gap-2 mt-2">
-                  <InputOTP
-                    maxLength={5}
-                    pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
-                  >
+                  <InputOTP maxLength={5} pattern={REGEXP_ONLY_DIGITS}>
                     <InputOTPGroup className="w-full justify-center gap-6">
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />
