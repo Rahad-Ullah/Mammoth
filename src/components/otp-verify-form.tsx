@@ -27,8 +27,8 @@ export function OtpVerifyForm({
           </figure>
           <CardTitle className="text-2xl">Verification code</CardTitle>
           <CardDescription className="pt-2 text-primary-foreground">
-            We sent a reset link to contact@dscode...com <br /> enter 5 digit
-            code that is mentioned in the email
+            We sent a reset link to contact@dscode...com. Enter 5 digit code
+            that is mentioned in the email.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -38,7 +38,7 @@ export function OtpVerifyForm({
                 {/* email */}
                 <div className="grid gap-2 mt-2">
                   <InputOTP maxLength={5} pattern={REGEXP_ONLY_DIGITS}>
-                    <InputOTPGroup className="w-full justify-center gap-6">
+                    <InputOTPGroup className="w-full justify-center gap-2 md:gap-6">
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />
                       <InputOTPSlot index={2} />

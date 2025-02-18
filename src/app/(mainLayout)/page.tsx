@@ -17,7 +17,7 @@ export default function Home() {
         <h1 className="text-2xl font-medium text-center">
           Authentication Pages
         </h1>
-        <div className="flex justify-center items-center gap-6 my-6">
+        <div className="flex flex-col justify-center items-center gap-6 my-6">
           <Link href={"/login"}>
             <Button>Login</Button>
           </Link>

@@ -72,7 +72,7 @@ export function LoginForm({
                   </div>
                 </div>
                 {/* remember checkbox */}
-                <div className="flex items-center">
+                <div className="flex flex-col md:flex-row justify-between gap-2 items-center">
                   <div className="flex items-center space-x-2">
                     <Checkbox id="terms" className="size-5" />
                     <label
@@ -84,7 +84,7 @@ export function LoginForm({
                   </div>
                   <Link
                     href="forgot-password"
-                    className="ml-auto text-sm text-primary-foreground font-medium underline-offset-4 hover:underline"
+                    className="text-sm text-primary-foreground font-medium underline-offset-4 hover:underline"
                   >
                     Forgot your password?
                   </Link>
@@ -95,7 +95,7 @@ export function LoginForm({
                 </Button>
               </div>
               {/* link to sign up */}
-              <div className="text-center text-sm mt-6">
+              <div className="text-center text-sm md:mt-6">
                 Don&apos;t have any account?{" "}
                 <Link
                   href="/sign-up"
