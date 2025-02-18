@@ -18,7 +18,7 @@ export function ForgotPasswordForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="p-4 md:px-20 md:py-12 shadow-none border-none bg-white/60 backdrop-blur-xl">
+      <Card className="py-4 md:px-20 md:py-12 shadow-none border-none bg-white/60 backdrop-blur-xl">
         <CardHeader className="text-center">
           <BackButton />
           <figure className="flex justify-center pb-4">

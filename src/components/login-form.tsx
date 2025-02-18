@@ -25,7 +25,7 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="p-4 md:px-20 shadow-none border-none bg-white/60 backdrop-blur-xl">
+      <Card className="py-4 md:px-20 shadow-none border-none bg-white/60 backdrop-blur-xl">
         <CardHeader className="text-center">
           <figure className="flex justify-center mb-4">
             <Image src={"/logo.png"} alt="logo" width={180} height={100} />
