@@ -28,7 +28,7 @@ export function LoginForm({
       <Card className="p-4 md:px-20 shadow-none border-none bg-white/60 backdrop-blur-xl">
         <CardHeader className="text-center">
           <figure className="flex justify-center mb-4">
-            <Image src={"/logo.png"} alt="logo" width={180} height={180} />
+            <Image src={"/logo.png"} alt="logo" width={180} height={100} />
           </figure>
           <CardTitle className="text-2xl">Log in to your account</CardTitle>
           <CardDescription className="pt-2 text-primary-foreground">
@@ -65,7 +65,7 @@ export function LoginForm({
                     />
                     <span
                       onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                      className="text-slate-400 absolute right-3 top-1.5 cursor-pointer"
+                      className="text-slate-400 absolute right-3 top-3 cursor-pointer"
                     >
                       {isPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
                     </span>

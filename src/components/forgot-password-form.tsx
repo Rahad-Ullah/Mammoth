@@ -23,8 +23,8 @@ export function ForgotPasswordForm({
       <Card className="p-4 md:px-20 md:py-12 shadow-none border-none bg-white/60 backdrop-blur-xl">
         <CardHeader className="text-center">
           <BackButton />
-          <figure className="flex justify-center mb-4">
-            <Image src={"/logo.png"} alt="logo" width={180} height={180} />
+          <figure className="flex justify-center pb-4">
+            <Image src={"/logo.png"} alt="logo" width={180} height={100} />
           </figure>
           <CardTitle className="text-2xl">Forgot password ?</CardTitle>
           <CardDescription className="pt-2 text-primary-foreground">
