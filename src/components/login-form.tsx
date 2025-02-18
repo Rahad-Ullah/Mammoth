@@ -91,7 +91,7 @@ export function LoginForm({
                 </div>
                 {/* submit button */}
                 <Button type="submit" className="w-full">
-                  Login
+                  Sign In
                 </Button>
               </div>
               {/* link to sign up */}
