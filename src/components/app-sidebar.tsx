@@ -2,19 +2,15 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  SquareActivity,
+  FlaskConical,
+  MapPinned,
+  Settings,
   Users,
   UsersRound,
+  Wrench,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -24,6 +20,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
+import { NavSettings } from "./nav-settings";
 
 // This is sample data.
 const data = {
@@ -32,28 +29,11 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
       title: "Tests",
       url: "/dashboard",
-      icon: SquareActivity,
+      icon: FlaskConical,
       isActive: true,
     },
     {
@@ -62,26 +42,26 @@ const data = {
       icon: Users,
     },
     {
-      title: "Users",
-      url: "/dashboard/users",
+      title: "User Details",
+      url: "/dashboard/user-details",
       icon: UsersRound,
     },
+    {
+      title: "Bill Details",
+      url: "/dashboard/bill-details",
+      icon: Settings,
+    },
   ],
-  projects: [
+  settings: [
     {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
+      name: "Facilities",
+      url: "/dashboard/facilities",
+      icon: MapPinned,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
+      name: "Toolbox",
+      url: "/dashboard/toolbox",
+      icon: Wrench,
     },
   ],
 };
@@ -96,7 +76,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavSettings settings={data.settings} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
