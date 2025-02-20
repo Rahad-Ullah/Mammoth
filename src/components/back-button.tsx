@@ -7,12 +7,10 @@ const BackButton = () => {
   const router = useRouter();
 
   return (
-    <span
+    <ChevronLeft
       onClick={() => router.back()}
-      className="absolute left-4 top-4 p-2 text-zinc-400 hover:text-primary cursor-pointer"
-    >
-      <ChevronLeft />
-    </span>
+      className="size-10 p-2 text-zinc-400 hover:text-primary cursor-pointer"
+    />
   );
 };
 

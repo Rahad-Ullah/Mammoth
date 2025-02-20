@@ -20,7 +20,9 @@ export function ForgotPasswordForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="py-4 md:px-20 md:py-12 shadow-none border-none bg-white/60 backdrop-blur-xl">
         <CardHeader className="text-center">
-          <BackButton />
+          <span className="absolute left-4 top-4">
+            <BackButton />
+          </span>
           <figure className="flex justify-center pb-4">
             <Image src={"/logo.png"} alt="logo" width={180} height={100} />
           </figure>
