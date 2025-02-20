@@ -23,12 +23,12 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="">
       {/* dashboard sidebar */}
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="">
         {/* dashboard header */}
-        <header className="flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="flex h-16 bg-white border-b shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex flex-nowrap items-center gap-2 px-4">
             <SidebarTrigger className="lg:hidden -ml-1" />
             <DashboardBreadcrumb />
@@ -54,7 +54,7 @@ export default function DashboardLayout({
           </div>
         </header>
         {/* dashboard content */}
-        {children}
+        <div className="bg-white flex-1 p-6">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
