@@ -38,31 +38,27 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
-// define allowed keys for filtering
-const allowedKeys = [
-  "id",
-  "first_name",
-  "last_name",
-  "phone",
-  "email",
-  "role",
-  "company",
-];
-
 // Filter only allowed keys
-const data: User[] = usersData.map((user) =>
-  Object.fromEntries(
-    Object.entries(user).filter(([key]) => allowedKeys.includes(key))
-  )
-) as User[];
+const data: User[] = usersData.map((user) => {
+  const filteredUser: User = {
+    id: user.id,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    phone: user.phone,
+    email: user.email,
+    role: user.role,
+    company: user.company,
+  };
+  return filteredUser;
+});
 
 export type User = {
-  id: string;
+  id: number;
   first_name: string;
   last_name: string;
   phone: string;
   email: string;
-  role: "admin" | "doctor" | "pathologist" | "histologist" | "representative";
+  role: string;
   company: string;
 };
 
@@ -191,7 +187,7 @@ export const columns: ColumnDef<User>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(item.id)}
+              onClick={() => navigator.clipboard.writeText(item.id.toString())}
             >
               Copy User ID
             </DropdownMenuItem>
