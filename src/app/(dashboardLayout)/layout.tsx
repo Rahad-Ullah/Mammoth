@@ -28,14 +28,14 @@ export default function DashboardLayout({
       <AppSidebar />
       <SidebarInset className="">
         {/* dashboard header */}
-        <header className="flex h-16 bg-white border-b shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="flex h-20 py-2 bg-white border-b shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex flex-nowrap items-center gap-2 px-4">
             <SidebarTrigger className="lg:hidden -ml-1" />
             <DashboardBreadcrumb />
           </div>
           {/* searchbar */}
-          <div className="flex justify-center items-center gap-6">
-            <div className="relative">
+          <div className="flex justify-center items-center gap-4 md:gap-6">
+            <div className="relative hidden lg:block">
               <Input
                 type="search"
                 id="search"
