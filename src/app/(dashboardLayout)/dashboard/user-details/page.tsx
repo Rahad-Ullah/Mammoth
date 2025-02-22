@@ -15,7 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, UserPlus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/table";
 import columns from "@/components/tableColumns/userTableColumn";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
+import Link from "next/link";
 
 export type User = {
   id: number;
@@ -65,7 +66,6 @@ const UsersPage = () => {
       ? usersData.filter((user) => user.role === selectedRole)
       : usersData;
   }, [selectedRole]);
-  console.log(data);
 
   const table = useReactTable<User>({
     data,
@@ -90,7 +90,7 @@ const UsersPage = () => {
   return (
     <div className="w-full">
       {/* table top option bar */}
-      <div className="flex justify-end gap-4 items-center pb-4">
+      <section className="flex justify-end gap-4 items-center pb-4">
         {/* <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -150,10 +150,17 @@ const UsersPage = () => {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+
+        {/* Add new user button */}
+        <Link href="/dashboard/user-details/add-new-user">
+          <Button>
+            <UserPlus /> Add New User
+          </Button>
+        </Link>
+      </section>
 
       {/* table */}
-      <div className="rounded-md border">
+      <section className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -202,7 +209,7 @@ const UsersPage = () => {
             )}
           </TableBody>
         </Table>
-      </div>
+      </section>
 
       {/* table bottom pagination */}
       <div className="flex items-center justify-end space-x-2 py-4">
