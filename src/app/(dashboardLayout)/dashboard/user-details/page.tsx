@@ -15,17 +15,14 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -36,21 +33,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-
-// Filter only allowed keys
-const data: User[] = usersData.map((user) => {
-  const filteredUser: User = {
-    id: user.id,
-    first_name: user.first_name,
-    last_name: user.last_name,
-    phone: user.phone,
-    email: user.email,
-    role: user.role,
-    company: user.company,
-  };
-  return filteredUser;
-});
+import columns from "@/components/tableColumns/userTableColumn";
+import { capitalizeSentence } from "@/utils/capitalizeSentence";
 
 export type User = {
   id: number;
@@ -59,149 +43,14 @@ export type User = {
   phone: string;
   email: string;
   role: string;
+  status: string;
   company: string;
 };
 
-// table column definition
-export const columns: ColumnDef<User>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "id",
-    header: "Id",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
-  },
-  {
-    accessorKey: "first_name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("first_name")}</div>
-    ),
-  },
-  {
-    accessorKey: "phone",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Phone
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "company",
-    header: () => <div>Company</div>,
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("company")}</div>
-    ),
-  },
-  {
-    accessorKey: "role",
-    header: () => <div>Role</div>,
-    cell: ({ row }) => {
-      const role = row.getValue("role");
-      return (
-        <Badge
-          className={`capitalize font-medium text-white rounded-full hover:bg-secondary-foreground ${
-            role === "admin"
-              ? "bg-orange-500"
-              : role === "representative"
-              ? "bg-pink-600"
-              : role === "pathologist"
-              ? "bg-green-600"
-              : role === "histologist"
-              ? "bg-blue-600"
-              : ""
-          }`}
-        >
-          {row.getValue("role")}
-        </Badge>
-      );
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    header: () => <div>Action</div>,
-    cell: ({ row }) => {
-      const item = row.original;
+// Extract unique roles from data
+const roles = Array.from(new Set(usersData.map((user) => user.role)));
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(item.id.toString())}
-            >
-              Copy User ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
-
-export default function UsersPage() {
+const UsersPage = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -209,10 +58,18 @@ export default function UsersPage() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [selectedRole, setSelectedRole] = React.useState<string | null>(null);
+
+  const data = React.useMemo(() => {
+    return selectedRole
+      ? usersData.filter((user) => user.role === selectedRole)
+      : usersData;
+  }, [selectedRole]);
+  console.log(data);
 
   const table = useReactTable<User>({
     data,
-    columns,
+    columns: columns as ColumnDef<User>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -226,13 +83,14 @@ export default function UsersPage() {
       columnFilters,
       columnVisibility,
       rowSelection,
+      // pagination: { pageIndex: 0, pageSize: 10 },
     },
   });
 
   return (
     <div className="w-full">
       {/* table top option bar */}
-      <div className="flex items-center pb-4">
+      <div className="flex justify-end gap-4 items-center pb-4">
         {/* <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -241,10 +99,35 @@ export default function UsersPage() {
           }
           className="max-w-sm"
         /> */}
+
+        {/* Role Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Status <ChevronDown />
+            <Button variant="outline" className="capitalize">
+              {selectedRole ? `Role: ${selectedRole}` : "Filter by Role"}{" "}
+              <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onClick={() => setSelectedRole(null)}>
+              All Roles
+            </DropdownMenuItem>
+            {roles.map((role) => (
+              <DropdownMenuItem
+                key={role}
+                onClick={() => setSelectedRole(role)}
+              >
+                {capitalizeSentence(role)}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Columns Filter Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -348,4 +231,6 @@ export default function UsersPage() {
       </div>
     </div>
   );
-}
+};
+
+export default UsersPage;

@@ -8,6 +8,7 @@ export const usersData = [
     address: "123 Main St, Springfield, IL",
     company: "Springfield Medical Center",
     role: "doctor",
+    status: "active",
     npi: "1234567890",
     apt_number: "48293",
     image: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -23,6 +24,7 @@ export const usersData = [
     address: "450 Sunset Blvd, Denver, CO",
     company: "Rocky Mountain Pathology",
     role: "pathologist",
+    status: "blocked",
     facility_location: "Rocky Mountain Diagnostic Lab",
     image: "https://randomuser.me/api/portraits/women/2.jpg",
     signature:
@@ -37,6 +39,7 @@ export const usersData = [
     address: "789 Oak St, San Francisco, CA",
     company: "Bay Area Medical",
     role: "doctor",
+    status: "active",
     npi: "9876543210",
     apt_number: "25931",
     image: "https://randomuser.me/api/portraits/men/3.jpg",
@@ -52,6 +55,7 @@ export const usersData = [
     address: "55 Lexington Ave, New York, NY",
     company: "NYC Histology Lab",
     role: "histologist",
+    status: "active",
     facility_location: "NYC Pathology Research Center",
     image: "https://randomuser.me/api/portraits/women/4.jpg",
     signature:
@@ -66,6 +70,7 @@ export const usersData = [
     address: "210 Ocean Dr, Miami, FL",
     company: "Florida 100Medical Group",
     role: "doctor",
+    status: "blocked",
     npi: "5678901234",
     apt_number: "37482",
     image: "https://randomuser.me/api/portraits/men/5.jpg",
@@ -81,6 +86,7 @@ export const usersData = [
     address: "999 Commonwealth Ave, Boston, MA",
     company: "Boston Medical Center",
     role: "admin",
+    status: "active",
     image: "https://randomuser.me/api/portraits/women/6.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
@@ -94,6 +100,7 @@ export const usersData = [
     address: "77 Lakeshore Dr, Chicago, IL",
     company: "Midwe100st Medical Diagnostics",
     role: "representative",
+    status: "blocked",
     image: "https://randomuser.me/api/portraits/men/7.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
@@ -107,6 +114,7 @@ export const usersData = [
     address: "500 Sunset Blvd, Los Angeles, CA",
     company: "California Medical Systems",
     role: "admin",
+    status: "active",
     image: "https://randomuser.me/api/portraits/women/8.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
@@ -120,6 +128,7 @@ export const usersData = [
     address: "102 Greenway Blvd, Raleigh, NC",
     company: "Carolina Healthcare",
     role: "admin",
+    status: "active",
     image: "https://randomuser.me/api/portraits/men/9.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
@@ -133,6 +142,7 @@ export const usersData = [
     address: "88 River Rd, Cincinnati, OH",
     company: "Ohio Diagnostic Lab",
     role: "representative",
+    status: "active",
     image: "https://randomuser.me/api/portraits/women/10.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
@@ -146,6 +156,7 @@ export const usersData = [
     address: "390 Desert Rd, Las Vegas, NV",
     company: "Nevada Health Group",
     role: "doctor",
+    status: "active",
     npi: "3456789012",
     apt_number: "12345",
     image: "https://randomuser.me/api/portraits/men/11.jpg",
@@ -161,6 +172,7 @@ export const usersData = [
     address: "1200 Rosewood St, Portland, OR",
     company: "Oregon Pathology Lab",
     role: "pathologist",
+    status: "active",
     facility_location: "Oregon Medical Diagnostics",
     image: "https://randomuser.me/api/portraits/women/12.jpg",
     signature:
@@ -175,6 +187,7 @@ export const usersData = [
     address: "405 Park Ave, New York, NY",
     company: "NYC Medical Center",
     role: "admin",
+    status: "active",
     image: "https://randomuser.me/api/portraits/men/13.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
@@ -188,6 +201,7 @@ export const usersData = [
     address: "600 Elm St, Dallas, TX",
     company: "Texas Medical Group",
     role: "representative",
+    status: "active",
     image: "https://randomuser.me/api/portraits/women/14.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
@@ -201,6 +215,7 @@ export const usersData = [
     address: "950 Bay St, San Francisco, CA",
     company: "California Health Services",
     role: "doctor",
+    status: "active",
     npi: "6789012345",
     apt_number: "67890",
     image: "https://randomuser.me/api/portraits/men/15.jpg",
@@ -216,6 +231,7 @@ export const usersData = [
     address: "111 Broadway, Brooklyn, NY",
     company: "New York Histology Lab",
     role: "histologist",
+    status: "active",
     facility_location: "NYC Clinical Research",
     image: "https://randomuser.me/api/portraits/women/16.jpg",
     signature:
@@ -230,6 +246,7 @@ export const usersData = [
     address: "50 Pine St, Raleigh, NC",
     company: "Carolina Health Group",
     role: "admin",
+    status: "active",
     image: "https://randomuser.me/api/portraits/men/17.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
@@ -243,6 +260,7 @@ export const usersData = [
     address: "777 Orlando Dr, Orlando, FL",
     company: "Florida Health Systems",
     role: "representative",
+    status: "active",
     image: "https://randomuser.me/api/portraits/women/18.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
@@ -256,6 +274,7 @@ export const usersData = [
     address: "222 Oak St, Birmingham, AL",
     company: "Alabama Health Services",
     role: "doctor",
+    status: "active",
     npi: "8901234567",
     apt_number: "23456",
     image: "https://randomuser.me/api/portraits/men/19.jpg",
@@ -271,6 +290,7 @@ export const usersData = [
     address: "333 Dakota St, Sioux Falls, SD",
     company: "Midwest Medical",
     role: "histologist",
+    status: "active",
     facility_location: "South Dakota Diagnostic Center",
     image: "https://randomuser.me/api/portraits/women/20.jpg",
     signature:
@@ -285,6 +305,7 @@ export const usersData = [
     address: "750 Hollywood Blvd, Los Angeles, CA",
     company: "California Diagnostics",
     role: "admin",
+    status: "active",
     image: "https://randomuser.me/api/portraits/men/21.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
@@ -298,6 +319,7 @@ export const usersData = [
     address: "45 Bayou St, Baton Rouge, LA",
     company: "Louisiana Medical Group",
     role: "representative",
+    status: "active",
     image: "https://randomuser.me/api/portraits/women/22.jpg",
     signature:
       "https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png",
