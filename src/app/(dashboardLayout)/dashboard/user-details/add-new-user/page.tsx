@@ -18,34 +18,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-
-const userRoles = [
-  {
-    id: 1,
-    title: "Admin",
-    value: "admin",
-  },
-  {
-    id: 2,
-    title: "Doctor",
-    value: "doctor",
-  },
-  {
-    id: 3,
-    title: "Pathologist",
-    value: "pathologist",
-  },
-  {
-    id: 4,
-    title: "Histologist",
-    value: "histologist",
-  },
-  {
-    id: 5,
-    title: "Representative",
-    value: "representative",
-  },
-];
+import { addUserFormSchema } from "@/schemas/formSchemas/addUserForm";
+import { userRoles } from "@/constants/user-roles";
 
 const AddNewUserPage = () => {
   const [role, setRole] = React.useState("admin");
@@ -54,108 +28,10 @@ const AddNewUserPage = () => {
     null
   );
 
-  const MAX_FILE_SIZE = 1024 * 1024 * 5; // 5MB
-  const ACCEPTED_IMAGE_TYPES = [
-    "image/jpeg",
-    "image/jpg",
-    "image/png",
-    "image/webp",
-  ];
+  // 1. Define your form schema.
+  const formSchema = addUserFormSchema(role);
 
-  const formSchema = z
-    .object({
-      image: z
-        .any()
-        .refine((file) => file, "Image is required.") // Required
-        .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-        .refine(
-          (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-          "Only .jpg, .jpeg, .png and .webp formats are supported."
-        ),
-      signature: z
-        .any()
-        .optional()
-        .transform((file) => (file === null ? "" : file)) // Convert null to empty string
-        .refine(
-          (file) => !file || file?.size <= MAX_FILE_SIZE,
-          "Max image size is 5MB."
-        )
-        .refine(
-          (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file?.type),
-          "Only .jpg, .jpeg, .png, and .webp formats are supported."
-        ),
-      first_name: z.string().min(2, {
-        message: "Must be at least 2 characters.",
-      }),
-      last_name: z.string().min(2, {
-        message: "Must be at least 2 characters.",
-      }),
-      email: z.string().email().min(1, {
-        message: "Must be a valid email address.",
-      }),
-      phone: z.string().min(10).max(14, {
-        message: "Must be a valid phone number.",
-      }),
-      address: z.string().min(3, {
-        message: "Must be at least 3 characters.",
-      }),
-      company: z.string().min(3, {
-        message: "Must be at least 3 characters.",
-      }),
-      npi_number: z.string().optional(), // Optional by default for non-doctors
-      apt_number: z.string().optional(), // Optional by default for non-doctors
-    })
-
-    .superRefine((data, ctx) => {
-      if (role === "doctor") {
-        // Validate NPI number for doctors
-        if (!data.npi_number || data.npi_number.trim() === "") {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: ["npi_number"],
-            message: "Must be a valid NPI number.",
-          });
-        } else if (data.npi_number.length < 15) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_small,
-            path: ["npi_number"],
-            message: "Must be at least 15 characters.",
-            type: "string",
-            minimum: 15,
-            inclusive: true,
-          });
-        }
-
-        // Validate ATP number for doctors
-        if (!data.apt_number || data.apt_number.trim() === "") {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: ["apt_number"],
-            message: "Must be a valid APT number.",
-          });
-        } else if (data.apt_number.length < 5) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_small,
-            path: ["apt_number"],
-            message: "Must be at least 5 characters.",
-            type: "string",
-            minimum: 5,
-            inclusive: true,
-          });
-        }
-
-        // Validate Signature for doctors
-        if (!data.signature || data.signature === "") {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: ["signature"],
-            message: "Signature is required.",
-          });
-        }
-      }
-    });
-
-  // 1. Define your form.
+  // 2. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -169,10 +45,11 @@ const AddNewUserPage = () => {
       company: "",
       npi_number: "",
       apt_number: "",
+      facility_location: "",
     },
   });
 
-  // 2. Define a submit handler.
+  // 3. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
