@@ -20,6 +20,22 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { addUserFormSchema } from "@/schemas/formSchemas/addUserForm";
 import { userRoles } from "@/constants/user-roles";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { cn } from "@/lib/utils";
+import { facilitiesData } from "@/constants/facilities";
 
 const AddNewUserPage = () => {
   const [role, setRole] = React.useState("admin");
@@ -84,7 +100,7 @@ const AddNewUserPage = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+            className="space-y-6 lg:space-y-0 lg:grid gap-6"
           >
             {/* First Name Field */}
             <FormField
@@ -278,6 +294,79 @@ const AddNewUserPage = () => {
                         className="mt-2 w-32 h-32 object-cover rounded-md"
                       />
                     )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {/* Facility Location for only doctor */}
+            {role === "doctor" && (
+              <FormField
+                control={form.control}
+                name="facility_location"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-2 mt-0.5">
+                    <FormLabel>Facility Location</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              "justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? facilitiesData.find(
+                                  (items) => items.address === field.value
+                                )?.address
+                              : "Select location"}
+                            <ChevronsUpDown className="opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="min-w-full p-0">
+                        <Command>
+                          <CommandInput
+                            placeholder="Search location..."
+                            className="h-9"
+                          />
+                          <CommandList>
+                            <CommandEmpty>No location found.</CommandEmpty>
+                            <CommandGroup
+                              onSelect={(value) => console.log(value)}
+                            >
+                              {facilitiesData.map((item) => (
+                                <CommandItem
+                                  value={item.address}
+                                  key={item.id}
+                                  onSelect={() => {
+                                    form.setValue(
+                                      "facility_location",
+                                      item.address
+                                    );
+                                    form.clearErrors("facility_location");
+                                  }}
+                                >
+                                  {item.address}
+                                  <Check
+                                    className={cn(
+                                      "ml-auto",
+                                      item.address === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}

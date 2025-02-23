@@ -8,6 +8,7 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/webp",
 ];
 
+// zod validation schema for add user form
 export const addUserFormSchema = (role: string) => {
   return z
     .object({
@@ -88,6 +89,15 @@ export const addUserFormSchema = (role: string) => {
             type: "string",
             minimum: 5,
             inclusive: true,
+          });
+        }
+
+        // Validate Facility Location for doctors
+        if (!data.facility_location || data.facility_location.trim() === "") {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["facility_location"],
+            message: "Must select a location.",
           });
         }
 
