@@ -24,27 +24,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import columns from "@/components/tableColumns/userTableColumn";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
 import Link from "next/link";
 import DashboardTable from "@/components/table";
 import TablePagination from "@/components/table-pagination";
-
-export type User = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  phone: string;
-  email: string;
-  role: string;
-  status: string;
-  company: string;
-};
+import { facilitiesData } from "@/constants/facilities";
+import columns from "@/components/tableColumns/facilityTableColumns";
+import { TFacility } from "@/types/facility";
 
 // Extract unique roles from data
 const roles = Array.from(new Set(usersData.map((user) => user.role)));
 
-const UsersPage = () => {
+const FacilitiesPage = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -56,13 +47,15 @@ const UsersPage = () => {
 
   const data = React.useMemo(() => {
     return selectedRole
-      ? usersData.filter((user) => user.role === selectedRole)
-      : usersData;
+      ? facilitiesData.filter(
+          (facility) => facility.account_type === selectedRole
+        )
+      : facilitiesData;
   }, [selectedRole]);
 
-  const table = useReactTable<User>({
+  const table = useReactTable<TFacility>({
     data,
-    columns: columns as ColumnDef<User>[],
+    columns: columns as ColumnDef<TFacility>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -84,15 +77,6 @@ const UsersPage = () => {
     <div className="w-full">
       {/* table top option bar */}
       <section className="flex justify-end gap-4 items-center pb-4">
-        {/* <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        /> */}
-
         {/* Role Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -161,4 +145,4 @@ const UsersPage = () => {
   );
 };
 
-export default UsersPage;
+export default FacilitiesPage;
