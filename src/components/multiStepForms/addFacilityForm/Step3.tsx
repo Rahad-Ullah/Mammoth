@@ -1,4 +1,14 @@
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { facilityOptions } from "@/constants/facilityOptions";
 import {
   ChevronLeft,
@@ -18,9 +28,28 @@ const Step3 = ({ nextStep, prevStep }) => {
       {/* header options */}
       <section>
         <div className="col-span-2 flex justify-end gap-4">
-          <Button onClick={prevStep} variant={"secondary"}>
-            <Plus /> Add
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant={"secondary"}>
+                <Plus /> Add
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>New option for this category</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <Input placeholder="Enter option name" />
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="submit" className="w-full">
+                    Add Option
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </section>
 
