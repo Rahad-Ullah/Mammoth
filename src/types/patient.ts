@@ -13,5 +13,4 @@ export type TPatient = {
   reasons: string[];
   sensory_symptoms: string[];
   ethnicity: string;
-  ordering_physician: string;
 };

@@ -19,22 +19,16 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
 import DashboardTable from "@/components/table";
 import TablePagination from "@/components/table-pagination";
-import { TPatient } from "@/types/patient";
-import { patientsData } from "@/constants/patients";
-import columns from "@/components/tableColumns/patientTableColumn";
+import { TBill } from "@/types/bill";
+import { billingData } from "@/constants/billingData";
+import columns from "@/components/tableColumns/billTableColumn";
 
-// Extract unique roles from data
-const statuses = Array.from(
-  new Set(patientsData.map((item) => item.insurance_company))
-);
-
-const PatientsPage = () => {
+const BillsPage = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -42,19 +36,13 @@ const PatientsPage = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [insurance, setInsurance] = React.useState<string | null>(null);
 
-  // Filter data based on selected insurance company
-  const data = React.useMemo(() => {
-    return insurance
-      ? patientsData.filter((item) => item.insurance_company === insurance)
-      : patientsData;
-  }, [insurance]);
+  const data = billingData;
 
   // Table Pagination, Sorting, Filtering, Column Visibility, Row Selection
-  const table = useReactTable<TPatient>({
+  const table = useReactTable<TBill>({
     data,
-    columns: columns as ColumnDef<TPatient>[],
+    columns: columns as ColumnDef<TBill>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -76,29 +64,6 @@ const PatientsPage = () => {
     <div className="w-full">
       {/* table top option bar */}
       <section className="flex justify-end gap-4 items-center pb-4">
-        {/* Role Filter Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="capitalize">
-              {insurance ? `Insurance: ${insurance}` : "Filter by Insurance"}{" "}
-              <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem onClick={() => setInsurance(null)}>
-              All Insurance
-            </DropdownMenuItem>
-            {statuses.map((status) => (
-              <DropdownMenuItem
-                key={status}
-                onClick={() => setInsurance(status)}
-              >
-                {capitalizeSentence(status)}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -137,4 +102,4 @@ const PatientsPage = () => {
   );
 };
 
-export default PatientsPage;
+export default BillsPage;
