@@ -336,9 +336,7 @@ const AddNewUserPage = () => {
                           />
                           <CommandList>
                             <CommandEmpty>No location found.</CommandEmpty>
-                            <CommandGroup
-                              onSelect={(value) => console.log(value)}
-                            >
+                            <CommandGroup>
                               {facilitiesData.map((item) => (
                                 <CommandItem
                                   value={item.address}
