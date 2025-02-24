@@ -27,7 +27,7 @@ export const sidebarMenu = {
     },
     {
       title: "Bill Details",
-      url: "/dashboard/bill-details",
+      url: "/dashboard/bills",
       icon: Settings,
     },
   ],

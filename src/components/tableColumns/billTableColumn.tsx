@@ -114,10 +114,7 @@ const columns: ColumnDef<TBill>[] = [
       const item = row.original;
       return (
         <div className="flex items-center gap-1">
-          <Link
-            href={`/dashboard/patients/patient-details/${item.id}`}
-            passHref
-          >
+          <Link href={`/dashboard/bills/bill-details/${item.id}`} passHref>
             <Button variant={"ghost"} size={"icon"} className="text-primary">
               <Info />
             </Button>
