@@ -222,7 +222,7 @@ const Step1 = ({ nextStep }) => {
 
             {/* submit button */}
             <div className="col-span-2 flex justify-end gap-4">
-              <Button onClick={nextStep} type="submit" className="md:px-6">
+              <Button type="submit" className="md:px-6">
                 Next <ChevronRight />
               </Button>
             </div>

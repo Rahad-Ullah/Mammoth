@@ -19,6 +19,7 @@ const initialFormData = {
 // Define the form context type
 interface FormContextType {
   formData: typeof initialFormData;
+  initialFormData: typeof initialFormData;
   setFormData: React.Dispatch<React.SetStateAction<typeof initialFormData>>;
   step: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
@@ -33,7 +34,9 @@ export const FormProvider = ({ children }) => {
   const [step, setStep] = useState(1);
 
   return (
-    <FormContext.Provider value={{ formData, setFormData, step, setStep }}>
+    <FormContext.Provider
+      value={{ formData, setFormData, step, setStep, initialFormData }}
+    >
       {children}
     </FormContext.Provider>
   );
