@@ -145,7 +145,7 @@ const UsersPage = () => {
         </DropdownMenu>
 
         {/* Add new user button */}
-        <Link href="/dashboard/user-details/add-new-user">
+        <Link href="/dashboard/users/add-new-user">
           <Button>
             <UserPlus /> Add New User
           </Button>

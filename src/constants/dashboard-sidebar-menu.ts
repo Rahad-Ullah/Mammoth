@@ -22,7 +22,7 @@ export const sidebarMenu = {
     },
     {
       title: "User Details",
-      url: "/dashboard/user-details",
+      url: "/dashboard/users",
       icon: UsersRound,
     },
     {

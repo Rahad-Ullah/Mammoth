@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@/app/(dashboardLayout)/dashboard/user-details/page";
+import { User } from "@/app/(dashboardLayout)/dashboard/users/page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -139,10 +139,7 @@ const columns: ColumnDef<User>[] = [
               <Lock />
             </Button>
           )}
-          <Link
-            href={`/dashboard/user-details/user-profile/${item.id}`}
-            passHref
-          >
+          <Link href={`/dashboard/users/user-details/${item.id}`} passHref>
             <Button variant={"ghost"} size={"icon"} className="text-primary">
               <Info />
             </Button>
