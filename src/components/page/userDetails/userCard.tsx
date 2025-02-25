@@ -1,6 +1,7 @@
+import { TUser } from "@/types/user";
 import Image from "next/image";
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user }: { user: TUser }) => {
   return (
     <div className="flex gap-10">
       <figure className="p-2 col-span-1">
@@ -39,10 +40,18 @@ const UserCard = ({ user }) => {
             <span className="text-zinc-400">Address</span>
             <span>: {user.address}</span>
           </li>
-          <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <span className="text-zinc-400">Death of Birth</span>
-            <span>: {user.apt_number}</span>
-          </li>
+          {user.facility_location && (
+            <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <span className="text-zinc-400">Facility Location</span>
+              <span>: {user.facility_location}</span>
+            </li>
+          )}
+          {user.apt_number && (
+            <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <span className="text-zinc-400">APT Number</span>
+              <span>: {user.apt_number}</span>
+            </li>
+          )}
         </ul>
       </div>
     </div>

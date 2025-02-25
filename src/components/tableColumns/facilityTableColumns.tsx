@@ -4,7 +4,6 @@ import { TFacility } from "@/types/facility";
 import { TUser } from "@/types/user";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, CircleDot, Info } from "lucide-react";
-import Link from "next/link";
 
 // table column definition
 const columns: ColumnDef<TFacility>[] = [
@@ -128,19 +127,12 @@ const columns: ColumnDef<TFacility>[] = [
     id: "actions",
     enableHiding: false,
     header: () => <div>Action</div>,
-    cell: ({ row }) => {
-      const item = row.original;
-
+    cell: () => {
       return (
         <div className="flex items-center gap-1">
-          <Link
-            href={`/dashboard/facilities/facility-details/${item.id}`}
-            passHref
-          >
-            <Button variant={"ghost"} size={"icon"} className="text-primary">
-              <Info />
-            </Button>
-          </Link>
+          <Button variant={"ghost"} size={"icon"} className="text-primary">
+            <Info />
+          </Button>
         </div>
       );
     },
