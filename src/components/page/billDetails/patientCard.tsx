@@ -1,4 +1,5 @@
 const PatientCard = ({ bill, patient }) => {
+
   return (
     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -45,7 +46,7 @@ const PatientCard = ({ bill, patient }) => {
       </li>
       <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <span className="text-zinc-400">Death of Birth</span>
-        <span>{bill.patient.date_of_birth}</span>
+        <span>{patient.date_of_birth}</span>
       </li>
     </ul>
   );
