@@ -33,6 +33,12 @@ import { testsData } from "@/constants/tests";
 // Extract unique statuses from data
 const statuses = Array.from(new Set(testsData.map((test) => test.status)));
 
+// Extract unique statuses from data
+const doctors = Array.from(new Set(testsData.map((item) => item.ordering_physician)));
+
+// Extract unique facilities from data
+const facilities = Array.from(new Set(testsData.map((item) => item.facility)));
+
 const TestsPage = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -42,12 +48,18 @@ const TestsPage = () => {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [status, setStatus] = React.useState<string | null>(null);
+  const [doctor, setDoctor] = React.useState<string | null>(null);
+  const [facility, setFacility] = React.useState<string | null>(null);
 
   const data = React.useMemo(() => {
-    return status
-      ? testsData.filter((item) => item.status === status)
-      : testsData;
-  }, [status]);
+    return testsData.filter((item) => {
+      const statusMatches = status ? item.status === status : true;
+      const doctorMatches = doctor ? item.ordering_physician === doctor : true;
+      const facilityMatches = facility ? item.facility === facility : true;
+  
+      return statusMatches && doctorMatches && facilityMatches;
+    });
+  }, [status, doctor, facility]);
 
   const table = useReactTable<TTest>({
     data,
@@ -73,11 +85,49 @@ const TestsPage = () => {
     <div className="w-full">
       {/* table top option bar */}
       <section className="flex justify-end gap-4 items-center pb-4">
+        {/* Doctor Filter Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="capitalize">
+              {doctor ? `Doctor: ${doctor}` : "Doctor"} <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onClick={() => setDoctor(null)}>
+              All Doctors
+            </DropdownMenuItem>
+            {doctors.map((item) => (
+              <DropdownMenuItem key={item} onClick={() => setDoctor(item)}>
+                {capitalizeSentence(item)}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Facility Filter Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="capitalize">
+              {facility ? `Facility: ${facility}` : "Facility"} <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onClick={() => setFacility(null)}>
+              All Facilities
+            </DropdownMenuItem>
+            {facilities.map((item) => (
+              <DropdownMenuItem key={item} onClick={() => setFacility(item)}>
+                {capitalizeSentence(item)}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        
         {/* Status Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="capitalize">
-              {status ? `Status: ${status}` : "Filter by Status"} <ChevronDown />
+              {status ? `Status: ${status}` : "Status"} <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
