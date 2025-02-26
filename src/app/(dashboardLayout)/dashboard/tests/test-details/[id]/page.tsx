@@ -1,4 +1,5 @@
 import PatientCard from "@/components/page/billDetails/patientCard";
+import AnatomyWrapper from "@/components/page/testDetails/anatomy/anatomyWrapper";
 import BillingSection from "@/components/page/testDetails/billingSection";
 import DocumentSection from "@/components/page/testDetails/documentSection";
 import GeneralTestDetails from "@/components/page/testDetails/generalTestDetails";
@@ -61,6 +62,7 @@ const TestDetailsPage = async ({ params }: { params: PageParams }) => {
             <section></section>
           </section>
         </CardContent>
+        <AnatomyWrapper />
       </Card>
     </section>
   );
