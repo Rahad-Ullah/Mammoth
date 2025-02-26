@@ -54,7 +54,7 @@ export default function DashboardLayout({
           </div>
         </header>
         {/* dashboard content */}
-        <div className="bg-white flex-1 p-6">{children}</div>
+        <div className="bg-white flex-1 p-4 md:p-6">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

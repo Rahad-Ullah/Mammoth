@@ -21,9 +21,9 @@ const PathologistSection = ({ test }) => {
       </h1>
       {/*  Final Microscopic Diagnosis */}
       <GraySection>
-        <div className="flex justify-between items-center gap-4">
+        <div className="flex flex-wrap justify-between items-center gap-4">
           <h1 className="text-xl font-medium">Final Microscopic Diagnosis:</h1>
-          <p className="flex gap-2 text-sm text-zinc-400">
+          <p className="flex flex-wrap gap-2 text-sm text-zinc-400">
             {Object.entries(
               test.pathologist_section.final_microscopic_diagnosis
             ).map(([key, value]) => (
@@ -36,7 +36,7 @@ const PathologistSection = ({ test }) => {
 
         {test.pathologist_section.samples.map((item, idx) => (
           <div key={idx} className="grid gap-5">
-            <div className="flex justify-between items-center gap-4 px-1">
+            <div className="flex flex-wrap justify-between items-center gap-2 px-1">
               <p>
                 {idx + 1}. Sample taken from{" "}
                 <span className="text-primary font-medium">
@@ -51,7 +51,7 @@ const PathologistSection = ({ test }) => {
             </div>
             <Input
               placeholder="Choose Canned Dx...."
-              className="bg-white w-4/5 md:w-2/5"
+              className="bg-white md:w-2/5"
             />
             <Textarea
               placeholder={item.diagnosis}
@@ -70,7 +70,7 @@ const PathologistSection = ({ test }) => {
 
         {test.pathologist_section.microscopic_examination.map((item, idx) => (
           <div key={idx} className="grid gap-5">
-            <div className="flex justify-between items-center gap-4 px-1">
+            <div className="flex flex-wrap justify-between items-center gap-2 px-1">
               <p>
                 {idx + 1}. Sample taken from{" "}
                 <span className="text-primary font-medium">
@@ -100,7 +100,7 @@ const PathologistSection = ({ test }) => {
 
         {test.pathologist_section.gross_description.map((item, idx) => (
           <div key={idx} className="grid gap-5">
-            <div className="flex justify-between items-center gap-4 px-1">
+            <div className="flex flex-wrap justify-between items-center gap-2 px-1">
               <p>
                 {idx + 1}. Sample taken from{" "}
                 <span className="text-primary font-medium">
@@ -130,7 +130,7 @@ const PathologistSection = ({ test }) => {
 
         {test.pathologist_section.comments.map((item, idx) => (
           <div key={idx} className="grid gap-5">
-            <div className="flex justify-between items-center gap-4 px-1">
+            <div className="flex flex-wrap justify-between items-center gap-2 px-1">
               <p>
                 {idx + 1}. Sample taken from{" "}
                 <span className="text-primary font-medium">

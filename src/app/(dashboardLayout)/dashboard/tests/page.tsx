@@ -84,7 +84,7 @@ const TestsPage = () => {
   return (
     <div className="w-full">
       {/* table top option bar */}
-      <section className="flex justify-end gap-4 items-center pb-4">
+      <section className="flex flex-wrap justify-center md:justify-end gap-4 items-center pb-4">
         {/* Doctor Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -122,7 +122,7 @@ const TestsPage = () => {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        
+
         {/* Status Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

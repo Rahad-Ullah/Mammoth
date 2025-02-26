@@ -1,6 +1,6 @@
 const TestInfo = ({ test }) => {
   return (
-    <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <ul className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <span className="text-zinc-400">Report No.</span>
         <span># {test.report_no}</span>

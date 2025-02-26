@@ -72,7 +72,7 @@ const FacilitiesPage = () => {
   return (
     <div className="w-full">
       {/* table top option bar */}
-      <section className="flex justify-end gap-4 items-center pb-4">
+      <section className="flex flex-wrap justify-center md:justify-end gap-4 items-center pb-4">
         {/* Role Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

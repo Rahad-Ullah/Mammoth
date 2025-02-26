@@ -1,7 +1,7 @@
 const PatientCard = ({ bill, patient }) => {
 
   return (
-    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <ul className="grid grid-cols-1 xl:grid-cols-2 gap-6">
       <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <span className="text-zinc-400">Name </span>
         <span>

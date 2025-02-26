@@ -5,7 +5,7 @@ const GeneralTestDetails = ({ test }) => {
     <>
       <GraySection>
         <h1 className="text-xl font-medium">Disorder Observation:</h1>
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-6">
           <h2 className="text-lg">Metabolic</h2>
           <ul className="text-zinc-500 grid gap-4">
             {test.disorder_observation.metabolic.map((item, idx: number) => (
@@ -41,7 +41,7 @@ const GeneralTestDetails = ({ test }) => {
 
       <GraySection>
         <h1 className="text-xl font-medium">Clinical Symptoms:</h1>
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-6">
           <h2 className="text-lg">Neck Pain</h2>
           <ul className="text-zinc-500 grid gap-4">
             {test.clinical_symptoms.neck_pain.map((item, idx: number) => (
@@ -52,7 +52,7 @@ const GeneralTestDetails = ({ test }) => {
             ))}
           </ul>
         </div>
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-6">
           <h2 className="text-lg">Leg Pain</h2>
           <ul className="text-zinc-500 grid gap-4">
             {test.clinical_symptoms.neck_pain.map((item, idx: number) => (
@@ -70,7 +70,7 @@ const GeneralTestDetails = ({ test }) => {
         <div className="flex gap-6 px-2">
           <ul className="text-zinc-500 grid gap-4 w-full">
             {test.biopsy_samples.map((item, idx: number) => (
-              <li key={idx} className="flex justify-between">
+              <li key={idx} className="flex flex-wrap justify-between">
                 <p>
                   {idx + 1}. Sample taken from{" "}
                   <span className="text-primary font-medium">

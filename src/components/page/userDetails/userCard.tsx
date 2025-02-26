@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const UserCard = ({ user }: { user: TUser }) => {
   return (
-    <div className="flex gap-10">
+    <div className="flex flex-col xl:flex-row gap-10">
       <figure className="p-2 col-span-1">
         <Image
           src={user.image}
@@ -17,7 +17,7 @@ const UserCard = ({ user }: { user: TUser }) => {
         <h1 className="text-xl font-medium text-primary capitalize mb-4 py-2">
           {user.role}:
         </h1>
-        <ul className="grid grid-cols-2 gap-6 h-fit">
+        <ul className="grid grid-cols-1 xl:grid-cols-2 gap-6 h-fit">
           <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <span className="text-zinc-400">Name </span>
             <span>
