@@ -55,7 +55,7 @@ const Step3 = ({ nextStep, prevStep }) => {
 
       {/* body */}
       <section className="py-6 flex-1">
-        <ul className="grid gap-2">
+        <ul className="grid gap-4 md:gap-2">
           {facilityOptions.facilityDetails.map((item) => (
             <li
               key={item.id}
@@ -66,10 +66,10 @@ const Step3 = ({ nextStep, prevStep }) => {
                   item.isHidden ? "text-stone-400" : "text-stone-600"
                 } `}
               >
-                <span className="size-3 bg-primary-foreground rounded-full"></span>{" "}
+                <span className="size-3 min-w-3 bg-primary-foreground rounded-full"></span>{" "}
                 {item.description}
               </p>
-              <div>
+              <div className="flex">
                 <Button
                   variant={"ghost"}
                   size={"icon"}

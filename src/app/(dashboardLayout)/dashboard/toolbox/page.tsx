@@ -10,7 +10,7 @@ const ToolboxPage = () => {
   return (
     <Tabs
       defaultValue={Object.keys(toolBoxData)[0]}
-      className="flex flex-col md:flex-row gap-6 h-full"
+      className="flex flex-col lg:flex-row gap-6 h-full"
     >
       <div className="border rounded-lg">
         <TabsList className="flex flex-col justify-start items-start gap-2 p-4 h-min sticky top-20">
@@ -28,7 +28,7 @@ const ToolboxPage = () => {
       <TabsContent value={Object.keys(toolBoxData)[0]} className="">
         {/* header */}
         <section className="flex justify-between items-center gap-2">
-          <h1 className="text-2xl font-medium text-primary">
+          <h1 className="text-xl lg:text-2xl font-medium text-primary">
             Canned Dx&apos;s
           </h1>
           <AddModalButton />
@@ -36,17 +36,17 @@ const ToolboxPage = () => {
         <Separator className="my-4" />
         {/* body */}
         <section className="">
-          <ul className="grid gap-2">
+          <ul className="grid gap-4 md:gap-2">
             {toolBoxData.canned_dxs.map((item) => (
               <li
                 key={item.id}
-                className="flex justify-between items-center gap-2 ml-2"
+                className="flex justify-between items-center gap-2 ml-2 md:m-0"
               >
                 <p className={`flex items-center gap-3 text-sm text-stone-600`}>
-                  <span className="size-3 bg-primary-foreground rounded-full"></span>{" "}
+                  <span className="size-3 min-w-3 bg-primary-foreground rounded-full"></span>{" "}
                   {item.findings}
                 </p>
-                <div>
+                <div className="flex">
                   <Button
                     variant={"ghost"}
                     size={"icon"}
@@ -72,7 +72,7 @@ const ToolboxPage = () => {
       <TabsContent value={Object.keys(toolBoxData)[1]} className="">
         {/* header */}
         <section className="flex justify-between items-center gap-2">
-          <h1 className="text-2xl font-medium text-primary">
+          <h1 className="text-xl lg:text-2xl font-medium text-primary">
             {capitalizeSentence(Object.keys(toolBoxData)[1])}
           </h1>
           <AddModalButton />
@@ -80,17 +80,17 @@ const ToolboxPage = () => {
         <Separator className="my-4" />
         {/* body */}
         <section className="">
-          <ul className="grid gap-2">
+          <ul className="grid gap-4 md:gap-2">
             {toolBoxData.insurance.map((item) => (
               <li
                 key={item.id}
-                className="flex justify-between items-center gap-2 ml-2"
+                className="flex justify-between items-center gap-2 ml-2 md:m-0"
               >
                 <p className={`flex items-center gap-3 text-sm text-stone-600`}>
-                  <span className="size-3 bg-primary-foreground rounded-full"></span>{" "}
+                  <span className="size-3 min-w-3 bg-primary-foreground rounded-full"></span>{" "}
                   {item.organization}
                 </p>
-                <div>
+                <div className="flex">
                   <Button
                     variant={"ghost"}
                     size={"icon"}
@@ -117,7 +117,7 @@ const ToolboxPage = () => {
         {/* header */}
         <div className="h-full flex flex-col">
           <section className="flex justify-between items-center gap-2 mb-6">
-            <h1 className="text-2xl font-medium text-primary">
+            <h1 className="text-xl lg:text-2xl font-medium text-primary">
               {capitalizeSentence(Object.keys(toolBoxData)[2])}
             </h1>
           </section>
@@ -140,7 +140,7 @@ const ToolboxPage = () => {
         {/* header */}
         <div className="h-full flex flex-col">
           <section className="flex justify-between items-center gap-2 mb-6">
-            <h1 className="text-2xl font-medium text-primary">
+            <h1 className="text-xl lg:text-2xl font-medium text-primary">
               {capitalizeSentence(Object.keys(toolBoxData)[3])}
             </h1>
           </section>
@@ -163,7 +163,7 @@ const ToolboxPage = () => {
         {/* header */}
         <div className="h-full flex flex-col">
           <section className="flex justify-between items-center gap-2 mb-6">
-            <h1 className="text-2xl font-medium text-primary">
+            <h1 className="text-xl lg:text-2xl font-medium text-primary">
               {capitalizeSentence(Object.keys(toolBoxData)[4])}
             </h1>
           </section>

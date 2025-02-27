@@ -103,8 +103,8 @@ const Step4 = ({ prevStep }) => {
                 </div>
                 <AccordionTrigger className="bg-zinc-100 p-7 rounded-lg"></AccordionTrigger>
               </div>
-              <AccordionContent className="p-5 lg:pr-20">
-                <ul className="grid gap-2">
+              <AccordionContent className="p-2 md:p-5 lg:pr-20">
+                <ul className="grid gap-4 md:gap-2">
                   {item.disorders.map((disorder) => (
                     <li
                       key={disorder.id}
@@ -117,10 +117,10 @@ const Step4 = ({ prevStep }) => {
                             : "text-stone-600"
                         } `}
                       >
-                        <span className="size-3 bg-primary-foreground rounded-full"></span>{" "}
+                        <span className="size-3 min-w-3 bg-primary-foreground rounded-full"></span>{" "}
                         {disorder.type}
                       </p>
-                      <div>
+                      <div className="flex">
                         <Button
                           variant={"ghost"}
                           size={"icon"}
