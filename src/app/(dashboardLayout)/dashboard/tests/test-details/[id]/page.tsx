@@ -36,9 +36,9 @@ const TestDetailsPage = async ({ params }: { params: PageParams }) => {
         </CardHeader>
         <CardContent className="grid gap-10">
           <TestInfo test={test} />
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <section className="flex flex-col-reverse lg:flex-row gap-8">
             {/* left section */}
-            <section className="col-span-2 grid gap-8">
+            <section className="w-full lg:w-2/3 grid gap-8">
               <GeneralTestDetails test={test} />
 
               {/* Document */}
@@ -59,10 +59,12 @@ const TestDetailsPage = async ({ params }: { params: PageParams }) => {
               {/* Note */}
               <NoteSection />
             </section>
-            <section></section>
+            {/* Anatomy Image section */}
+            <section>
+              <AnatomyWrapper />
+            </section>
           </section>
         </CardContent>
-        <AnatomyWrapper />
       </Card>
     </section>
   );
