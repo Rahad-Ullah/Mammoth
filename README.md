@@ -1,3 +1,5 @@
+# Mammoth
+### CRM for Medical Diagnostic Centre
 
 
 ## Getting Started
