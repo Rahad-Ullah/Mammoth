@@ -6,64 +6,70 @@ import useImage from "use-image";
 
 const pointsData = [
   {
-    name: "Proximal Arm",
+    location: "Proximal Arm",
     abbreviation: "PA",
-    position: "Left",
+    side: "Left",
     x: 105,
     y: 150,
   },
   {
-    name: "Proximal Arm",
+    location: "Proximal Arm",
     abbreviation: "PA",
-    position: "Right",
+    side: "Right",
     x: 235,
     y: 150,
   },
-  { name: "Distal Arm", abbreviation: "DA", position: "Left", x: 60, y: 210 },
-  { name: "Distal Arm", abbreviation: "DA", position: "Right", x: 275, y: 210 },
   {
-    name: "Proximal Thigh",
+    location: "Distal Arm",
+    abbreviation: "DA",
+    side: "Left",
+    x: 60,
+    y: 210,
+  },
+  {
+    location: "Distal Arm",
+    abbreviation: "DA",
+    side: "Right",
+    x: 275,
+    y: 210,
+  },
+  {
+    location: "Proximal Thigh",
     abbreviation: "PT",
-    position: "Left",
+    side: "Left",
     x: 140,
     y: 310,
   },
   {
-    name: "Proximal Thigh",
+    location: "Proximal Thigh",
     abbreviation: "PT",
-    position: "Right",
+    side: "Right",
     x: 210,
     y: 310,
   },
   {
-    name: "Distal Thigh",
+    location: "Distal Thigh",
     abbreviation: "DT",
-    position: "Left",
+    side: "Left",
     x: 145,
     y: 355,
   },
   {
-    name: "Distal Thigh",
+    location: "Distal Thigh",
     abbreviation: "DT",
-    position: "Right",
+    side: "Right",
     x: 200,
     y: 355,
   },
-  { name: "Calf", abbreviation: "C", position: "Left", x: 145, y: 410 },
-  { name: "Calf", abbreviation: "C", position: "Right", x: 200, y: 410 },
-  { name: "Ankle", abbreviation: "A", position: "Left", x: 150, y: 455 },
-  { name: "Ankle", abbreviation: "A", position: "Right", x: 200, y: 455 },
-  { name: "Foot", abbreviation: "F", position: "Left", x: 150, y: 520 },
-  { name: "Foot", abbreviation: "F", position: "Right", x: 190, y: 520 },
+  { location: "Calf", abbreviation: "C", side: "Left", x: 145, y: 410 },
+  { location: "Calf", abbreviation: "C", side: "Right", x: 200, y: 410 },
+  { location: "Ankle", abbreviation: "A", side: "Left", x: 150, y: 455 },
+  { location: "Ankle", abbreviation: "A", side: "Right", x: 200, y: 455 },
+  { location: "Foot", abbreviation: "F", side: "Left", x: 150, y: 520 },
+  { location: "Foot", abbreviation: "F", side: "Right", x: 190, y: 520 },
 ];
 
-const selectedPoints = [
-  { name: "Proximal Arm", abbreviation: "PA", position: "Left" },
-  { name: "Distal Arm", abbreviation: "DA", position: "Left" },
-  { name: "Distal Arm", abbreviation: "DA", position: "Right" },
-];
-
-const ImageAnnotation = () => {
+const ImageAnnotation = ({ testPoints }) => {
   const [isHidden, setHidden] = useState(false);
   const [isImageFront, setIsImageFront] = useState(false);
   const [isGenderMale, setIsGenderMale] = useState(true);
@@ -78,9 +84,9 @@ const ImageAnnotation = () => {
   useEffect(() => {
     // Animation for selected circles every 500ms
     const interval = setInterval(() => {
-      selectedPoints.forEach((point) => {
+      testPoints?.forEach((point) => {
         const circle =
-          circleRefs.current[`${point.abbreviation}-${point.position}`];
+          circleRefs.current[`${point.abbreviation}-${point.side}`];
         if (circle) {
           // Get the current scale
           const currentScale = circle.scaleX();
@@ -151,30 +157,29 @@ const ImageAnnotation = () => {
 
           {/* Render circles */}
           {pointsData.map((point) => {
-            const isSelected = selectedPoints.some(
+            const isSelected = testPoints?.some(
               (item) =>
                 item.abbreviation === point.abbreviation &&
-                item.position === point.position
+                item.side === point.side
             );
 
             return (
-              <React.Fragment key={`${point.abbreviation}-${point.position}`}>
+              <React.Fragment key={`${point.abbreviation}-${point.side}`}>
                 <Circle
                   ref={(el) => {
-                    circleRefs.current[
-                      `${point.abbreviation}-${point.position}`
-                    ] = el;
+                    circleRefs.current[`${point.abbreviation}-${point.side}`] =
+                      el;
                   }}
                   x={point.x}
                   y={point.y}
                   radius={isSelected ? 5 : 4}
                   fill={isSelected ? "red" : "turquoise"}
                 />
-                {point.position === "Right" && !isHidden && (
+                {point.side === "Right" && !isHidden && (
                   <Text
                     x={point.x + 15} // Slight offset for text visibility
                     y={point.y - 5} // Slight offset for text visibility
-                    text={`← ${point.name} (${point.abbreviation})`}
+                    text={`← ${point.location} (${point.abbreviation})`}
                     fontSize={12}
                     fontFamily="Poppins"
                     fill="gray"

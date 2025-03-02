@@ -10,8 +10,8 @@ const ImageAnnotation = dynamic(
   }
 );
 
-const AnatomyWrapper = () => {
-  return <ImageAnnotation />;
+const AnatomyWrapper = ({ testPoints }) => {
+  return <ImageAnnotation testPoints={testPoints} />;
 };
 
 export default AnatomyWrapper;

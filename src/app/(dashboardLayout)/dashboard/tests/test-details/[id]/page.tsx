@@ -61,7 +61,7 @@ const TestDetailsPage = async ({ params }: { params: PageParams }) => {
             </section>
             {/* Anatomy Image section */}
             <section>
-              <AnatomyWrapper />
+              <AnatomyWrapper testPoints={test.biopsy_samples} />
             </section>
           </section>
         </CardContent>
