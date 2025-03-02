@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { FormProvider } from "@/contexts/FormContext";
+import { TestFormProvider } from "@/contexts/testFormContext";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -24,7 +25,9 @@ export default function RootLayout({
       <body
         className={`${poppins.className} antialiased bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB]`}
       >
-        <FormProvider>{children}</FormProvider>
+        <FormProvider>
+          <TestFormProvider>{children}</TestFormProvider>
+        </FormProvider>
       </body>
     </html>
   );
