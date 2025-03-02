@@ -12,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown, FilePlus } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,18 +23,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
-import Link from "next/link";
 import DashboardTable from "@/components/table";
 import TablePagination from "@/components/table-pagination";
 import columns from "@/components/tableColumns/testTableColumn";
 import { TTest } from "@/types/test";
 import { testsData } from "@/constants/tests";
+import CreateTestModal from "@/components/page/tests/createTestModal";
 
 // Extract unique statuses from data
 const statuses = Array.from(new Set(testsData.map((test) => test.status)));
 
 // Extract unique statuses from data
-const doctors = Array.from(new Set(testsData.map((item) => item.ordering_physician)));
+const doctors = Array.from(
+  new Set(testsData.map((item) => item.ordering_physician))
+);
 
 // Extract unique facilities from data
 const facilities = Array.from(new Set(testsData.map((item) => item.facility)));
@@ -56,7 +58,7 @@ const TestsPage = () => {
       const statusMatches = status ? item.status === status : true;
       const doctorMatches = doctor ? item.ordering_physician === doctor : true;
       const facilityMatches = facility ? item.facility === facility : true;
-  
+
       return statusMatches && doctorMatches && facilityMatches;
     });
   }, [status, doctor, facility]);
@@ -171,11 +173,7 @@ const TestsPage = () => {
         </DropdownMenu>
 
         {/* Add new user button */}
-        <Link href="/dashboard/tests/add-new-test">
-          <Button>
-            <FilePlus /> Intake
-          </Button>
-        </Link>
+        <CreateTestModal />
       </section>
 
       {/* table and pagination*/}
