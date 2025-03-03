@@ -14,12 +14,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { FilePlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const CreateTestModal = () => {
+  const router = useRouter();
   const { step, setStep } = useFormContext();
 
   const nextStep = () => setStep(step + 1);
+
+  // handle confirmation
+  const handleConfirm = () => {
+    setStep(1);
+    router.push(`/dashboard/tests/add-new-test`);
+  };
 
   return (
     <Dialog>
@@ -83,9 +90,9 @@ const CreateTestModal = () => {
               <Input placeholder="Enter location" />
             </div>
             <DialogFooter>
-              <Link href={`/dashboard/tests/add-new-test`} className="w-full">
-                <Button className="w-full">Confirm</Button>
-              </Link>
+              <Button onClick={handleConfirm} className="w-full">
+                Confirm
+              </Button>
             </DialogFooter>
           </div>
         )}
