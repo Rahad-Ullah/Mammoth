@@ -1,73 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { anatomyPointsData } from "@/constants/anatomyPointsData";
 import { Eye, EyeOff, Mars, RefreshCcw, Venus } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 import { Stage, Layer, Image, Circle, Text } from "react-konva";
 import useImage from "use-image";
-
-const pointsData = [
-  {
-    location: "Proximal Arm",
-    abbreviation: "PA",
-    side: "Left",
-    x: 105,
-    y: 150,
-  },
-  {
-    location: "Proximal Arm",
-    abbreviation: "PA",
-    side: "Right",
-    x: 235,
-    y: 150,
-  },
-  {
-    location: "Distal Arm",
-    abbreviation: "DA",
-    side: "Left",
-    x: 60,
-    y: 210,
-  },
-  {
-    location: "Distal Arm",
-    abbreviation: "DA",
-    side: "Right",
-    x: 275,
-    y: 210,
-  },
-  {
-    location: "Proximal Thigh",
-    abbreviation: "PT",
-    side: "Left",
-    x: 140,
-    y: 310,
-  },
-  {
-    location: "Proximal Thigh",
-    abbreviation: "PT",
-    side: "Right",
-    x: 210,
-    y: 310,
-  },
-  {
-    location: "Distal Thigh",
-    abbreviation: "DT",
-    side: "Left",
-    x: 145,
-    y: 355,
-  },
-  {
-    location: "Distal Thigh",
-    abbreviation: "DT",
-    side: "Right",
-    x: 200,
-    y: 355,
-  },
-  { location: "Calf", abbreviation: "C", side: "Left", x: 145, y: 410 },
-  { location: "Calf", abbreviation: "C", side: "Right", x: 200, y: 410 },
-  { location: "Ankle", abbreviation: "A", side: "Left", x: 150, y: 455 },
-  { location: "Ankle", abbreviation: "A", side: "Right", x: 200, y: 455 },
-  { location: "Foot", abbreviation: "F", side: "Left", x: 150, y: 520 },
-  { location: "Foot", abbreviation: "F", side: "Right", x: 190, y: 520 },
-];
 
 const ImageAnnotation = ({ testPoints }) => {
   const [isHidden, setHidden] = useState(false);
@@ -156,7 +92,7 @@ const ImageAnnotation = ({ testPoints }) => {
           )}
 
           {/* Render circles */}
-          {pointsData.map((point) => {
+          {anatomyPointsData.map((point) => {
             const isSelected = testPoints?.some(
               (item) =>
                 item.abbreviation === point.abbreviation &&
