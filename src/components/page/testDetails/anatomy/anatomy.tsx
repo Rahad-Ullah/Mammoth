@@ -101,7 +101,7 @@ const ImageAnnotation = ({ testPoints }) => {
     }, 500); // every 500ms
 
     return () => clearInterval(interval); // Cleanup on component unmount
-  }, []); // Empty dependency array ensures the effect runs once
+  }, [testPoints]); // Empty dependency array ensures the effect runs once
 
   if (loading === "loading") {
     return <div className="text-center text-xl">Loading...</div>;
