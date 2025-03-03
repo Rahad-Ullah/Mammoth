@@ -63,7 +63,7 @@ const Step2 = ({
   return (
     <div className="grid gap-8">
       {/* body */}
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col-reverse lg:flex-row gap-8">
         <section className="w-full lg:w-2/3">
           <Accordion type="single" collapsible className="w-full grid gap-2">
             {disorderTypes.painTypes.map((item) => (

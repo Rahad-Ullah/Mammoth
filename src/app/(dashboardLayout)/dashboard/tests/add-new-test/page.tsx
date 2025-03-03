@@ -4,6 +4,7 @@ import React from "react";
 import { useFormContext } from "@/contexts/FormContext";
 import Step1 from "@/components/multiStepForms/addTestForm/Step1";
 import Step2 from "@/components/multiStepForms/addTestForm/Step2";
+import Step3 from "@/components/multiStepForms/addTestForm/Step3";
 
 const AddNewTestPage = () => {
   const { step, setStep } = useFormContext();
@@ -15,6 +16,7 @@ const AddNewTestPage = () => {
     <>
       {step === 1 && <Step1 nextStep={nextStep} />}
       {step === 2 && <Step2 prevStep={prevStep} nextStep={nextStep} />}
+      {step === 3 && <Step3 prevStep={prevStep} nextStep={nextStep} />}
     </>
   );
 };
