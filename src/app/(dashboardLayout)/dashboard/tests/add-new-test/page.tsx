@@ -5,6 +5,8 @@ import { useFormContext } from "@/contexts/FormContext";
 import Step1 from "@/components/multiStepForms/addTestForm/Step1";
 import Step2 from "@/components/multiStepForms/addTestForm/Step2";
 import Step3 from "@/components/multiStepForms/addTestForm/Step3";
+import Step4 from "@/components/multiStepForms/addTestForm/Step4";
+import Step5 from "@/components/multiStepForms/addTestForm/Step5";
 
 const AddNewTestPage = () => {
   const { step, setStep } = useFormContext();
@@ -17,6 +19,8 @@ const AddNewTestPage = () => {
       {step === 1 && <Step1 nextStep={nextStep} />}
       {step === 2 && <Step2 prevStep={prevStep} nextStep={nextStep} />}
       {step === 3 && <Step3 prevStep={prevStep} nextStep={nextStep} />}
+      {step === 4 && <Step4 prevStep={prevStep} nextStep={nextStep} />}
+      {step === 5 && <Step5 prevStep={prevStep} nextStep={nextStep} />}
     </>
   );
 };

@@ -8,10 +8,10 @@ import { facilityOptions } from "@/constants/facilityOptions";
 
 interface Disorder {
   id: number;
-  title: string;
+  description: string;
 }
 
-const Step3 = ({
+const Step4 = ({
   prevStep,
   nextStep,
 }: {
@@ -28,13 +28,16 @@ const Step3 = ({
   // Function to handle checkbox change
   const handleCheckboxChange = (
     facilityId: number,
-    facilityTitle: string,
+    facilityDescription: string,
     checked: boolean
   ) => {
     setSelectedDisorderOptions((prevSelected) => {
       // If the checkbox is checked, add the facility to the selectedDisorders
       if (checked) {
-        return [...prevSelected, { id: facilityId, title: facilityTitle }];
+        return [
+          ...prevSelected,
+          { id: facilityId, description: facilityDescription },
+        ];
       } else {
         // If the checkbox is unchecked, remove the facility from the selectedDisorders
         return prevSelected.filter((item) => item.id !== facilityId);
@@ -48,19 +51,22 @@ const Step3 = ({
       <div className="flex flex-col-reverse lg:flex-row gap-8">
         <section className="w-full lg:w-2/3">
           <div className="grid gap-4">
-            {facilityOptions.facilityTypes.map((item) => (
+            {facilityOptions.facilityDetails.map((item) => (
               <div key={item.id} className="flex gap-2">
                 {/* Render checkboxes for each facility */}
                 <Checkbox
-                  id={item.title}
-                  value={item.title}
+                  id={item.description}
+                  value={item.description}
                   onCheckedChange={(checked) =>
-                    handleCheckboxChange(item.id, item.title, !!checked)
+                    handleCheckboxChange(item.id, item.description, !!checked)
                   }
                   className="mt-1"
                 />
-                <Label htmlFor={item.title} className="text-sm text-stone-600">
-                  {item.title}
+                <Label
+                  htmlFor={item.description}
+                  className="text-sm text-stone-600"
+                >
+                  {item.description}
                 </Label>
               </div>
             ))}
@@ -86,4 +92,4 @@ const Step3 = ({
   );
 };
 
-export default Step3;
+export default Step4;
