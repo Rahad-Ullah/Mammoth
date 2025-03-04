@@ -13,6 +13,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown } from "lucide-react";
+import pdfIcon from "../../../../assets/icons/pdf.svg";
+import excelIcon from "../../../../assets/icons/excel.svg";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +31,7 @@ import columns from "@/components/tableColumns/testTableColumn";
 import { TTest } from "@/types/test";
 import { testsData } from "@/constants/tests";
 import CreateTestModal from "@/components/page/tests/createTestModal";
+import Image from "next/image";
 
 // Extract unique statuses from data
 const statuses = Array.from(new Set(testsData.map((test) => test.status)));
@@ -87,10 +90,21 @@ const TestsPage = () => {
     <div className="w-full">
       {/* table top option bar */}
       <section className="flex flex-wrap justify-center md:justify-end gap-4 items-center pb-4">
+        {/* PDF button */}
+        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+          <Image src={pdfIcon} alt="pdf" width={24} height={24} />
+        </Button>
+        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+          <Image src={excelIcon} alt="pdf" width={24} height={24} />
+        </Button>
+
         {/* Doctor Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="capitalize">
+            <Button
+              variant="outline"
+              className="capitalize shadow text-zinc-500"
+            >
               {doctor ? `Doctor: ${doctor}` : "Doctor"} <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -109,7 +123,10 @@ const TestsPage = () => {
         {/* Facility Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="capitalize">
+            <Button
+              variant="outline"
+              className="capitalize shadow text-zinc-500"
+            >
               {facility ? `Facility: ${facility}` : "Facility"} <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -128,7 +145,10 @@ const TestsPage = () => {
         {/* Status Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="capitalize">
+            <Button
+              variant="outline"
+              className="capitalize shadow text-zinc-500"
+            >
               {status ? `Status: ${status}` : "Status"} <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -147,7 +167,7 @@ const TestsPage = () => {
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
+            <Button variant="outline" className="shadow text-zinc-500">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -165,7 +185,7 @@ const TestsPage = () => {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {capitalizeSentence(column.id)}
                   </DropdownMenuCheckboxItem>
                 );
               })}

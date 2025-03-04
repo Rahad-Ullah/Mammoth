@@ -20,7 +20,7 @@ import { LogOut } from "lucide-react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <figure className="flex justify-center mt-2">
           <Image src={"/logo.png"} alt="logo" width={120} height={68} />

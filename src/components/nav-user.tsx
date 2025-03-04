@@ -35,7 +35,7 @@ export function NavUser({
 }) {
 
   return (
-    <SidebarMenu className="w-fit pr-4 lg:px-6">
+    <SidebarMenu className="w-fit pr-4">
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -43,17 +43,22 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground justify-center w-fit"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="size-10 rounded-lg">
                 <AvatarImage
                   src={user.avatar}
                   alt={user.name}
-                  className="rounded-full"
+                  className="rounded-full relative"
                 />
+                <span className="size-2.5 border border-white bg-[#319517] rounded-full absolute bottom-0 right-1"></span>
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="hidden lg:grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.role}</span>
+                <span className="truncate font-semibold text-[#414141]">
+                  {user.name}
+                </span>
+                <span className="truncate text-xs text-primary">
+                  {user.role}
+                </span>
               </div>
             </SidebarMenuButton>
           </DropdownMenuTrigger>

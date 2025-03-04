@@ -50,5 +50,5 @@ export const userData = {
   email: "me@example.com",
   role: "Admin",
   avatar:
-    "https://s3-alpha-sig.figma.com/img/e632/dc20/86efa3df337e8c215dd8095476bb6513?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=WYL8~jvcgEMAxObUvAOOVxwTjtwLtbSaQuUHyzQAHUZ8vsoryajL-3T9XsEDVWexBiys0D4Vd9QtQLP75FU~Dj4hRQyozFAhhOZPfdD-xV7byFLqsOLEFCcgNqOwa18WAqq9119xO-vvRuj8uy4-OChvZQ-uJM75A96r40Id6ZrUlHPzPoiQ9wgC8P7hrvJ3W3nQH685eP-3S~a-JtavA3K8KRAF4FNZpySdfeGpcGwzn0-rYUwhSHmxiVsNX6bVGZkIbHIGCbWkb57Bdw4nhHMDtFceMYlJcBoh6tB3cDnKVO~2mJOzNC36wVzb8lelhYfYYUs9QmlC9ZCg~ay-iQ__",
+    "https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D",
 };

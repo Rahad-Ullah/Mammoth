@@ -15,6 +15,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown, UserPlus } from "lucide-react";
+import pdfIcon from "../../../../assets/icons/pdf.svg";
+import excelIcon from "../../../../assets/icons/excel.svg";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +31,7 @@ import { capitalizeSentence } from "@/utils/capitalizeSentence";
 import Link from "next/link";
 import DashboardTable from "@/components/table";
 import TablePagination from "@/components/table-pagination";
+import Image from "next/image";
 
 export type User = {
   id: number;
@@ -93,10 +96,21 @@ const UsersPage = () => {
           className="max-w-sm"
         /> */}
 
+        {/* PDF button */}
+        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+          <Image src={pdfIcon} alt="pdf" width={24} height={24} />
+        </Button>
+        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+          <Image src={excelIcon} alt="pdf" width={24} height={24} />
+        </Button>
+
         {/* Role Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="capitalize">
+            <Button
+              variant="outline"
+              className="capitalize shadow text-zinc-500"
+            >
               {selectedRole ? `Role: ${selectedRole}` : "Filter by Role"}{" "}
               <ChevronDown />
             </Button>
@@ -119,7 +133,7 @@ const UsersPage = () => {
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
+            <Button variant="outline" className="shadow text-zinc-500">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>

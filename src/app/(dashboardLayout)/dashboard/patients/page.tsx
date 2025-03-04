@@ -13,6 +13,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown } from "lucide-react";
+import pdfIcon from "../../../../assets/icons/pdf.svg";
+import excelIcon from "../../../../assets/icons/excel.svg";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +30,7 @@ import TablePagination from "@/components/table-pagination";
 import { TPatient } from "@/types/patient";
 import { patientsData } from "@/constants/patients";
 import columns from "@/components/tableColumns/patientTableColumn";
+import Image from "next/image";
 
 // Extract unique roles from data
 const statuses = Array.from(
@@ -76,10 +79,21 @@ const PatientsPage = () => {
     <div className="w-full">
       {/* table top option bar */}
       <section className="flex justify-end gap-4 items-center pb-4">
+        {/* PDF button */}
+        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+          <Image src={pdfIcon} alt="pdf" width={24} height={24} />
+        </Button>
+        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+          <Image src={excelIcon} alt="pdf" width={24} height={24} />
+        </Button>
+
         {/* Role Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="capitalize">
+            <Button
+              variant="outline"
+              className="capitalize shadow text-zinc-500"
+            >
               {insurance ? `Insurance: ${insurance}` : "Filter by Insurance"}{" "}
               <ChevronDown />
             </Button>
@@ -102,7 +116,7 @@ const PatientsPage = () => {
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
+            <Button variant="outline" className="shadow text-zinc-500">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>

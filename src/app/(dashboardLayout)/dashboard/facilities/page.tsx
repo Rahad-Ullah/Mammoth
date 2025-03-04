@@ -13,6 +13,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown, Plus } from "lucide-react";
+import pdfIcon from "../../../../assets/icons/pdf.svg";
+import excelIcon from "../../../../assets/icons/excel.svg";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +31,7 @@ import TablePagination from "@/components/table-pagination";
 import { facilitiesData } from "@/constants/facilities";
 import columns from "@/components/tableColumns/facilityTableColumns";
 import { TFacility } from "@/types/facility";
+import Image from "next/image";
 
 // Extract unique roles from data
 const statuses = Array.from(new Set(facilitiesData.map((item) => item.status)));
@@ -73,10 +76,21 @@ const FacilitiesPage = () => {
     <div className="w-full">
       {/* table top option bar */}
       <section className="flex flex-wrap justify-center md:justify-end gap-4 items-center pb-4">
+        {/* PDF button */}
+        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+          <Image src={pdfIcon} alt="pdf" width={24} height={24} />
+        </Button>
+        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+          <Image src={excelIcon} alt="pdf" width={24} height={24} />
+        </Button>
+
         {/* Role Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="capitalize">
+            <Button
+              variant="outline"
+              className="capitalize shadow text-zinc-500"
+            >
               {status ? `Status: ${status}` : "Filter by Status"}{" "}
               <ChevronDown />
             </Button>
@@ -96,7 +110,7 @@ const FacilitiesPage = () => {
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
+            <Button variant="outline" className="shadow text-zinc-500">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>

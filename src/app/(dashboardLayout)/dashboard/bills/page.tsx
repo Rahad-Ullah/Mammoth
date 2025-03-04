@@ -13,6 +13,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown } from "lucide-react";
+import pdfIcon from "../../../../assets/icons/pdf.svg";
+import excelIcon from "../../../../assets/icons/excel.svg";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +29,7 @@ import TablePagination from "@/components/table-pagination";
 import { TBill } from "@/types/bill";
 import { billingData } from "@/constants/billingData";
 import columns from "@/components/tableColumns/billTableColumn";
+import Image from "next/image";
 
 const BillsPage = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -64,10 +67,18 @@ const BillsPage = () => {
     <div className="w-full">
       {/* table top option bar */}
       <section className="flex justify-end gap-4 items-center pb-4">
+        {/* PDF button */}
+        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+          <Image src={pdfIcon} alt="pdf" width={24} height={24} />
+        </Button>
+        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+          <Image src={excelIcon} alt="pdf" width={24} height={24} />
+        </Button>
+
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
+            <Button variant="outline" className="shadow text-zinc-500">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>

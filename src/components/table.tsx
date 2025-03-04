@@ -17,7 +17,10 @@ const DashboardTable = ({ table, columns }) => {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    className="bg-muted text-[#5C5C5C]"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -38,7 +41,7 @@ const DashboardTable = ({ table, columns }) => {
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id} className="text-zinc-500">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

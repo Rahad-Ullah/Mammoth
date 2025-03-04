@@ -3,7 +3,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { TFacility } from "@/types/facility";
 import { TUser } from "@/types/user";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, CircleDot, Info } from "lucide-react";
+import { ArrowUpDown, Info } from "lucide-react";
+import { MdOutlineRadioButtonChecked } from "react-icons/md";
 
 // table column definition
 const columns: ColumnDef<TFacility>[] = [
@@ -112,9 +113,9 @@ const columns: ColumnDef<TFacility>[] = [
       return (
         <div className={`capitalize`}>
           <div className="flex items-center space-x-2">
-            <CircleDot
+            <MdOutlineRadioButtonChecked
               className={`size-5 ${
-                status === "active" ? "text-green-500" : "text-red-500"
+                status === "active" ? "text-[#319517]" : "text-red-500"
               }`}
             />
             <p>{status as string}</p>

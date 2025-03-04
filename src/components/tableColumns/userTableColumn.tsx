@@ -101,7 +101,7 @@ const columns: ColumnDef<User>[] = [
       const role = row.getValue("role");
       return (
         <Badge
-          className={`capitalize font-medium text-white rounded-full hover:bg-primary`}
+          className={`capitalize font-medium text-white rounded-full hover:bg-primary py-1.5 w-full flex justify-center`}
           style={{
             backgroundColor:
               role === "admin"
@@ -111,7 +111,7 @@ const columns: ColumnDef<User>[] = [
                 : role === "pathologist"
                 ? "#319517"
                 : role === "histologist"
-                ? "#4747d1"
+                ? "#85CA53"
                 : "",
           }}
         >

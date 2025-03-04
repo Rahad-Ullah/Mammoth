@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { TPatient } from "@/types/patient";
 import { TTest } from "@/types/test";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Info, Lock, LockOpen } from "lucide-react";
+import { ArrowUpDown, Info } from "lucide-react";
 import Link from "next/link";
 
 // table column definition
@@ -51,7 +51,7 @@ const columns: ColumnDef<TTest>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Ordering Provider
+          User Name
           <ArrowUpDown />
         </Button>
       );
@@ -68,7 +68,7 @@ const columns: ColumnDef<TTest>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Facility
+          Test Form Facility
           <ArrowUpDown />
         </Button>
       );
@@ -85,7 +85,7 @@ const columns: ColumnDef<TTest>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Patient
+          Patient Name
           <ArrowUpDown />
         </Button>
       );
@@ -119,7 +119,11 @@ const columns: ColumnDef<TTest>[] = [
     header: () => <div>Report Date</div>,
     cell: ({ row }) => {
       const item = row.original as TTest;
-      return <div className="capitalize">{item.report_date.split("T")[0]}</div>;
+      return (
+        <div className="capitalize text-red-500">
+          {item.report_date.split("T")[0]}
+        </div>
+      );
     },
   },
   {
@@ -129,17 +133,17 @@ const columns: ColumnDef<TTest>[] = [
       const status = row.getValue("status");
       return (
         <Badge
-          className={`capitalize font-medium text-white rounded-full hover:bg-primary`}
+          className={`capitalize font-medium text-white w-full rounded-full hover:bg-primary flex justify-center py-1.5`}
           style={{
             backgroundColor:
               status === "Collected"
-                ? "#F17600"
+                ? "#1B83B8"
                 : status === "Send to Histology"
-                ? "#C42985"
-                : status === "Ready for pathology"
+                ? "#20B9CB"
+                : status === "Ready for Pathology"
                 ? "#319517"
                 : status === "Final"
-                ? "#4747d1"
+                ? "#FF2A30"
                 : "",
           }}
         >
@@ -157,16 +161,6 @@ const columns: ColumnDef<TTest>[] = [
 
       return (
         <div className="flex items-center gap-1">
-          {item.status === "active" && (
-            <Button variant={"ghost"} size={"icon"} className="text-zinc-400">
-              <LockOpen />
-            </Button>
-          )}
-          {item.status === "blocked" && (
-            <Button variant={"ghost"} size={"icon"} className="text-red-500">
-              <Lock />
-            </Button>
-          )}
           <Link
             href={`/dashboard/tests/test-details/${item.report_no}`}
             passHref
