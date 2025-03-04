@@ -15,12 +15,12 @@ const AddNewFacilityPage = () => {
   const prevStep = () => setStep(step - 1);
 
   return (
-    <>
+    <div className="bg-white p-6 rounded-xl h-full">
       {step === 1 && <Step1 nextStep={nextStep} />}
       {step === 2 && <Step2 prevStep={prevStep} nextStep={nextStep} />}
       {step === 3 && <Step3 prevStep={prevStep} nextStep={nextStep} />}
       {step === 4 && <Step4 prevStep={prevStep} />}
-    </>
+    </div>
   );
 };
 

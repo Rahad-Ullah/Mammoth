@@ -16,7 +16,7 @@ const TestDetailsPage = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
   const test = testsData.find((item: TTest) => item.report_no === id);
-  if (!test) return <h1>Bill not found</h1>;
+  if (!test) return <h1>Data not found</h1>;
 
   return (
     <section className="grid gap-6">

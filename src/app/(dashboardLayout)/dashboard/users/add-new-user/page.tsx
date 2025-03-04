@@ -73,7 +73,7 @@ const AddNewUserPage = () => {
   }
 
   return (
-    <div className="grid gap-8">
+    <div className="flex flex-col gap-8 bg-white p-6 rounded-xl h-full">
       <section>
         <h3 className="text-sm font-medium mb-4">User Role</h3>
         <RadioGroup

@@ -10,7 +10,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 1,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",
@@ -255,7 +255,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 1,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",
@@ -500,7 +500,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 1,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",
@@ -745,7 +745,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 2,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",
@@ -990,7 +990,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 2,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",
@@ -1235,7 +1235,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 3,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",
@@ -1480,7 +1480,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 3,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",
@@ -1725,7 +1725,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 2,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",
@@ -1970,7 +1970,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 3,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",
@@ -2215,7 +2215,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 1,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",
@@ -2460,7 +2460,7 @@ export const testsData = [
     apply_date: "2025-01-02T17:30:00",
     report_date: "2025-01-02T17:30:00",
     patient: {
-      id: 20,
+      id: 2,
       first_name: "Sofia",
       last_name: "King",
       email: "sofia.king@example.com",

@@ -40,7 +40,7 @@ const Step4 = ({ prevStep }) => {
   return (
     <div className="h-full flex flex-col justify-between">
       {/* body */}
-      <section className="py-6 flex-1">
+      <section className="pb-6 flex-1">
         <Accordion type="single" collapsible className="w-full grid gap-2">
           {disorderTypes.painTypes.map((item) => (
             <AccordionItem
