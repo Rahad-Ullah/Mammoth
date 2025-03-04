@@ -1,6 +1,11 @@
 "use client"
 
-import { BadgeCheck, Bell, CreditCard, LogOut, Sparkles } from "lucide-react";
+import {
+  BadgeCheck,
+  Bell,
+  Key,
+  LogOut,
+} from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -16,7 +21,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 
 export function NavUser({
@@ -29,7 +33,6 @@ export function NavUser({
     avatar: string;
   };
 }) {
-  const { isMobile } = useSidebar();
 
   return (
     <SidebarMenu className="w-fit pr-4 lg:px-6">
@@ -56,7 +59,7 @@ export function NavUser({
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
+            side={"bottom"}
             align="end"
             sideOffset={4}
           >
@@ -75,23 +78,16 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
                 <Bell />
                 Notifications
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <BadgeCheck />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Key />
+                Change Password
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
