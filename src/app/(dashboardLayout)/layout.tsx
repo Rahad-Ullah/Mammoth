@@ -54,7 +54,7 @@ export default function DashboardLayout({
           </div>
         </header>
         {/* dashboard content */}
-        <div className="bg-white rounded-xl flex-1 p-4 md:p-6">{children}</div>
+        <div className="rounded-xl flex-1">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

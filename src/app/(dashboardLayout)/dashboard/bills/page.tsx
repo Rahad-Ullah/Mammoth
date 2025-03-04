@@ -64,7 +64,7 @@ const BillsPage = () => {
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-white p-4 rounded-xl h-full">
       {/* table top option bar */}
       <section className="flex justify-end gap-4 items-center pb-4">
         {/* PDF button */}

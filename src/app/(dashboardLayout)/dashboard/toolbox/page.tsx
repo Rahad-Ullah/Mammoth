@@ -10,13 +10,17 @@ const ToolboxPage = () => {
   return (
     <Tabs
       defaultValue={Object.keys(toolBoxData)[0]}
-      className="flex flex-col lg:flex-row gap-6 h-full"
+      className="flex flex-col lg:flex-row gap-2 h-full"
     >
-      <div className="border rounded-lg">
-        <TabsList className="flex flex-col justify-start items-start gap-2 p-4 h-min sticky top-20">
+      <div className="bg-white p-4 rounded-xl">
+        <TabsList className="flex flex-col justify-start items-start gap-2 h-min sticky top-20">
           {Object.keys(toolBoxData).map((item, idx) => {
             return (
-              <TabsTrigger value={item} key={idx}>
+              <TabsTrigger
+                value={item}
+                key={idx}
+                className="text-zinc-500 text-base font-normal"
+              >
                 {capitalizeSentence(item)}
               </TabsTrigger>
             );
@@ -25,7 +29,10 @@ const ToolboxPage = () => {
       </div>
 
       {/* tab content 1 */}
-      <TabsContent value={Object.keys(toolBoxData)[0]} className="">
+      <TabsContent
+        value={Object.keys(toolBoxData)[0]}
+        className="bg-white p-4 rounded-xl"
+      >
         {/* header */}
         <section className="flex justify-between items-center gap-2">
           <h1 className="text-xl lg:text-2xl font-medium text-primary">
@@ -69,7 +76,10 @@ const ToolboxPage = () => {
       </TabsContent>
 
       {/* tab content 2 */}
-      <TabsContent value={Object.keys(toolBoxData)[1]} className="">
+      <TabsContent
+        value={Object.keys(toolBoxData)[1]}
+        className="bg-white p-4 rounded-xl"
+      >
         {/* header */}
         <section className="flex justify-between items-center gap-2">
           <h1 className="text-xl lg:text-2xl font-medium text-primary">
@@ -113,7 +123,10 @@ const ToolboxPage = () => {
       </TabsContent>
 
       {/* tab content 3 */}
-      <TabsContent value={Object.keys(toolBoxData)[2]} className="">
+      <TabsContent
+        value={Object.keys(toolBoxData)[2]}
+        className="bg-white p-4 rounded-xl"
+      >
         {/* header */}
         <div className="h-full flex flex-col">
           <section className="flex justify-between items-center gap-2 mb-6">
@@ -136,7 +149,10 @@ const ToolboxPage = () => {
       </TabsContent>
 
       {/* tab content 4 */}
-      <TabsContent value={Object.keys(toolBoxData)[3]} className="">
+      <TabsContent
+        value={Object.keys(toolBoxData)[3]}
+        className="bg-white p-4 rounded-xl"
+      >
         {/* header */}
         <div className="h-full flex flex-col">
           <section className="flex justify-between items-center gap-2 mb-6">
@@ -159,7 +175,10 @@ const ToolboxPage = () => {
       </TabsContent>
 
       {/* tab content 5 */}
-      <TabsContent value={Object.keys(toolBoxData)[4]} className="">
+      <TabsContent
+        value={Object.keys(toolBoxData)[4]}
+        className="bg-white p-4 rounded-xl"
+      >
         {/* header */}
         <div className="h-full flex flex-col">
           <section className="flex justify-between items-center gap-2 mb-6">

@@ -10,7 +10,7 @@ import {
 
 const DashboardTable = ({ table, columns }) => {
   return (
-    <div className="rounded-md border max-w-[calc(100vw-20px)] md:max-w-[calc(100vw-100px)] lg:w-full">
+    <div className="rounded-lg max-w-[calc(100vw-20px)] md:max-w-[calc(100vw-100px)] lg:w-full">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

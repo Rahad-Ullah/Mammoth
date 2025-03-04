@@ -8,7 +8,7 @@ const PatientDetailsPage = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
   const patient = patientsData.find((item) => item.id === Number(id));
-  if (!patient) return <h1>Bill not found</h1>;
+  if (!patient) return <h1>Data not found</h1>;
 
   return (
     <section className="grid gap-6">
