@@ -87,20 +87,46 @@ const PatientsPage = () => {
           <Image src={excelIcon} alt="pdf" width={24} height={24} />
         </Button>
 
-        {/* Role Filter Dropdown */}
+        {/* Facility Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              className="capitalize shadow text-zinc-500"
+              className="capitalize shadow text-[#929292]"
             >
-              {insurance ? `Insurance: ${insurance}` : "Filter by Insurance"}{" "}
+              {insurance ? `Facility: ${insurance}` : "Facility"}{" "}
               <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onClick={() => setInsurance(null)}>
-              All Insurance
+              All Facility
+            </DropdownMenuItem>
+            {statuses.map((status) => (
+              <DropdownMenuItem
+                key={status}
+                onClick={() => setInsurance(status)}
+              >
+                {capitalizeSentence(status)}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Status Filter Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="capitalize shadow text-[#929292]"
+            >
+              {insurance ? `Status: ${insurance}` : "Status"}{" "}
+              <ChevronDown className="text-primary" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onClick={() => setInsurance(null)}>
+              All Status
             </DropdownMenuItem>
             {statuses.map((status) => (
               <DropdownMenuItem
@@ -116,7 +142,7 @@ const PatientsPage = () => {
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="shadow text-zinc-500">
+            <Button variant="outline" className="shadow text-[#929292]">
               Columns <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>

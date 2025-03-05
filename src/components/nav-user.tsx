@@ -2,8 +2,6 @@
 
 import {
   BadgeCheck,
-  Bell,
-  Key,
   LogOut,
 } from "lucide-react";
 
@@ -22,6 +20,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 export function NavUser({
   user,
@@ -33,7 +32,6 @@ export function NavUser({
     avatar: string;
   };
 }) {
-
   return (
     <SidebarMenu className="w-fit pr-4">
       <SidebarMenuItem>
@@ -82,18 +80,12 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Key />
-                Change Password
-              </DropdownMenuItem>
+              <Link href={`/dashboard/profile`}>
+                <DropdownMenuItem>
+                  <BadgeCheck />
+                  Profile
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

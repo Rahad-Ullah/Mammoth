@@ -152,6 +152,16 @@
   .no-result {
     @apply text-black-100 text-sm font-normal;
   }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
 }
 @layer base {
   * {

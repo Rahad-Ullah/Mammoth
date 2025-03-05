@@ -19,7 +19,7 @@ const DashboardTable = ({ table, columns }) => {
                 return (
                   <TableHead
                     key={header.id}
-                    className="bg-muted text-[#5C5C5C]"
+                    className="bg-[#F1F1F1] text-[#5C5C5C]"
                   >
                     {header.isPlaceholder
                       ? null

@@ -14,7 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown, UserPlus } from "lucide-react";
+import { ChevronDown, Plus } from "lucide-react";
 import pdfIcon from "../../../../assets/icons/pdf.svg";
 import excelIcon from "../../../../assets/icons/excel.svg";
 
@@ -104,20 +104,20 @@ const UsersPage = () => {
           <Image src={excelIcon} alt="pdf" width={24} height={24} />
         </Button>
 
-        {/* Role Filter Dropdown */}
+        {/* Status Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              className="capitalize shadow text-zinc-500"
+              className="capitalize shadow text-[#929292]"
             >
-              {selectedRole ? `Role: ${selectedRole}` : "Filter by Role"}{" "}
+              {selectedRole ? `Status: ${selectedRole}` : "Status"}{" "}
               <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onClick={() => setSelectedRole(null)}>
-              All Roles
+              All Status
             </DropdownMenuItem>
             {roles.map((role) => (
               <DropdownMenuItem
@@ -133,7 +133,7 @@ const UsersPage = () => {
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="shadow text-zinc-500">
+            <Button variant="outline" className="shadow text-[#929292]">
               Columns <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
@@ -161,7 +161,7 @@ const UsersPage = () => {
         {/* Add new user button */}
         <Link href="/dashboard/users/add-new-user">
           <Button>
-            <UserPlus /> Add New User
+            <Plus /> Add New User
           </Button>
         </Link>
       </section>

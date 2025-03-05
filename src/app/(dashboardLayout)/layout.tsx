@@ -40,7 +40,7 @@ export default function DashboardLayout({
                 type="search"
                 id="search"
                 placeholder="Search your interest"
-                className="rounded-full bg-zinc-50 px-5 h-10"
+                className="rounded-full bg-[#F1F1F1] px-5 h-10 placeholder:text-[#B6B6B6]"
                 size={28}
               />
               <Search className="absolute right-2 top-2 text-zinc-500" />

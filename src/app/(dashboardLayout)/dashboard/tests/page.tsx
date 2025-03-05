@@ -103,7 +103,7 @@ const TestsPage = () => {
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              className="capitalize shadow text-zinc-500"
+              className="capitalize shadow text-[#929292]"
             >
               {doctor ? `Doctor: ${doctor}` : "Doctor"}{" "}
               <ChevronDown className="text-primary" />
@@ -126,7 +126,7 @@ const TestsPage = () => {
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              className="capitalize shadow text-zinc-500"
+              className="capitalize shadow text-[#929292]"
             >
               {facility ? `Facility: ${facility}` : "Facility"}{" "}
               <ChevronDown className="text-primary" />
@@ -149,7 +149,7 @@ const TestsPage = () => {
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              className="capitalize shadow text-zinc-500"
+              className="capitalize shadow text-[#929292]"
             >
               {status ? `Status: ${status}` : "Status"}{" "}
               <ChevronDown className="text-primary" />
@@ -170,7 +170,7 @@ const TestsPage = () => {
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="shadow text-zinc-500">
+            <Button variant="outline" className="shadow text-[#929292]">
               Columns <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>

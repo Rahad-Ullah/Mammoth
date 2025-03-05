@@ -10,10 +10,10 @@ const ToolboxPage = () => {
   return (
     <Tabs
       defaultValue={Object.keys(toolBoxData)[0]}
-      className="flex flex-col lg:flex-row gap-2 h-full"
+      className="flex flex-col lg:flex-row gap-2 h-[calc(100vh-128px)] sticky top-32"
     >
       <div className="bg-white p-4 rounded-xl">
-        <TabsList className="flex flex-col justify-start items-start gap-2 h-min sticky top-20">
+        <TabsList className="flex flex-col justify-start items-start gap-2">
           {Object.keys(toolBoxData).map((item, idx) => {
             return (
               <TabsTrigger
@@ -31,7 +31,7 @@ const ToolboxPage = () => {
       {/* tab content 1 */}
       <TabsContent
         value={Object.keys(toolBoxData)[0]}
-        className="bg-white p-4 rounded-xl"
+        className="bg-white p-4 rounded-xl overflow-y-scroll no-scrollbar"
       >
         {/* header */}
         <section className="flex justify-between items-center gap-2">
@@ -78,7 +78,7 @@ const ToolboxPage = () => {
       {/* tab content 2 */}
       <TabsContent
         value={Object.keys(toolBoxData)[1]}
-        className="bg-white p-4 rounded-xl"
+        className="bg-white p-4 rounded-xl overflow-y-scroll no-scrollbar"
       >
         {/* header */}
         <section className="flex justify-between items-center gap-2">
@@ -125,7 +125,7 @@ const ToolboxPage = () => {
       {/* tab content 3 */}
       <TabsContent
         value={Object.keys(toolBoxData)[2]}
-        className="bg-white p-4 rounded-xl"
+        className="bg-white p-4 rounded-xl overflow-y-scroll no-scrollbar"
       >
         {/* header */}
         <div className="h-full flex flex-col">
@@ -151,7 +151,7 @@ const ToolboxPage = () => {
       {/* tab content 4 */}
       <TabsContent
         value={Object.keys(toolBoxData)[3]}
-        className="bg-white p-4 rounded-xl"
+        className="bg-white p-4 rounded-xl overflow-y-scroll no-scrollbar"
       >
         {/* header */}
         <div className="h-full flex flex-col">
@@ -177,7 +177,7 @@ const ToolboxPage = () => {
       {/* tab content 5 */}
       <TabsContent
         value={Object.keys(toolBoxData)[4]}
-        className="bg-white p-4 rounded-xl"
+        className="bg-white p-4 rounded-xl overflow-y-scroll no-scrollbar"
       >
         {/* header */}
         <div className="h-full flex flex-col">

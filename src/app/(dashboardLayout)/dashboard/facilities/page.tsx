@@ -35,6 +35,9 @@ import Image from "next/image";
 
 // Extract unique roles from data
 const statuses = Array.from(new Set(facilitiesData.map((item) => item.status)));
+const representatives = Array.from(
+  new Set(facilitiesData.map((item) => item.representative.first_name))
+);
 
 const FacilitiesPage = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -45,6 +48,9 @@ const FacilitiesPage = () => {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [status, setStatus] = React.useState<string | null>(null);
+  const [representative, setRepresentative] = React.useState<string | null>(
+    null
+  );
 
   const data = React.useMemo(() => {
     return status
@@ -84,20 +90,74 @@ const FacilitiesPage = () => {
           <Image src={excelIcon} alt="pdf" width={24} height={24} />
         </Button>
 
-        {/* Role Filter Dropdown */}
+        {/* Doctor Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              className="capitalize shadow text-zinc-500"
+              className="capitalize shadow text-[#929292]"
             >
-              {status ? `Status: ${status}` : "Filter by Status"}{" "}
+              {representative ? `Doctor: ${representative}` : "Doctor"}{" "}
+              <ChevronDown className="text-primary" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onClick={() => setRepresentative(null)}>
+              All Doctor
+            </DropdownMenuItem>
+            {representatives.map((item) => (
+              <DropdownMenuItem
+                key={item}
+                onClick={() => setRepresentative(item)}
+              >
+                {capitalizeSentence(item)}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Representative Filter Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="capitalize shadow text-[#929292]"
+            >
+              {representative
+                ? `Representative: ${representative}`
+                : "Representative"}{" "}
+              <ChevronDown className="text-primary" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onClick={() => setRepresentative(null)}>
+              All Representative
+            </DropdownMenuItem>
+            {representatives.map((item) => (
+              <DropdownMenuItem
+                key={item}
+                onClick={() => setRepresentative(item)}
+              >
+                {capitalizeSentence(item)}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Activity Filter Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="capitalize shadow text-[#929292]"
+            >
+              {status ? `Activity: ${status}` : "Activity"}{" "}
               <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onClick={() => setStatus(null)}>
-              All Status
+              All Activity
             </DropdownMenuItem>
             {statuses.map((status) => (
               <DropdownMenuItem key={status} onClick={() => setStatus(status)}>
@@ -110,7 +170,7 @@ const FacilitiesPage = () => {
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="shadow text-zinc-500">
+            <Button variant="outline" className="shadow text-[#929292]">
               Columns <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
