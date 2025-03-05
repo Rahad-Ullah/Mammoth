@@ -112,7 +112,7 @@ const UsersPage = () => {
               className="capitalize shadow text-zinc-500"
             >
               {selectedRole ? `Role: ${selectedRole}` : "Filter by Role"}{" "}
-              <ChevronDown />
+              <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -134,7 +134,7 @@ const UsersPage = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="shadow text-zinc-500">
-              Columns <ChevronDown />
+              Columns <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

@@ -37,7 +37,7 @@ const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "id",
-    header: "Id",
+    header: "Sl. No",
     cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
   },
   {
@@ -48,7 +48,7 @@ const columns: ColumnDef<User>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          User Name
           <ArrowUpDown />
         </Button>
       );
@@ -65,7 +65,7 @@ const columns: ColumnDef<User>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Phone
+          Phone No
           <ArrowUpDown />
         </Button>
       );
@@ -89,14 +89,14 @@ const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "company",
-    header: () => <div>Company</div>,
+    header: () => <div>Facilities Lacation</div>,
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("company")}</div>
     ),
   },
   {
     accessorKey: "role",
-    header: () => <div>Role</div>,
+    header: () => <div>Status</div>,
     cell: ({ row }) => {
       const role = row.getValue("role");
       return (

@@ -1,7 +1,5 @@
 "use client"
 
-import { type LucideIcon } from "lucide-react";
-
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -18,7 +16,7 @@ export function NavMain({
   items: {
     title: string;
     url: string;
-    icon?: LucideIcon;
+    icon?: React.ComponentType<{ fill: string }>;
     isActive?: boolean;
     items?: {
       title: string;
@@ -29,8 +27,10 @@ export function NavMain({
   const pathname = usePathname();
 
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Menu</SidebarGroupLabel>
+    <SidebarGroup className="gap-4">
+      <SidebarGroupLabel className="flex items-center gap-2 text-zinc-400">
+        <span>Menu</span> <span className="flex-1 bg-gray-200 h-0.5"></span>
+      </SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
           const isActive = item.url === pathname;
@@ -46,7 +46,15 @@ export function NavMain({
                       : ""
                   }`}
                 >
-                  {item.icon && <item.icon />}
+                  {item.icon && (
+                    <span className="icon">
+                      {/* Pass 'fill' based on active state */}
+                      {item.icon && (
+                        <item.icon fill={isActive ? "#ffffff" : "#929292"} />
+                      )}
+                    </span>
+                  )}
+
                   <span>{item.title}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>

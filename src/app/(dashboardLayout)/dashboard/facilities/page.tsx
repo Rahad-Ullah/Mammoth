@@ -92,7 +92,7 @@ const FacilitiesPage = () => {
               className="capitalize shadow text-zinc-500"
             >
               {status ? `Status: ${status}` : "Filter by Status"}{" "}
-              <ChevronDown />
+              <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -111,7 +111,7 @@ const FacilitiesPage = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="shadow text-zinc-500">
-              Columns <ChevronDown />
+              Columns <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

@@ -95,7 +95,7 @@ const PatientsPage = () => {
               className="capitalize shadow text-zinc-500"
             >
               {insurance ? `Insurance: ${insurance}` : "Filter by Insurance"}{" "}
-              <ChevronDown />
+              <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -117,7 +117,7 @@ const PatientsPage = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="shadow text-zinc-500">
-              Columns <ChevronDown />
+              Columns <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

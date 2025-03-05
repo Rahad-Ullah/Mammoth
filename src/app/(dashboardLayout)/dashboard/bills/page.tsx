@@ -79,7 +79,7 @@ const BillsPage = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="shadow text-zinc-500">
-              Columns <ChevronDown />
+              Columns <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

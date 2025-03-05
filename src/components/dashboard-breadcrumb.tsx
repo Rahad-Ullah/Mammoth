@@ -28,7 +28,7 @@ const DashboardBreadcrumb = () => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem className="hidden lg:block">
-          {filteredSegments?.length > 1 && <BackButton />}
+          {filteredSegments?.length > 2 && <BackButton />}
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbPage className="md:text-base lg:text-lg font-medium">

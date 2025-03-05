@@ -35,7 +35,7 @@ const columns: ColumnDef<TFacility>[] = [
   },
   {
     accessorKey: "id",
-    header: "Id",
+    header: "Sl. No",
     cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
   },
   {
@@ -46,7 +46,7 @@ const columns: ColumnDef<TFacility>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          Facilities Name
           <ArrowUpDown />
         </Button>
       );

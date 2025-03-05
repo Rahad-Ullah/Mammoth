@@ -1,46 +1,44 @@
-import {
-  FlaskConical,
-  MapPinned,
-  Settings,
-  Users,
-  UsersRound,
-  Wrench,
-} from "lucide-react";
+import BillIcon from "@/components/icons/bill-icon";
+import FacilityIcon from "@/components/icons/facility-icon";
+import PatientIcon from "@/components/icons/patient-icon";
+import TestIcon from "@/components/icons/test-icon";
+import ToolboxIcon from "@/components/icons/tool-icon";
+import UserIcon from "@/components/icons/user-icon";
 
 export const sidebarMenu = {
   navMain: [
     {
       title: "Tests",
       url: "/dashboard/tests",
-      icon: FlaskConical,
+      icon: TestIcon,
       isActive: true,
     },
     {
       title: "Patients",
       url: "/dashboard/patients",
-      icon: Users,
+      icon: PatientIcon,
     },
     {
       title: "User Details",
       url: "/dashboard/users",
-      icon: UsersRound,
+      icon: UserIcon,
     },
     {
       title: "Bill Details",
       url: "/dashboard/bills",
-      icon: Settings,
+      icon: BillIcon,
     },
   ],
   settings: [
     {
       name: "Facilities",
       url: "/dashboard/facilities",
-      icon: MapPinned,
+      icon: FacilityIcon,
     },
     {
       name: "Toolbox",
       url: "/dashboard/toolbox",
-      icon: Wrench,
+      icon: ToolboxIcon,
     },
   ],
 };

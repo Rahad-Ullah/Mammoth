@@ -34,7 +34,7 @@ const columns: ColumnDef<TPatient>[] = [
   },
   {
     accessorKey: "id",
-    header: "Id",
+    header: "Sl. No",
     cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
   },
   {
@@ -45,7 +45,7 @@ const columns: ColumnDef<TPatient>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          Patient Name
           <ArrowUpDown />
         </Button>
       );
@@ -67,7 +67,7 @@ const columns: ColumnDef<TPatient>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Phone
+          Phone No
           <ArrowUpDown />
         </Button>
       );

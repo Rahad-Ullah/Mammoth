@@ -34,7 +34,7 @@ const columns: ColumnDef<TBill>[] = [
   },
   {
     accessorKey: "id",
-    header: "Id",
+    header: "Sl. No",
     cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
   },
   {

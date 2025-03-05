@@ -105,7 +105,8 @@ const TestsPage = () => {
               variant="outline"
               className="capitalize shadow text-zinc-500"
             >
-              {doctor ? `Doctor: ${doctor}` : "Doctor"} <ChevronDown />
+              {doctor ? `Doctor: ${doctor}` : "Doctor"}{" "}
+              <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -127,7 +128,8 @@ const TestsPage = () => {
               variant="outline"
               className="capitalize shadow text-zinc-500"
             >
-              {facility ? `Facility: ${facility}` : "Facility"} <ChevronDown />
+              {facility ? `Facility: ${facility}` : "Facility"}{" "}
+              <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -149,7 +151,8 @@ const TestsPage = () => {
               variant="outline"
               className="capitalize shadow text-zinc-500"
             >
-              {status ? `Status: ${status}` : "Status"} <ChevronDown />
+              {status ? `Status: ${status}` : "Status"}{" "}
+              <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -168,7 +171,7 @@ const TestsPage = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="shadow text-zinc-500">
-              Columns <ChevronDown />
+              Columns <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
