@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.className} antialiased bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB]`}
+        className={`${poppins.className} antialiased bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] min-h-screen`}
       >
         <FormProvider>
           <TestFormProvider>{children}</TestFormProvider>

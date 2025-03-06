@@ -30,6 +30,7 @@ export default function Home() {
           <Link href={"/otp-verify"}>
             <Button>OTP Verify</Button>
           </Link>
+          <h1 className="text-2xl font-medium text-center">Dashboard Pages</h1>
           <Link href={"/dashboard/tests"}>
             <Button>Dashboard</Button>
           </Link>
