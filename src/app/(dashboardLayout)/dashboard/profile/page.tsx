@@ -10,6 +10,8 @@ import { useState } from "react";
 
 const ProfilePage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
+  const [isConfPasswordVisible, setIsConfPasswordVisible] = useState(false);
   return (
     <Tabs
       defaultValue={"profile-details"}
@@ -40,11 +42,11 @@ const ProfilePage = () => {
         className="rounded-xl border-none p-0 overflow-y-scroll no-scrollbar"
       >
         {/* header */}
-        <section className="flex justify-end items-center gap-2">
+        <section className="flex justify-end items-center gap-2 mb-4">
           <EditProfileModal />
         </section>
         {/* body */}
-        <section className="flex gap-16">
+        <section className="flex flex-col md:flex-row gap-16">
           <div className="flex flex-col items-center gap-2">
             <Image
               src={
@@ -140,15 +142,17 @@ const ProfilePage = () => {
                   <div className="relative max-w-[600px]">
                     <Input
                       id="new_password"
-                      type={`${isPasswordVisible ? "text" : "password"}`}
+                      type={`${isNewPasswordVisible ? "text" : "password"}`}
                       placeholder="Enter new password"
                       required
                     />
                     <span
-                      onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                      onClick={() =>
+                        setIsNewPasswordVisible(!isNewPasswordVisible)
+                      }
                       className="text-slate-400 absolute right-3 top-3 cursor-pointer"
                     >
-                      {isPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
+                      {isNewPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
                     </span>
                   </div>
                 </div>
@@ -166,15 +170,17 @@ const ProfilePage = () => {
                   <div className="relative max-w-[600px]">
                     <Input
                       id="confirm_password"
-                      type={`${isPasswordVisible ? "text" : "password"}`}
+                      type={`${isConfPasswordVisible ? "text" : "password"}`}
                       placeholder="Enter new password again"
                       required
                     />
                     <span
-                      onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                      onClick={() =>
+                        setIsConfPasswordVisible(!isConfPasswordVisible)
+                      }
                       className="text-slate-400 absolute right-3 top-3 cursor-pointer"
                     >
-                      {isPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
+                      {isConfPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
                     </span>
                   </div>
                 </div>
