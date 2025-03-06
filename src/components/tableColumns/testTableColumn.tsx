@@ -41,9 +41,19 @@ const columns: ColumnDef<TTest>[] = [
   {
     accessorKey: "report_no",
     header: "Report No.",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("report_no")}</div>
-    ),
+    cell: ({ row }) => {
+      const item = row.original as TTest;
+      return (
+        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {row.getValue("report_no")}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "ordering_provider",
@@ -58,9 +68,19 @@ const columns: ColumnDef<TTest>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("ordering_provider")}</div>
-    ),
+    cell: ({ row }) => {
+      const item = row.original as TTest;
+      return (
+        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {row.getValue("ordering_provider")}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "facility",
@@ -75,9 +95,19 @@ const columns: ColumnDef<TTest>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("facility")}</div>
-    ),
+    cell: ({ row }) => {
+      const item = row.original as TTest;
+      return (
+        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {row.getValue("facility")}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "patient",
@@ -93,27 +123,52 @@ const columns: ColumnDef<TTest>[] = [
       );
     },
     cell: ({ row }) => {
+      const item = row.original as TTest;
       const patient = row.getValue("patient") as TPatient;
       return (
-        <div className="capitalize">
-          {patient.first_name} {patient.last_name}
-        </div>
+        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {patient.first_name} {patient.last_name}
+          </Button>
+        </Link>
       );
     },
   },
   {
     accessorKey: "ordering_physician",
     header: () => <div>Physician</div>,
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("ordering_physician")}</div>
-    ),
+    cell: ({ row }) => {
+      const item = row.original as TTest;
+      return (
+        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {row.getValue("ordering_physician")}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "apply_date",
     header: () => <div>Apply Date</div>,
     cell: ({ row }) => {
       const item = row.original as TTest;
-      return <div className="capitalize">{item.apply_date.split("T")[0]}</div>;
+      return (
+        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.apply_date.split("T")[0]}
+          </Button>
+        </Link>
+      );
     },
   },
   {
@@ -122,9 +177,14 @@ const columns: ColumnDef<TTest>[] = [
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <div className="capitalize text-red-500">
-          {item.report_date.split("T")[0]}
-        </div>
+        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize text-red-500 w-full justify-start hover:bg-transparent"
+          >
+            {item.report_date.split("T")[0]}
+          </Button>
+        </Link>
       );
     },
   },
@@ -132,25 +192,28 @@ const columns: ColumnDef<TTest>[] = [
     accessorKey: "status",
     header: () => <div>Status</div>,
     cell: ({ row }) => {
+      const item = row.original as TTest;
       const status = row.getValue("status");
       return (
-        <Badge
-          className={`capitalize font-medium text-white w-full rounded-full hover:bg-primary flex justify-center py-1.5`}
-          style={{
-            backgroundColor:
-              status === "Collected"
-                ? "#1B83B8"
-                : status === "Send to Histology"
-                ? "#20B9CB"
-                : status === "Ready for Pathology"
-                ? "#319517"
-                : status === "Final"
-                ? "#FF2A30"
-                : "",
-          }}
-        >
-          {row.getValue("status")}
-        </Badge>
+        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+          <Badge
+            className={`capitalize font-medium text-white w-full rounded-full hover:bg-primary flex justify-center py-1.5`}
+            style={{
+              backgroundColor:
+                status === "Collected"
+                  ? "#1B83B8"
+                  : status === "Send to Histology"
+                  ? "#20B9CB"
+                  : status === "Ready for Pathology"
+                  ? "#319517"
+                  : status === "Final"
+                  ? "#FF2A30"
+                  : "",
+            }}
+          >
+            {row.getValue("status")}
+          </Badge>
+        </Link>
       );
     },
   },

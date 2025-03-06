@@ -37,14 +37,36 @@ const columns: ColumnDef<TBill>[] = [
   {
     accessorKey: "id",
     header: "Sl. No",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
+    cell: ({ row }) => {
+      const item = row.original as TBill;
+      return (
+        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.id}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "report_no",
     header: "Report No.",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("report_no")}</div>
-    ),
+    cell: ({ row }) => {
+      const item = row.original as TBill;
+      return (
+        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.report_no}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "ordering_provider",
@@ -61,7 +83,16 @@ const columns: ColumnDef<TBill>[] = [
     },
     cell: ({ row }) => {
       const item = row.original as TBill;
-      return <div className="capitalize">{item.ordering_provider}</div>;
+      return (
+        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.ordering_provider}
+          </Button>
+        </Link>
+      );
     },
   },
   {
@@ -78,7 +109,17 @@ const columns: ColumnDef<TBill>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="">{row.getValue("ordering_physician")}</div>;
+      const item = row.original as TBill;
+      return (
+        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.ordering_physician}
+          </Button>
+        </Link>
+      );
     },
   },
   {
@@ -86,7 +127,16 @@ const columns: ColumnDef<TBill>[] = [
     header: () => <div>Bill Date</div>,
     cell: ({ row }) => {
       const item = row.original as TBill;
-      return <div className="capitalize">{item.bill_date}</div>;
+      return (
+        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.bill_date}
+          </Button>
+        </Link>
+      );
     },
   },
   {
@@ -105,7 +155,16 @@ const columns: ColumnDef<TBill>[] = [
     cell: ({ row }) => {
       const item = row.original as TBill;
       const bill = parseFloat(item.bill_amount.toString()).toFixed(2);
-      return <div className="px-4">{`$${bill}`}</div>;
+      return (
+        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent px-6"
+          >
+            $ {bill}
+          </Button>
+        </Link>
+      );
     },
   },
   {

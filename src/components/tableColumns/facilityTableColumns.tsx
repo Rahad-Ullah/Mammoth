@@ -4,6 +4,7 @@ import { TFacility } from "@/types/facility";
 import { TUser } from "@/types/user";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Info } from "lucide-react";
+import Link from "next/link";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 
 // table column definition
@@ -38,7 +39,19 @@ const columns: ColumnDef<TFacility>[] = [
   {
     accessorKey: "id",
     header: "Sl. No",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
+    cell: ({ row }) => {
+      const item = row.original as TFacility;
+      return (
+        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.id}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "facility_name",
@@ -53,9 +66,19 @@ const columns: ColumnDef<TFacility>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("facility_name")}</div>
-    ),
+    cell: ({ row }) => {
+      const item = row.original as TFacility;
+      return (
+        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.facility_name}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "address",
@@ -70,7 +93,19 @@ const columns: ColumnDef<TFacility>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("address")}</div>,
+    cell: ({ row }) => {
+      const item = row.original as TFacility;
+      return (
+        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.address}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "doctors",
@@ -87,11 +122,17 @@ const columns: ColumnDef<TFacility>[] = [
     },
     cell: ({ row }) => {
       const doctors = row.getValue("doctors") as TUser[];
+      const item = row.original as TFacility;
       return (
-        <div className="capitalize">
-          {`Dr. ${doctors[0].first_name} ${doctors[0].last_name}, `}
-          <span className="text-primary">{doctors.length - 1}+</span>
-        </div>
+        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {`Dr. ${doctors[0].first_name} ${doctors[0].last_name}, `}
+            <span className="text-primary">{doctors.length - 1}+</span>
+          </Button>
+        </Link>
       );
     },
   },
@@ -99,11 +140,16 @@ const columns: ColumnDef<TFacility>[] = [
     accessorKey: "representative",
     header: () => <div>Representative</div>,
     cell: ({ row }) => {
-      const representative = row.getValue("representative") as TUser;
+      const item = row.original as TFacility;
       return (
-        <div className="capitalize">
-          {representative.first_name} {representative.last_name}
-        </div>
+        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.representative.first_name} {item.representative.last_name}
+          </Button>
+        </Link>
       );
     },
   },
@@ -111,18 +157,24 @@ const columns: ColumnDef<TFacility>[] = [
     accessorKey: "status",
     header: () => <div>Status</div>,
     cell: ({ row }) => {
+      const item = row.original as TFacility;
       const status = row.getValue("status");
       return (
-        <div className={`capitalize`}>
-          <div className="flex items-center space-x-2">
-            <MdOutlineRadioButtonChecked
-              className={`size-5 ${
-                status === "active" ? "text-[#319517]" : "text-red-500"
-              }`}
-            />
-            <p>{status as string}</p>
-          </div>
-        </div>
+        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className={`capitalize w-full justify-start hover:bg-transparent`}
+          >
+            <div className="flex items-center space-x-2">
+              <MdOutlineRadioButtonChecked
+                className={`size-5 ${
+                  status === "active" ? "text-[#319517]" : "text-red-500"
+                }`}
+              />
+              <p>{status as string}</p>
+            </div>
+          </Button>
+        </Link>
       );
     },
   },
@@ -130,13 +182,16 @@ const columns: ColumnDef<TFacility>[] = [
     id: "actions",
     enableHiding: false,
     header: () => <div>Action</div>,
-    cell: () => {
+    cell: ({ row }) => {
+      const item = row.original as TFacility;
       return (
-        <div className="flex items-center gap-1">
-          <Button variant={"ghost"} size={"icon"} className="text-primary">
-            <Info />
-          </Button>
-        </div>
+        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+          <div className="flex items-center gap-1">
+            <Button variant={"ghost"} size={"icon"} className="text-primary">
+              <Info />
+            </Button>
+          </div>
+        </Link>
       );
     },
   },

@@ -37,7 +37,19 @@ const columns: ColumnDef<TPatient>[] = [
   {
     accessorKey: "id",
     header: "Sl. No",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
+    cell: ({ row }) => {
+      const item = row.original as TPatient;
+      return (
+        <Link href={`/dashboard/patients/patient-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {row.getValue("id")}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "first_name",
@@ -55,9 +67,14 @@ const columns: ColumnDef<TPatient>[] = [
     cell: ({ row }) => {
       const item = row.original as TPatient;
       return (
-        <div className="capitalize">
-          {item.first_name} {item.last_name}
-        </div>
+        <Link href={`/dashboard/patients/patient-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.first_name} {item.last_name}
+          </Button>
+        </Link>
       );
     },
   },
@@ -74,7 +91,19 @@ const columns: ColumnDef<TPatient>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("phone")}</div>,
+    cell: ({ row }) => {
+      const item = row.original as TPatient;
+      return (
+        <Link href={`/dashboard/patients/patient-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.phone}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "email",
@@ -90,7 +119,17 @@ const columns: ColumnDef<TPatient>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="">{row.getValue("email")}</div>;
+      const item = row.original as TPatient;
+      return (
+        <Link href={`/dashboard/patients/patient-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="w-full justify-start hover:bg-transparent"
+          >
+            {item.email}
+          </Button>
+        </Link>
+      );
     },
   },
   {
@@ -98,7 +137,16 @@ const columns: ColumnDef<TPatient>[] = [
     header: () => <div>Insurance</div>,
     cell: ({ row }) => {
       const item = row.original as TPatient;
-      return <div className="capitalize">{item.insurance_company}</div>;
+      return (
+        <Link href={`/dashboard/patients/patient-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.insurance_company}
+          </Button>
+        </Link>
+      );
     },
   },
   {

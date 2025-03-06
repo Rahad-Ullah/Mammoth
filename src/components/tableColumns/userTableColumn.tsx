@@ -40,7 +40,19 @@ const columns: ColumnDef<User>[] = [
   {
     accessorKey: "id",
     header: "Sl. No",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
+    cell: ({ row }) => {
+      const item = row.original as User;
+      return (
+        <Link href={`/dashboard/users/user-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.id}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "first_name",
@@ -55,9 +67,19 @@ const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("first_name")}</div>
-    ),
+    cell: ({ row }) => {
+      const item = row.original as User;
+      return (
+        <Link href={`/dashboard/users/user-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.first_name} {item.last_name}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "phone",
@@ -72,7 +94,19 @@ const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
+    cell: ({ row }) => {
+      const item = row.original as User;
+      return (
+        <Link href={`/dashboard/users/user-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.phone}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "email",
@@ -87,38 +121,63 @@ const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => {
+      const item = row.original as User;
+      return (
+        <Link href={`/dashboard/users/user-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="w-full justify-start hover:bg-transparent"
+          >
+            {item.email}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "company",
     header: () => <div>Facilities Lacation</div>,
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("company")}</div>
-    ),
+    cell: ({ row }) => {
+      const item = row.original as User;
+      return (
+        <Link href={`/dashboard/users/user-details/${item.id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent"
+          >
+            {item.company}
+          </Button>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "role",
     header: () => <div>Status</div>,
     cell: ({ row }) => {
       const role = row.getValue("role");
+      const item = row.original as User;
       return (
-        <Badge
-          className={`capitalize font-medium text-white rounded-full hover:bg-primary py-1.5 w-full flex justify-center`}
-          style={{
-            backgroundColor:
-              role === "admin"
-                ? "#F17600"
-                : role === "representative"
-                ? "#C42985"
-                : role === "pathologist"
-                ? "#319517"
-                : role === "histologist"
-                ? "#85CA53"
-                : "",
-          }}
-        >
-          {row.getValue("role")}
-        </Badge>
+        <Link href={`/dashboard/users/user-details/${item.id}`}>
+          <Badge
+            className={`capitalize font-medium text-white rounded-full hover:bg-primary py-1.5 w-full flex justify-center`}
+            style={{
+              backgroundColor:
+                role === "admin"
+                  ? "#F17600"
+                  : role === "representative"
+                  ? "#C42985"
+                  : role === "pathologist"
+                  ? "#319517"
+                  : role === "histologist"
+                  ? "#85CA53"
+                  : "",
+            }}
+          >
+            {row.getValue("role")}
+          </Badge>
+        </Link>
       );
     },
   },

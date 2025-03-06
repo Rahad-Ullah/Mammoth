@@ -41,7 +41,7 @@ const DashboardTable = ({ table, columns }) => {
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="text-zinc-500">
+                  <TableCell key={cell.id} className="text-zinc-500 p-0 h-14">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
