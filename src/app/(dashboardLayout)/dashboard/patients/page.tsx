@@ -78,7 +78,7 @@ const PatientsPage = () => {
   return (
     <div className="w-full bg-white p-4 rounded-xl h-full">
       {/* table top option bar */}
-      <section className="flex justify-end gap-4 items-center pb-4">
+      <section className="flex flex-wrap justify-center md:justify-end gap-4 items-center pb-4">
         {/* PDF button */}
         <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
           <Image src={pdfIcon} alt="pdf" width={24} height={24} />

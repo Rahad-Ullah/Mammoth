@@ -12,8 +12,8 @@ import {
 const TablePagination = ({ table }) => {
   const [page, setPage] = useState(1);
   return (
-    <div className="flex items-center gap-2 pt-4">
-      <div className="absolute text-sm text-muted-foreground">
+    <div className="flex flex-col md:flex-row items-center gap-4 pt-4">
+      <div className="md:absolute text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>

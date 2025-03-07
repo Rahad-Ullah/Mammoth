@@ -17,14 +17,15 @@ import Image from "next/image";
 import { NavSettings } from "./nav-settings";
 import { sidebarMenu } from "@/constants/dashboard-sidebar-menu";
 import { LogOut } from "lucide-react";
+import Link from "next/link";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <figure className="flex justify-center mt-2">
+        <Link href={"/"} className="flex justify-center mt-2">
           <Image src={"/logo.png"} alt="logo" width={120} height={68} />
-        </figure>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={sidebarMenu.navMain} />

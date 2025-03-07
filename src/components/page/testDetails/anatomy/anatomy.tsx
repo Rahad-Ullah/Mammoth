@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { anatomyPointsData } from "@/constants/anatomyPointsData";
 import { Eye, EyeOff, Mars, RefreshCcw, Venus } from "lucide-react";
@@ -43,6 +45,9 @@ const ImageAnnotation = ({ testPoints }) => {
     return <div className="text-center text-xl">Loading...</div>;
   }
 
+  const screenWidth = window.innerWidth;
+  const canvasWidth = screenWidth > 425 ? 390 : 340;
+
   return (
     <div className="flex flex-col md:flex-row justify-center space-y-4 sticky top-20">
       <div className="md:grid gap-2 mt-12 h-fit">
@@ -75,7 +80,7 @@ const ImageAnnotation = ({ testPoints }) => {
           {isGenderMale ? <Mars /> : <Venus />}
         </Button>
       </div>
-      <Stage width={390} height={560} className="flex-1">
+      <Stage width={canvasWidth} height={560} className="flex-1">
         <Layer>
           {/* Image rendering */}
           {isGenderMale && !isImageFront && (
