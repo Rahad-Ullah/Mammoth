@@ -78,7 +78,7 @@ const EditProfileModal = () => {
           <Pencil />
         </Button>
       </DialogTrigger>
-      <DialogContent className="min-w-[80vw] grid gap-6">
+      <DialogContent className="min-w-[80vw] h-[90vh] overflow-scroll grid gap-6">
         <DialogHeader>
           <DialogTitle className="text-primary font-medium text-xl">
             Edit Profile
@@ -262,13 +262,6 @@ const EditProfileModal = () => {
             </form>
           </Form>
         </section>
-        {/* <DialogFooter>
-          <DialogClose asChild>
-            <Button type="submit" className="w-full">
-              Add Option
-            </Button>
-          </DialogClose>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );
