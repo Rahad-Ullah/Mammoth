@@ -13,7 +13,7 @@ export default function Home() {
         Welcome to <span className="text-primary-foreground">MAMMOTH</span>
       </h1>
 
-      <section className="py-16">
+      <section className="">
         <h1 className="text-2xl font-medium text-center">
           Authentication Pages
         </h1>
@@ -35,6 +35,13 @@ export default function Home() {
             <Button>Dashboard</Button>
           </Link>
         </div>
+      </section>
+
+      <section className="max-w-fit mx-auto text-red-500 font-semibold p-6 rounded-lg">
+        <h3>
+          Note: This page is only for testing purpose. In production mode it
+          will be removed.
+        </h3>
       </section>
     </div>
   );
