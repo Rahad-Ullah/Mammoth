@@ -16,12 +16,47 @@ import { Checkbox } from "./ui/checkbox";
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
+import nexiosInstance, { ApiResponse } from "../../nexios.config";
+import toast from "react-hot-toast";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const { setUser } = useAuthContext();
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    toast.loading("Logging in...", {
+      id: "login",
+    });
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+
+    try {
+      const { data } = await nexiosInstance.post<ApiResponse>(
+        "/auth/login",
+        payload
+      );
+
+      if (data.success) {
+        toast.success("Login successful", { id: "login" });
+        setUser(data.data?.accessToken as string);
+        router.push("/dashboard/tests");
+      } else {
+        toast.error(data.message, { id: "login" });
+      }
+    } catch (error: unknown) {
+      console.log("Error fetching data:", error);
+    }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -36,7 +71,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="grid gap-6">
               <div className="grid gap-6">
                 {/* email */}
@@ -44,8 +79,10 @@ export function LoginForm({
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="me@example.com"
+                    defaultValue={"sharifsj143@gmail.com"}
                     required
                     className="bg-white border-none shadow-none"
                   />
@@ -58,8 +95,10 @@ export function LoginForm({
                   <div className="relative">
                     <Input
                       id="password"
+                      name="password"
                       type={`${isPasswordVisible ? "text" : "password"}`}
                       placeholder="Enter password"
+                      defaultValue={"MasomRana456"}
                       required
                       className="bg-white border-none shadow-none"
                     />
@@ -95,7 +134,7 @@ export function LoginForm({
                 </Button>
               </div>
               {/* link to sign up */}
-              <div className="text-center text-sm md:mt-6">
+              {/* <div className="text-center text-sm md:mt-6">
                 Don&apos;t have any account?{" "}
                 <Link
                   href="/sign-up"
@@ -103,7 +142,7 @@ export function LoginForm({
                 >
                   Sign Up
                 </Link>
-              </div>
+              </div> */}
             </div>
           </form>
         </CardContent>
