@@ -10,14 +10,89 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import Link from "next/link";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "./ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import toast from "react-hot-toast";
+import { useSearchParams, useRouter } from "next/navigation";
+import nexiosInstance, { ApiResponse } from "../../nexios.config";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 
+const FormSchema = z.object({
+  oneTimeCode: z.string().min(5, {
+    message: "Your one-time password must be 5 digits.",
+  }),
+});
 export function OtpVerifyForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams?.get("email");
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      oneTimeCode: "",
+    },
+  });
+
+  // handle form submit
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    toast.loading("Verifying...", {
+      id: "verify-otp-toast",
+    });
+
+    const payload = {
+      oneTimeCode: Number(values.oneTimeCode),
+      email,
+    };
+
+    try {
+      const { data } = await nexiosInstance.post<ApiResponse>(
+        "/auth/verify-email",
+        payload
+      );
+
+      if (data.success) {
+        toast.success(data.message, { id: "verify-otp-toast" });
+        router.push(`/reset-password?auth=${data?.data}`);
+      } else {
+        toast.error(data.message || "Failed to verify", {
+          id: "verify-otp-toast",
+        });
+      }
+    } catch (error: unknown) {
+      console.log("Error fetching data:", error);
+    }
+  };
+
+  // handle resend otp
+  const handleResend = async () => {
+    toast.loading("Sending...", {
+      id: "resend-otp-toast",
+    });
+    try {
+      const { data } = await nexiosInstance.post<ApiResponse>(
+        "/auth/forget-password",
+        { email }
+      );
+
+      if (data.success) {
+        toast.success(data.message, { id: "resend-otp-toast" });
+      } else {
+        toast.error(data.message || "Failed to resend", {
+          id: "resend-otp-toast",
+        });
+      }
+    } catch (error: unknown) {
+      console.log("Error fetching data:", error);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="py-4 md:px-20 md:py-12 shadow-none border-none bg-white/60 backdrop-blur-xl">
@@ -32,38 +107,55 @@ export function OtpVerifyForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
-            <div className="grid gap-6">
-              <div className="grid gap-6">
-                {/* email */}
-                <div className="grid gap-2 mt-2">
-                  <InputOTP maxLength={5} pattern={REGEXP_ONLY_DIGITS}>
-                    <InputOTPGroup className="w-full justify-center gap-2 md:gap-6">
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                      <InputOTPSlot index={4} />
-                    </InputOTPGroup>
-                  </InputOTP>
+          <div className="grid gap-6">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="grid gap-6">
+                  {/* email */}
+                  <div className="grid gap-2 mt-2">
+                    <FormField
+                      control={form.control}
+                      name="oneTimeCode"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <InputOTP
+                              maxLength={5}
+                              pattern={REGEXP_ONLY_DIGITS}
+                              {...field}
+                            >
+                              <InputOTPGroup className="w-full justify-center gap-2 md:gap-6">
+                                <InputOTPSlot index={0} />
+                                <InputOTPSlot index={1} />
+                                <InputOTPSlot index={2} />
+                                <InputOTPSlot index={3} />
+                                <InputOTPSlot index={4} />
+                              </InputOTPGroup>
+                            </InputOTP>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  {/* submit button */}
+                  <Button type="submit" className="w-full">
+                    Sign In
+                  </Button>
                 </div>
-                {/* submit button */}
-                <Button type="submit" className="w-full">
-                  Sign In
-                </Button>
-              </div>
-              {/* link to sign up */}
-              <div className="text-center text-sm mt-6">
-                You have not received the email?{" "}
-                <Link
-                  href=""
-                  className="font-medium text-primary-foreground hover:underline underline-offset-4"
-                >
-                  Resend
-                </Link>
-              </div>
+              </form>
+            </Form>
+            {/* link to sign up */}
+            <div className="text-center text-sm mt-6">
+              You have not received the email?{" "}
+              <span
+                onClick={handleResend}
+                className="font-medium text-primary-foreground hover:underline underline-offset-4"
+              >
+                Resend
+              </span>
             </div>
-          </form>
+          </div>
         </CardContent>
       </Card>
     </div>

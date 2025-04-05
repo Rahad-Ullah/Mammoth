@@ -38,11 +38,10 @@ export function ForgotPasswordForm({
         "/auth/forget-password",
         payload
       );
-      console.log(data);
 
       if (data.success) {
         toast.success(data.message, { id: "forgot-password-toast" });
-        router.push("/otp-verify");
+        router.push(`/otp-verify?email=${payload.email}`);
       } else {
         toast.error(data.message || "Failed to send", {
           id: "forgot-password-toast",
