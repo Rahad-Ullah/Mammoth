@@ -66,7 +66,7 @@ export function OtpVerifyForm({
         });
       }
     } catch (error: unknown) {
-      console.log("Error fetching data:", error);
+      console.log(error);
     }
   };
 

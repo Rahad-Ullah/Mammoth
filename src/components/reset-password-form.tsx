@@ -14,6 +14,26 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+import nexiosInstance, { ApiResponse } from "../../nexios.config";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+
+// zod schema for form validation
+const FormSchema = z
+  .object({
+    newPassword: z.string().min(8, {
+      message: "Password must be at least 8 characters long",
+    }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Password not matched",
+    path: ["confirmPassword"], // Error will be shown on the confirmPassword field
+  });
 
 export function ResetPasswordForm({
   className,
@@ -21,6 +41,49 @@ export function ResetPasswordForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfPasswordVisible, setIsConfPasswordVisible] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams?.get("auth");
+
+  // define form
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
+  // handle form submit
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    console.log(values);
+    toast.loading("Reseting...", {
+      id: "reset-password-toast",
+    });
+
+    try {
+      const { data } = await nexiosInstance.post<ApiResponse>(
+        "/auth/reset-password",
+        values,
+        {
+          headers: {
+            Authorization: token as string,
+          },
+        }
+      );
+
+      if (data.success) {
+        toast.success(data.message, { id: "reset-password-toast" });
+        router.push(`/login`);
+      } else {
+        toast.error(data.message || "Failed to reset", {
+          id: "reset-password-toast",
+        });
+      }
+    } catch (error: unknown) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -35,60 +98,86 @@ export function ResetPasswordForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
-            <div className="grid gap-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-6">
                 {/* new password */}
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">New Password</Label>
-                  </div>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={`${isPasswordVisible ? "text" : "password"}`}
-                      placeholder="Enter password"
-                      required
-                      className="bg-white border-none shadow-none"
-                    />
-                    <span
-                      onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                      className="text-slate-400 absolute right-3 top-3 cursor-pointer"
-                    >
-                      {isPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
-                    </span>
-                  </div>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="newPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center">
+                        <Label htmlFor="password">New Password</Label>
+                      </div>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            id="password"
+                            type={`${isPasswordVisible ? "text" : "password"}`}
+                            placeholder="Enter password"
+                            className="bg-white border-none shadow-none"
+                            {...field}
+                          />
+                          <span
+                            onClick={() =>
+                              setIsPasswordVisible(!isPasswordVisible)
+                            }
+                            className="text-slate-400 absolute right-3 top-3 cursor-pointer"
+                          >
+                            {isPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
+                          </span>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 {/* confirm new password */}
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="conf-password">Confirm Password</Label>
-                  </div>
-                  <div className="relative">
-                    <Input
-                      id="conf-password"
-                      type={`${isConfPasswordVisible ? "text" : "password"}`}
-                      placeholder="Enter password"
-                      required
-                      className="bg-white border-none shadow-none"
-                    />
-                    <span
-                      onClick={() =>
-                        setIsConfPasswordVisible(!isConfPasswordVisible)
-                      }
-                      className="text-slate-400 absolute right-3 top-3 cursor-pointer"
-                    >
-                      {isConfPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
-                    </span>
-                  </div>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center">
+                        <Label htmlFor="conf-password">Confirm Password</Label>
+                      </div>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            id="conf-password"
+                            type={`${
+                              isConfPasswordVisible ? "text" : "password"
+                            }`}
+                            placeholder="Enter password"
+                            className="bg-white border-none shadow-none"
+                            {...field}
+                          />
+                          <span
+                            onClick={() =>
+                              setIsConfPasswordVisible(!isConfPasswordVisible)
+                            }
+                            className="text-slate-400 absolute right-3 top-3 cursor-pointer"
+                          >
+                            {isConfPasswordVisible ? (
+                              <EyeOffIcon />
+                            ) : (
+                              <EyeIcon />
+                            )}
+                          </span>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 {/* submit button */}
                 <Button type="submit" className="w-full">
-                  Sign In
+                  Reset
                 </Button>
               </div>
-            </div>
-          </form>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>
