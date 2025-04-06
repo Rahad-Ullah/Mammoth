@@ -26,7 +26,7 @@ export function LoginForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const { setUser } = useAuthContext();
+  const { setToken } = useAuthContext();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,7 +48,7 @@ export function LoginForm({
 
       if (data.success) {
         toast.success("Login successful", { id: "login" });
-        setUser(data.data?.accessToken as string);
+        setToken(data.data?.accessToken as string);
         router.push("/dashboard/tests");
       } else {
         toast.error(data.message, { id: "login" });

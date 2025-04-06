@@ -5,6 +5,8 @@ import { setCookie, deleteCookie } from "cookies-next";
 
 // Define the context type
 interface AuthContextType {
+  token: string | null | unknown;
+  setToken: (token: string | null) => void;
   user: string | null | unknown;
   setUser: (user: string | null) => void;
   logout: () => void;
@@ -15,12 +17,25 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({
   children,
+  initialToken,
   initialUser,
 }: {
   children: ReactNode;
+  initialToken: string | null;
   initialUser: string | null;
 }) => {
+  const [token, setTokenState] = useState<string | null>(initialToken);
   const [user, setUserState] = useState<string | null>(initialUser);
+
+  // Function to update user state and cookies
+  const setToken = (newToken: string | null) => {
+    if (newToken) {
+      setCookie("accessToken", newToken, { maxAge: 60 * 60 * 24 * 7 }); // Store for 7 days
+    } else {
+      deleteCookie("accessToken");
+    }
+    setTokenState(newToken);
+  };
 
   // Function to update user state and cookies
   const setUser = (newUser: string | null) => {
@@ -36,7 +51,7 @@ export const AuthProvider = ({
   const logout = () => setUser(null);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider value={{ token, setToken, user, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -67,7 +67,9 @@ export function ResetPasswordForm({
         values,
         {
           headers: {
-            Authorization: token as string,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );

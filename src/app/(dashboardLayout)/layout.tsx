@@ -1,6 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import DashboardBreadcrumb from "@/components/dashboard-breadcrumb";
-import { NavUser } from "@/components/nav-user";
+import NavUserWrapper from "@/components/nav-user-wrapper";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,7 +8,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { userData } from "@/constants/dashboard-sidebar-menu";
+
 import { Bell, Search } from "lucide-react";
 import { Metadata } from "next";
 
@@ -50,7 +50,7 @@ export default function DashboardLayout({
               <Bell />
             </Button>
             {/* user dropdown */}
-            <NavUser user={userData} />
+            <NavUserWrapper />
           </div>
         </header>
         {/* dashboard content */}
