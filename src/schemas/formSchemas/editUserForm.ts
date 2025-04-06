@@ -35,6 +35,8 @@ export const editUserFormSchema = () => {
         message: "Must be at least 3 characters.",
       })
       .optional(),
+    company_name: z.string().optional(),
+    npi_number: z.string().optional(),
     apt_number: z.string().optional(),
     facility_location: z.string().optional(),
   });

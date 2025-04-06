@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import FacilityCard from "@/components/page/facilityDetails/facilityCard";
 import GraySection from "@/components/page/testDetails/grayPortion";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { facilitiesData } from "@/constants/facilities";
 import { testsData } from "@/constants/tests";
-import { TFacility } from "@/types/facility";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
 
 type PageParams = Promise<{ id: string }>;
@@ -11,9 +11,7 @@ type PageParams = Promise<{ id: string }>;
 const FacilityDetailsPage = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
-  const facility = facilitiesData.find(
-    (item: TFacility) => item.id === Number(id)
-  );
+  const facility = facilitiesData.find((item: any) => item.id === Number(id));
   if (!facility) return <h1>Data not found</h1>;
 
   return (

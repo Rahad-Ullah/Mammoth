@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import avater from "../../../assets/images/user-avater.png";
 import { ImageIcon } from "lucide-react";
+import { config } from "@/config/env-config";
 
-const ImageUpload = ({ file, setFile }) => {
-  const [image, setImage] = useState<string | null>(file);
+const ImageUpload = ({ setFile, user }) => {
+  const [image, setImage] = useState<string | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -27,7 +27,7 @@ const ImageUpload = ({ file, setFile }) => {
         >
           {/* Display Image or Placeholder */}
           <Image
-            src={image || avater} // Display uploaded image or default
+            src={image || `${config.baseURL}${user.image}`} // Display uploaded image or default
             alt="Profile"
             width={350}
             height={300}

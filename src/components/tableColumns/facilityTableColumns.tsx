@@ -129,7 +129,7 @@ const columns: ColumnDef<TFacility>[] = [
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {`Dr. ${doctors[0].first_name} ${doctors[0].last_name}, `}
+            {`Dr. ${doctors[0].firstname} ${doctors[0].lastname}, `}
             <span className="text-primary">{doctors.length - 1}+</span>
           </Button>
         </Link>
@@ -147,7 +147,7 @@ const columns: ColumnDef<TFacility>[] = [
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.representative.first_name} {item.representative.last_name}
+            {item.representative.firstname} {item.representative.lastname}
           </Button>
         </Link>
       );

@@ -1,16 +1,22 @@
 export type TUser = {
-  id: number;
-  first_name: string;
-  last_name: string;
+  _id: string;
+  firstname: string;
+  lastname: string;
+  role: string;
   email: string;
   phone: string;
-  address: string;
-  company: string;
-  role: string;
-  status: string;
-  npi?: string;
-  apt_number?: string;
   image: string;
-  signature?: string;
-  facility_location?: string;
+  status: string;
+  address: string;
+  company_name: string;
+  signature: string;
+  facility_location: string;
+  npi_number: number;
+  apt_number: number;
+  isLocked: boolean;
+  verified: boolean;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  name: string;
+  id: number;
 };

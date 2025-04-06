@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -58,7 +59,7 @@ const FacilitiesPage = () => {
       : facilitiesData;
   }, [status]);
 
-  const table = useReactTable<TFacility>({
+  const table = useReactTable<any>({
     data,
     columns: columns as ColumnDef<TFacility>[],
     onSortingChange: setSorting,

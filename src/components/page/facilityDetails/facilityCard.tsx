@@ -1,7 +1,7 @@
-import { TFacility } from "@/types/facility";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
 
-const FacilityCard = ({ facility }: { facility: TFacility }) => {
+const FacilityCard = ({ facility }: { facility: any }) => {
   return (
     <ul className="grid grid-cols-1 xl:grid-cols-2 gap-6">
       <li className="grid grid-cols-1 md:grid-cols-2 gap-4">

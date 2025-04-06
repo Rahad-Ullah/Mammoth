@@ -41,11 +41,12 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { TUser } from "@/types/user";
+import nexiosInstance, { ApiResponse } from "../../../../nexios.config";
+import toast from "react-hot-toast";
 
-const EditProfileModal = () => {
-  const [file, setFile] = useState<File | string | null>(
-    "https://images.unsplash.com/photo-1633332755192-727a05c4013d?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"
-  );
+const EditProfileModal = ({ user }: { user: TUser }) => {
+  const [file, setFile] = useState<File | string | null>(user.image);
 
   // 1. Define your form schema.
   const formSchema = editUserFormSchema();
@@ -54,21 +55,52 @@ const EditProfileModal = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone: "",
-      address: "",
-      apt_number: "",
-      facility_location: "",
+      first_name: user?.firstname,
+      last_name: user?.lastname,
+      email: user?.email,
+      phone: user?.phone,
+      company_name: user?.company_name,
+      address: user?.address || "",
+      npi_number: user?.npi_number?.toString() || "",
+      apt_number: user?.apt_number?.toString() || "",
+      facility_location: user?.facility_location || "",
     },
   });
 
   // 3. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    toast.loading("Updating...", {
+      id: "update-profile",
+    });
+    const formData = new FormData();
+
+    // Append all form values to FormData
+    Object.entries(values).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
+
+    // Append the file (if any) to FormData
+    if (file) {
+      formData.append("image", file);
+    }
+
+    // Send the form data to the API
+    try {
+      const { data } = await nexiosInstance.put<ApiResponse>(
+        "/user/profile",
+        formData
+      );
+      if (data.success) {
+        toast.success(data.message, {
+          id: "update-profile",
+        });
+      }
+    } catch (error) {
+      toast.error("Failed to update", {
+        id: "update-profile",
+      });
+      console.log(error);
+    }
   }
 
   return (
@@ -86,7 +118,7 @@ const EditProfileModal = () => {
         </DialogHeader>
         <div className="grid gap-4">
           <Label>Upload Profile Image</Label>
-          <ImageUpload file={file} setFile={setFile} />
+          <ImageUpload setFile={setFile} user={user} />
         </div>
         <section>
           <Form {...form}>
@@ -169,89 +201,125 @@ const EditProfileModal = () => {
                 )}
               />
 
-              {/* APT Number for only doctor */}
+              {/* Company Field */}
               <FormField
                 control={form.control}
-                name="apt_number"
+                name="company_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>APT Number</FormLabel>
+                    <FormLabel>Company Name</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="12345" {...field} />
+                      <Input placeholder="Example Limited" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
+              {/* NPI Number for only doctor */}
+              {user?.npi_number && (
+                <FormField
+                  control={form.control}
+                  name="npi_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>NPI Number</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="12345" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              {/* APT Number for only doctor */}
+              {user?.apt_number && (
+                <FormField
+                  control={form.control}
+                  name="apt_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>APT Number</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="12345" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
               {/* facility location */}
-              <FormField
-                control={form.control}
-                name="facility_location"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-2 mt-0.5 col-span-2">
-                    <FormLabel>Facility Location</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value
-                              ? facilitiesData.find(
-                                  (items) => items.address === field.value
-                                )?.address
-                              : "Select location"}
-                            <ChevronsUpDown className="opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="min-w-full p-0">
-                        <Command>
-                          <CommandInput
-                            placeholder="Search location..."
-                            className="h-9"
-                          />
-                          <CommandList>
-                            <CommandEmpty>No location found.</CommandEmpty>
-                            <CommandGroup>
-                              {facilitiesData.map((item) => (
-                                <CommandItem
-                                  value={item.address}
-                                  key={item.id}
-                                  onSelect={() => {
-                                    form.setValue(
-                                      "facility_location",
-                                      item.address
-                                    );
-                                    form.clearErrors("facility_location");
-                                  }}
-                                >
-                                  {item.address}
-                                  <Check
-                                    className={cn(
-                                      "ml-auto",
-                                      item.address === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {user?.facility_location && (
+                <FormField
+                  control={form.control}
+                  name="facility_location"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-2 mt-0.5 col-span-2">
+                      <FormLabel>Facility Location</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "justify-between",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? facilitiesData.find(
+                                    (items) => items.address === field.value
+                                  )?.address
+                                : "Select location"}
+                              <ChevronsUpDown className="opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="min-w-full p-0">
+                          <Command>
+                            <CommandInput
+                              placeholder="Search location..."
+                              className="h-9"
+                            />
+                            <CommandList>
+                              <CommandEmpty>No location found.</CommandEmpty>
+                              <CommandGroup>
+                                {facilitiesData.map((item) => (
+                                  <CommandItem
+                                    value={item.address}
+                                    key={item.id}
+                                    onSelect={() => {
+                                      form.setValue(
+                                        "facility_location",
+                                        item.address
+                                      );
+                                      form.clearErrors("facility_location");
+                                    }}
+                                  >
+                                    {item.address}
+                                    <Check
+                                      className={cn(
+                                        "ml-auto",
+                                        item.address === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               {/* submit button */}
               <DialogFooter className="col-span-2">

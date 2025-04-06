@@ -1,7 +1,8 @@
-import { TUser } from "@/types/user";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Image from "next/image";
 
-const UserCard = ({ user }: { user: TUser }) => {
+const UserCard = ({ user }: { user: any }) => {
   return (
     <div className="flex flex-col xl:flex-row gap-10">
       <figure className="p-2 col-span-1">
@@ -21,12 +22,12 @@ const UserCard = ({ user }: { user: TUser }) => {
           <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <span className="text-zinc-400">Name </span>
             <span>
-              : {user.first_name} {user.last_name}
+              : {user.firstname} {user.lastname}
             </span>
           </li>
           <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <span className="text-zinc-400">Company </span>
-            <span>: {user.company}</span>
+            <span>: {user.company_name}</span>
           </li>
           <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <span className="text-zinc-400">Email </span>
