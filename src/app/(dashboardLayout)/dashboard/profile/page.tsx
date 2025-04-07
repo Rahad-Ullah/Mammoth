@@ -1,12 +1,11 @@
 import ChangePasswordTab from "@/components/page/profile/ChangePasswordTab";
 import ProfileDetailsTab from "@/components/page/profile/ProfileDetailsTab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import nexiosInstance, { ApiResponse } from "../../../../../nexios.config";
+import { myFetch } from "@/utils/myFetch";
 
 const ProfilePage = async () => {
-  const {
-    data: { data: user },
-  } = await nexiosInstance.get<ApiResponse>(`/user/profile`);
+  const res = await myFetch("/user/profile", "GET", null, ["user-profile"]);
+  const user = res?.data;
 
   return (
     <Tabs
@@ -37,7 +36,11 @@ const ProfilePage = async () => {
         value={"profile-details"}
         className="rounded-xl border-none p-0 overflow-y-scroll no-scrollbar"
       >
-        <ProfileDetailsTab user={user} />
+        {user ? (
+          <ProfileDetailsTab user={user} />
+        ) : (
+          <p className="text-muted-foreground my-8">Something went wrong</p>
+        )}
       </TabsContent>
 
       {/* tab content 2 */}
@@ -45,7 +48,7 @@ const ProfilePage = async () => {
         value={"change-password"}
         className="rounded-xl border-none p-0 overflow-y-scroll no-scrollbar"
       >
-        <ChangePasswordTab user={user} />
+        <ChangePasswordTab />
       </TabsContent>
     </Tabs>
   );

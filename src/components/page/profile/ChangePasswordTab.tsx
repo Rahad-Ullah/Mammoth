@@ -5,14 +5,12 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { TUser } from "@/types/user";
 
-const ChangePasswordTab = ({ user }: { user: TUser }) => {
+const ChangePasswordTab = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isConfPasswordVisible, setIsConfPasswordVisible] = useState(false);
 
-  console.log(user);
   return (
     <>
       <section className="grid gap-8">

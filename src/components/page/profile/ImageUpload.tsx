@@ -5,10 +5,17 @@ import { config } from "@/config/env-config";
 
 const ImageUpload = ({ setFile, user }) => {
   const [image, setImage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null); // State for error message
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 1 * 1024 * 1024) {
+        // Check if file size exceeds 1 MB
+        setError("File size must be less than 1 MB.");
+        return;
+      }
+      setError(null); // Clear any previous error
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result as string); // Set the base64 image
@@ -46,6 +53,8 @@ const ImageUpload = ({ setFile, user }) => {
           </span>
         </label>
       </div>
+      {error && <p className="text-red-500 text-sm">{error}</p>}{" "}
+      {/* Display error message */}
     </div>
   );
 };

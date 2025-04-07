@@ -42,8 +42,9 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { TUser } from "@/types/user";
-import nexiosInstance, { ApiResponse } from "../../../../nexios.config";
 import toast from "react-hot-toast";
+import { revalidate } from "@/helpers/revalidateHelper";
+import { myFetch } from "@/utils/myFetch";
 
 const EditProfileModal = ({ user }: { user: TUser }) => {
   const [file, setFile] = useState<File | string | null>(user.image);
@@ -55,8 +56,8 @@ const EditProfileModal = ({ user }: { user: TUser }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      first_name: user?.firstname,
-      last_name: user?.lastname,
+      firstname: user?.firstname,
+      lastname: user?.lastname,
       email: user?.email,
       phone: user?.phone,
       company_name: user?.company_name,
@@ -86,14 +87,12 @@ const EditProfileModal = ({ user }: { user: TUser }) => {
 
     // Send the form data to the API
     try {
-      const { data } = await nexiosInstance.put<ApiResponse>(
-        "/user/profile",
-        formData
-      );
-      if (data.success) {
-        toast.success(data.message, {
+      const res = await myFetch("/user/profile", "PUT", formData);
+      if (res?.success) {
+        toast.success(res?.message as string, {
           id: "update-profile",
         });
+        revalidate("user-profile");
       }
     } catch (error) {
       toast.error("Failed to update", {
@@ -129,7 +128,7 @@ const EditProfileModal = ({ user }: { user: TUser }) => {
               {/* First Name Field */}
               <FormField
                 control={form.control}
-                name="first_name"
+                name="firstname"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
@@ -144,7 +143,7 @@ const EditProfileModal = ({ user }: { user: TUser }) => {
               {/* Last Name Field */}
               <FormField
                 control={form.control}
-                name="last_name"
+                name="lastname"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>

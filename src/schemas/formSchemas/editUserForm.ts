@@ -3,13 +3,13 @@ import { z } from "zod";
 // zod validation schema for add user form
 export const editUserFormSchema = () => {
   return z.object({
-    first_name: z
+    firstname: z
       .string()
       .min(2, {
         message: "Must be at least 2 characters.",
       })
       .optional(),
-    last_name: z
+    lastname: z
       .string()
       .min(2, {
         message: "Must be at least 2 characters.",

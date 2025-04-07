@@ -30,6 +30,7 @@ export function NavUser({
     image: string;
   };
 }) {
+
   return (
     <SidebarMenu className="w-fit pr-4">
       <SidebarMenuItem>
