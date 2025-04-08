@@ -82,7 +82,7 @@ export function LoginForm({
                     name="email"
                     type="email"
                     placeholder="me@example.com"
-                    defaultValue={"sharifsj143@gmail.com"}
+                    defaultValue={"rahadullah10@gmail.com"}
                     required
                     className="bg-white border-none shadow-none"
                   />
@@ -98,7 +98,7 @@ export function LoginForm({
                       name="password"
                       type={`${isPasswordVisible ? "text" : "password"}`}
                       placeholder="Enter password"
-                      defaultValue={"MasomRana456"}
+                      defaultValue={"user1234"}
                       required
                       className="bg-white border-none shadow-none"
                     />

@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 import { setCookie, deleteCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 // Define the context type
 interface AuthContextType {
@@ -26,6 +27,7 @@ export const AuthProvider = ({
 }) => {
   const [token, setTokenState] = useState<string | null>(initialToken);
   const [user, setUserState] = useState<string | null>(initialUser);
+  const router = useRouter();
 
   // Function to update user state and cookies
   const setToken = (newToken: string | null) => {
@@ -48,7 +50,12 @@ export const AuthProvider = ({
   };
 
   // Function to clear user state and cookies
-  const logout = () => setUser(null);
+  const logout = () => {
+    setUser(null);
+    deleteCookie("accessToken");
+    deleteCookie("user");
+    router.push("/login");
+  };
 
   return (
     <AuthContext.Provider value={{ token, setToken, user, setUser, logout }}>

@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { config } from "@/config/env-config";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export function NavUser({
   user,
@@ -30,7 +31,7 @@ export function NavUser({
     image: string;
   };
 }) {
-
+  const { logout } = useAuthContext();
   return (
     <SidebarMenu className="w-fit pr-4">
       <SidebarMenuItem>
@@ -90,7 +91,7 @@ export function NavUser({
               </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => logout()}>
               <LogOut />
               Log out
             </DropdownMenuItem>
