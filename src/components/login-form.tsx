@@ -16,10 +16,10 @@ import { Checkbox } from "./ui/checkbox";
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
-import nexiosInstance, { ApiResponse } from "../../nexios.config";
 import toast from "react-hot-toast";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { myFetch } from "@/utils/myFetch";
 
 export function LoginForm({
   className,
@@ -41,17 +41,17 @@ export function LoginForm({
     };
 
     try {
-      const { data } = await nexiosInstance.post<ApiResponse>(
-        "/auth/login",
-        payload
-      );
+      const res = await myFetch("/auth/login", {
+        method: "POST",
+        body: payload,
+      });
 
-      if (data.success) {
+      if (res?.success) {
         toast.success("Login successful", { id: "login" });
-        setToken(data.data?.accessToken as string);
+        setToken(res?.data?.accessToken);
         router.push("/dashboard/tests");
       } else {
-        toast.error(data.message, { id: "login" });
+        toast.error(res?.message as string, { id: "login" });
       }
     } catch (error: unknown) {
       console.log("Error fetching data:", error);

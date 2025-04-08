@@ -19,8 +19,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import nexiosInstance, { ApiResponse } from "../../nexios.config";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import { myFetch } from "@/utils/myFetch";
 
 // zod schema for form validation
 const FormSchema = z
@@ -56,29 +56,24 @@ export function ResetPasswordForm({
 
   // handle form submit
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
     toast.loading("Reseting...", {
       id: "reset-password-toast",
     });
 
     try {
-      const { data } = await nexiosInstance.post<ApiResponse>(
-        "/auth/reset-password",
-        values,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await myFetch("/auth/reset-password", {
+        method: "POST",
+        body: values,
+        token: token as string,
+      });
 
-      if (data.success) {
-        toast.success(data.message, { id: "reset-password-toast" });
+      if (res.success) {
+        toast.success((res.message as string) || "Reseted successfully", {
+          id: "reset-password-toast",
+        });
         router.push(`/login`);
       } else {
-        toast.error(data.message || "Failed to reset", {
+        toast.error(res.message || "Failed to reset", {
           id: "reset-password-toast",
         });
       }

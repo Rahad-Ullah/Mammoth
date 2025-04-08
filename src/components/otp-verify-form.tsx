@@ -14,11 +14,11 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "./ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import toast from "react-hot-toast";
 import { useSearchParams, useRouter } from "next/navigation";
-import nexiosInstance, { ApiResponse } from "../../nexios.config";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import { myFetch } from "@/utils/myFetch";
 
 const FormSchema = z.object({
   oneTimeCode: z.string().min(5, {
@@ -52,16 +52,16 @@ export function OtpVerifyForm({
     };
 
     try {
-      const { data } = await nexiosInstance.post<ApiResponse>(
-        "/auth/verify-email",
-        payload
-      );
+      const res = await myFetch("/auth/verify-email", {
+        method: "POST",
+        body: payload,
+      });
 
-      if (data.success) {
-        toast.success(data.message, { id: "verify-otp-toast" });
-        router.push(`/reset-password?auth=${data?.data}`);
+      if (res?.success) {
+        toast.success(res?.message as string, { id: "verify-otp-toast" });
+        router.push(`/reset-password?auth=${res?.data}`);
       } else {
-        toast.error(data.message || "Failed to verify", {
+        toast.error(res.message || "Failed to verify", {
           id: "verify-otp-toast",
         });
       }
@@ -76,15 +76,15 @@ export function OtpVerifyForm({
       id: "resend-otp-toast",
     });
     try {
-      const { data } = await nexiosInstance.post<ApiResponse>(
-        "/auth/forget-password",
-        { email }
-      );
+      const res = await myFetch("/auth/forget-password", {
+        method: "POST",
+        body: { email },
+      });
 
-      if (data.success) {
-        toast.success(data.message, { id: "resend-otp-toast" });
+      if (res?.success) {
+        toast.success(res?.message as string, { id: "resend-otp-toast" });
       } else {
-        toast.error(data.message || "Failed to resend", {
+        toast.error(res?.message || "Failed to resend", {
           id: "resend-otp-toast",
         });
       }

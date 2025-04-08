@@ -4,7 +4,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { myFetch } from "@/utils/myFetch";
 
 const ProfilePage = async () => {
-  const res = await myFetch("/user/profile", "GET", null, ["user-profile"]);
+  const res = await myFetch("/user/profile", {
+    tags: ["user-profile"],
+  });
   const user = res?.data;
 
   return (

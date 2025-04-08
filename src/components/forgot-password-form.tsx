@@ -14,8 +14,8 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import BackButton from "./back-button";
 import toast from "react-hot-toast";
-import nexiosInstance, { ApiResponse } from "../../nexios.config";
 import { useRouter } from "next/navigation";
+import { myFetch } from "@/utils/myFetch";
 
 export function ForgotPasswordForm({
   className,
@@ -34,16 +34,16 @@ export function ForgotPasswordForm({
     };
 
     try {
-      const { data } = await nexiosInstance.post<ApiResponse>(
-        "/auth/forget-password",
-        payload
-      );
+      const res = await myFetch("/auth/forget-password", {
+        method: "POST",
+        body: payload,
+      });
 
-      if (data.success) {
-        toast.success(data.message, { id: "forgot-password-toast" });
+      if (res?.success) {
+        toast.success(res?.message as string, { id: "forgot-password-toast" });
         router.push(`/otp-verify?email=${payload.email}`);
       } else {
-        toast.error(data.message || "Failed to send", {
+        toast.error(res?.message || "Failed to send", {
           id: "forgot-password-toast",
         });
       }
