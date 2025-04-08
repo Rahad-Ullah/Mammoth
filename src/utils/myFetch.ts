@@ -5,9 +5,15 @@ import { config } from "@/config/env-config";
 import { getToken } from "./get-token";
 
 export interface FetchResponse {
-  data?: any;
   success: boolean;
   message?: string;
+  data?: any;
+  pagination?: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPage: number;
+  };
   error?: string | null;
 }
 
@@ -51,7 +57,7 @@ export const myFetch = async (
       headers: reqHeaders,
       ...(hasBody && { body: isFormData ? body : JSON.stringify(body) }),
       ...(tags && { next: { tags } }),
-      ...(!(method === 'GET') ? {cache: 'no-store' } : {cache: cache}),
+      ...(!(method === "GET") ? { cache: "no-store" } : { cache: cache }),
     });
 
     const data = await response.json();
@@ -59,16 +65,17 @@ export const myFetch = async (
     if (response.ok) {
       return {
         success: data?.success ?? true,
-        data: data?.data,
         message: data?.message,
+        data: data?.data,
+        pagination: data?.pagination,
         error: null,
       };
     }
 
     return {
       success: false,
-      data: null,
       message: data?.message,
+      data: null,
       error: data?.errorMessages || "Request failed",
     };
   } catch (error) {
