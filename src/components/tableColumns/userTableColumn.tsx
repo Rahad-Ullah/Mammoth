@@ -1,15 +1,15 @@
 "use client";
 
-import { User } from "@/app/(dashboardLayout)/dashboard/users/page";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { IUser } from "@/types/user";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Info, Lock, LockOpen } from "lucide-react";
 import Link from "next/link";
 
 // table column definition
-const columns: ColumnDef<User>[] = [
+const columns: ColumnDef<IUser>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -41,7 +41,7 @@ const columns: ColumnDef<User>[] = [
     accessorKey: "id",
     header: "Sl. No",
     cell: ({ row }) => {
-      const item = row.original as User;
+      const item = row.original as IUser;
       return (
         <Link href={`/dashboard/users/user-details/${item.id}`}>
           <Button
@@ -68,14 +68,14 @@ const columns: ColumnDef<User>[] = [
       );
     },
     cell: ({ row }) => {
-      const item = row.original as User;
+      const item = row.original as IUser;
       return (
         <Link href={`/dashboard/users/user-details/${item.id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.first_name} {item.last_name}
+            {item?.name}
           </Button>
         </Link>
       );
@@ -95,7 +95,7 @@ const columns: ColumnDef<User>[] = [
       );
     },
     cell: ({ row }) => {
-      const item = row.original as User;
+      const item = row.original as IUser;
       return (
         <Link href={`/dashboard/users/user-details/${item.id}`}>
           <Button
@@ -122,7 +122,7 @@ const columns: ColumnDef<User>[] = [
       );
     },
     cell: ({ row }) => {
-      const item = row.original as User;
+      const item = row.original as IUser;
       return (
         <Link href={`/dashboard/users/user-details/${item.id}`}>
           <Button
@@ -136,17 +136,17 @@ const columns: ColumnDef<User>[] = [
     },
   },
   {
-    accessorKey: "company",
+    accessorKey: "address",
     header: () => <div>Facilities Lacation</div>,
     cell: ({ row }) => {
-      const item = row.original as User;
+      const item = row.original as IUser;
       return (
         <Link href={`/dashboard/users/user-details/${item.id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.company}
+            {item?.address}
           </Button>
         </Link>
       );
@@ -157,20 +157,20 @@ const columns: ColumnDef<User>[] = [
     header: () => <div>Status</div>,
     cell: ({ row }) => {
       const role = row.getValue("role");
-      const item = row.original as User;
+      const item = row.original as IUser;
       return (
         <Link href={`/dashboard/users/user-details/${item.id}`}>
           <Badge
             className={`capitalize font-medium text-white rounded-full hover:bg-primary py-1.5 w-full flex justify-center`}
             style={{
               backgroundColor:
-                role === "admin"
+                role === "Admin"
                   ? "#F17600"
-                  : role === "representative"
+                  : role === "Representative"
                   ? "#C42985"
-                  : role === "pathologist"
+                  : role === "Pathologist"
                   ? "#319517"
-                  : role === "histologist"
+                  : role === "Histologist"
                   ? "#85CA53"
                   : "",
             }}
@@ -190,12 +190,12 @@ const columns: ColumnDef<User>[] = [
 
       return (
         <div className="flex items-center gap-1">
-          {item.status === "active" && (
+          {!item.isLocked && (
             <Button variant={"ghost"} size={"icon"} className="text-zinc-400">
               <LockOpen />
             </Button>
           )}
-          {item.status === "blocked" && (
+          {item.isLocked && (
             <Button variant={"ghost"} size={"icon"} className="text-red-500">
               <Lock />
             </Button>

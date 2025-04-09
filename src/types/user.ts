@@ -20,3 +20,17 @@ export type TUser = {
   name: string;
   id: number;
 };
+
+export interface IUser {
+  _id: string;
+  id: number;
+  role: "Admin" | "Representative" | "Pathologist" | "Histologist";
+  email: string;
+  phone: string;
+  image: string;
+  isLocked: boolean;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  name: string;
+  address: string;
+}
