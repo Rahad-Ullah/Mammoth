@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { TBill } from "@/types/bill";
+import { IBill } from "@/types/bill";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import Link from "next/link";
 
 // table column definition
-const columns: ColumnDef<TBill>[] = [
+const columns: ColumnDef<IBill>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -35,34 +35,17 @@ const columns: ColumnDef<TBill>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
-    header: "Sl. No",
-    cell: ({ row }) => {
-      const item = row.original as TBill;
-      return (
-        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
-          <Button
-            variant={"ghost"}
-            className="capitalize w-full justify-start hover:bg-transparent"
-          >
-            {item.id}
-          </Button>
-        </Link>
-      );
-    },
-  },
-  {
     accessorKey: "report_no",
     header: "Report No.",
     cell: ({ row }) => {
-      const item = row.original as TBill;
+      const item = row.original as IBill;
       return (
-        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+        <Link href={`/dashboard/bills/bill-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.report_no}
+            {item?.report?.report_no}
           </Button>
         </Link>
       );
@@ -70,26 +53,16 @@ const columns: ColumnDef<TBill>[] = [
   },
   {
     accessorKey: "ordering_provider",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Ordering Provider
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Ordering Provider",
     cell: ({ row }) => {
-      const item = row.original as TBill;
+      const item = row.original as IBill;
       return (
-        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+        <Link href={`/dashboard/bills/bill-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.ordering_provider}
+            {item?.report?.ordering_provider}
           </Button>
         </Link>
       );
@@ -97,26 +70,16 @@ const columns: ColumnDef<TBill>[] = [
   },
   {
     accessorKey: "ordering_physician",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Ordering Physician
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Ordering Physician",
     cell: ({ row }) => {
-      const item = row.original as TBill;
+      const item = row.original as IBill;
       return (
-        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+        <Link href={`/dashboard/bills/bill-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.ordering_physician}
+            {item?.report?.doctor?.name}
           </Button>
         </Link>
       );
@@ -126,14 +89,14 @@ const columns: ColumnDef<TBill>[] = [
     accessorKey: "bill_date",
     header: () => <div>Bill Date</div>,
     cell: ({ row }) => {
-      const item = row.original as TBill;
+      const item = row.original as IBill;
       return (
-        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+        <Link href={`/dashboard/bills/bill-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.bill_date}
+            {item.bill_date.split("T")[0]}
           </Button>
         </Link>
       );
@@ -141,22 +104,12 @@ const columns: ColumnDef<TBill>[] = [
   },
   {
     accessorKey: "bill_amount",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Bill Amount
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: " Bill Amount",
     cell: ({ row }) => {
-      const item = row.original as TBill;
-      const bill = parseFloat(item.bill_amount.toString()).toFixed(2);
+      const item = row.original as IBill;
+      const bill = parseFloat(item?.total_amount?.toString())?.toFixed(2);
       return (
-        <Link href={`/dashboard/bills/bill-details/${item.id}`}>
+        <Link href={`/dashboard/bills/bill-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent px-6"
@@ -175,7 +128,7 @@ const columns: ColumnDef<TBill>[] = [
       const item = row.original;
       return (
         <div className="flex items-center gap-1">
-          <Link href={`/dashboard/bills/bill-details/${item.id}`} passHref>
+          <Link href={`/dashboard/bills/bill-details/${item._id}`} passHref>
             <Button variant={"ghost"} size={"icon"} className="text-primary">
               <Info />
             </Button>

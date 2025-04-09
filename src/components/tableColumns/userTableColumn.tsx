@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { IUser } from "@/types/user";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Info, Lock, LockOpen } from "lucide-react";
+import { Info, Lock, LockOpen } from "lucide-react";
 import Link from "next/link";
 
 // table column definition
@@ -55,18 +55,8 @@ const columns: ColumnDef<IUser>[] = [
     },
   },
   {
-    accessorKey: "first_name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          User Name
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    accessorKey: "name",
+    header: " User Name",
     cell: ({ row }) => {
       const item = row.original as IUser;
       return (
@@ -83,17 +73,7 @@ const columns: ColumnDef<IUser>[] = [
   },
   {
     accessorKey: "phone",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Phone No
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Phone No",
     cell: ({ row }) => {
       const item = row.original as IUser;
       return (
@@ -110,17 +90,7 @@ const columns: ColumnDef<IUser>[] = [
   },
   {
     accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Email",
     cell: ({ row }) => {
       const item = row.original as IUser;
       return (
@@ -137,7 +107,7 @@ const columns: ColumnDef<IUser>[] = [
   },
   {
     accessorKey: "address",
-    header: () => <div>Facilities Lacation</div>,
+    header: () => <div>Address</div>,
     cell: ({ row }) => {
       const item = row.original as IUser;
       return (

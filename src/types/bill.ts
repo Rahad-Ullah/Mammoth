@@ -9,3 +9,24 @@ export type TBill = {
   bill_amount: number;
   patient: TPatient;
 };
+
+export interface IBill {
+  _id: string;
+  report: {
+    _id: string;
+    report_no: number;
+    patient: {
+      _id: string;
+      name: string;
+    };
+    doctor: {
+      _id: string;
+      name: string;
+    };
+    facility_location: string;
+    ordering_provider: string;
+  };
+  bill_date: string;
+  total_amount: number;
+  isBilled: boolean;
+}
