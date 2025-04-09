@@ -208,7 +208,7 @@ const TestsTable = ({ tests, meta, filters }) => {
       {/* table and pagination*/}
       <section>
         <DashboardTable table={table} columns={columns} />
-        <TablePagination table={table} />
+        <TablePagination table={table} meta={meta} />
       </section>
     </div>
   );

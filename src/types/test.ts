@@ -1,11 +1,15 @@
 import { TPatient } from "./patient";
 
 export type TTest = {
+  _id: string;
   report_no: string;
   status: string;
   ordering_provider: string;
-  ordering_physician: string;
-  facility: string;
+  doctor: {
+    _id: string;
+    name: string;
+  };
+  facility_location: string;
   cpts: string[];
   icds: string[];
   apply_date: string;

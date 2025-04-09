@@ -14,3 +14,8 @@ export type TPatient = {
   sensory_symptoms: string[];
   ethnicity: string;
 };
+
+export interface IPatient {
+  _id: string;
+  name: string;
+}

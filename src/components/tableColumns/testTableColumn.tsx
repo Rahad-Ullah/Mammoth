@@ -3,10 +3,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { TPatient } from "@/types/patient";
+import { IPatient } from "@/types/patient";
 import { TTest } from "@/types/test";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import Link from "next/link";
 
 // table column definition
@@ -44,7 +44,7 @@ const columns: ColumnDef<TTest>[] = [
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+        <Link href={`/dashboard/tests/test-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -57,21 +57,11 @@ const columns: ColumnDef<TTest>[] = [
   },
   {
     accessorKey: "ordering_provider",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          User Name
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: " User Name",
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+        <Link href={`/dashboard/tests/test-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -83,27 +73,17 @@ const columns: ColumnDef<TTest>[] = [
     },
   },
   {
-    accessorKey: "facility",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Test Form Facility
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    accessorKey: "facility_location",
+    header: "Facility Location",
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+        <Link href={`/dashboard/tests/test-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {row.getValue("facility")}
+            {row.getValue("facility_location")}
           </Button>
         </Link>
       );
@@ -111,44 +91,34 @@ const columns: ColumnDef<TTest>[] = [
   },
   {
     accessorKey: "patient",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Patient Name
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Patient Name",
     cell: ({ row }) => {
       const item = row.original as TTest;
-      const patient = row.getValue("patient") as TPatient;
+      const patient = row.getValue("patient") as IPatient;
       return (
-        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+        <Link href={`/dashboard/tests/test-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {patient.first_name} {patient.last_name}
+            {patient.name}
           </Button>
         </Link>
       );
     },
   },
   {
-    accessorKey: "ordering_physician",
+    accessorKey: "doctor",
     header: () => <div>Physician</div>,
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+        <Link href={`/dashboard/tests/test-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {row.getValue("ordering_physician")}
+            {item.doctor.name}
           </Button>
         </Link>
       );
@@ -160,7 +130,7 @@ const columns: ColumnDef<TTest>[] = [
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+        <Link href={`/dashboard/tests/test-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -177,7 +147,7 @@ const columns: ColumnDef<TTest>[] = [
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+        <Link href={`/dashboard/tests/test-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize text-red-500 w-full justify-start hover:bg-transparent"
@@ -195,7 +165,7 @@ const columns: ColumnDef<TTest>[] = [
       const item = row.original as TTest;
       const status = row.getValue("status");
       return (
-        <Link href={`/dashboard/tests/test-details/${item.report_no}`}>
+        <Link href={`/dashboard/tests/test-details/${item._id}`}>
           <Badge
             className={`capitalize font-medium text-white w-full rounded-full hover:bg-primary flex justify-center py-1.5`}
             style={{
@@ -226,10 +196,7 @@ const columns: ColumnDef<TTest>[] = [
 
       return (
         <div className="flex items-center gap-1">
-          <Link
-            href={`/dashboard/tests/test-details/${item.report_no}`}
-            passHref
-          >
+          <Link href={`/dashboard/tests/test-details/${item._id}`} passHref>
             <Button variant={"ghost"} size={"icon"} className="text-primary">
               <Info />
             </Button>
