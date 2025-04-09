@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { TPatient } from "@/types/patient";
+import { IPatient } from "@/types/patient";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import Link from "next/link";
 
 // table column definition
-const columns: ColumnDef<TPatient>[] = [
+const columns: ColumnDef<IPatient>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -38,9 +38,9 @@ const columns: ColumnDef<TPatient>[] = [
     accessorKey: "id",
     header: "Sl. No",
     cell: ({ row }) => {
-      const item = row.original as TPatient;
+      const item = row.original as IPatient;
       return (
-        <Link href={`/dashboard/patients/patient-details/${item.id}`}>
+        <Link href={`/dashboard/patients/patient-details/${item?.id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -52,27 +52,17 @@ const columns: ColumnDef<TPatient>[] = [
     },
   },
   {
-    accessorKey: "first_name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Patient Name
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    accessorKey: "name",
+    header: "Patient Name",
     cell: ({ row }) => {
-      const item = row.original as TPatient;
+      const item = row.original as IPatient;
       return (
-        <Link href={`/dashboard/patients/patient-details/${item.id}`}>
+        <Link href={`/dashboard/patients/patient-details/${item?.id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.first_name} {item.last_name}
+            {item.name}
           </Button>
         </Link>
       );
@@ -80,21 +70,11 @@ const columns: ColumnDef<TPatient>[] = [
   },
   {
     accessorKey: "phone",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Phone No
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Phone No",
     cell: ({ row }) => {
-      const item = row.original as TPatient;
+      const item = row.original as IPatient;
       return (
-        <Link href={`/dashboard/patients/patient-details/${item.id}`}>
+        <Link href={`/dashboard/patients/patient-details/${item?.id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -107,21 +87,11 @@ const columns: ColumnDef<TPatient>[] = [
   },
   {
     accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Email",
     cell: ({ row }) => {
-      const item = row.original as TPatient;
+      const item = row.original as IPatient;
       return (
-        <Link href={`/dashboard/patients/patient-details/${item.id}`}>
+        <Link href={`/dashboard/patients/patient-details/${item?.id}`}>
           <Button
             variant={"ghost"}
             className="w-full justify-start hover:bg-transparent"
@@ -136,14 +106,14 @@ const columns: ColumnDef<TPatient>[] = [
     accessorKey: "insurance_company",
     header: () => <div>Insurance</div>,
     cell: ({ row }) => {
-      const item = row.original as TPatient;
+      const item = row.original as IPatient;
       return (
-        <Link href={`/dashboard/patients/patient-details/${item.id}`}>
+        <Link href={`/dashboard/patients/patient-details/${item?.id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.insurance_company}
+            {item.insuranceCompany}
           </Button>
         </Link>
       );
@@ -158,7 +128,7 @@ const columns: ColumnDef<TPatient>[] = [
       return (
         <div className="flex items-center gap-1">
           <Link
-            href={`/dashboard/patients/patient-details/${item.id}`}
+            href={`/dashboard/patients/patient-details/${item?.id}`}
             passHref
           >
             <Button variant={"ghost"} size={"icon"} className="text-primary">

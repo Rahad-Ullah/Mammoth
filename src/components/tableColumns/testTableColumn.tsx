@@ -3,7 +3,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { IPatient } from "@/types/patient";
 import { TTest } from "@/types/test";
 import { ColumnDef } from "@tanstack/react-table";
 import { Info } from "lucide-react";
@@ -44,7 +43,7 @@ const columns: ColumnDef<TTest>[] = [
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item._id}`}>
+        <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -61,7 +60,7 @@ const columns: ColumnDef<TTest>[] = [
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item._id}`}>
+        <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -78,7 +77,7 @@ const columns: ColumnDef<TTest>[] = [
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item._id}`}>
+        <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -94,14 +93,14 @@ const columns: ColumnDef<TTest>[] = [
     header: "Patient Name",
     cell: ({ row }) => {
       const item = row.original as TTest;
-      const patient = row.getValue("patient") as IPatient;
+      const patient = row.getValue("patient") as { _id: string; name: string };
       return (
-        <Link href={`/dashboard/tests/test-details/${item._id}`}>
+        <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {patient.name}
+            {patient?.name}
           </Button>
         </Link>
       );
@@ -113,7 +112,7 @@ const columns: ColumnDef<TTest>[] = [
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item._id}`}>
+        <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -130,7 +129,7 @@ const columns: ColumnDef<TTest>[] = [
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item._id}`}>
+        <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -147,7 +146,7 @@ const columns: ColumnDef<TTest>[] = [
     cell: ({ row }) => {
       const item = row.original as TTest;
       return (
-        <Link href={`/dashboard/tests/test-details/${item._id}`}>
+        <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize text-red-500 w-full justify-start hover:bg-transparent"
@@ -165,7 +164,7 @@ const columns: ColumnDef<TTest>[] = [
       const item = row.original as TTest;
       const status = row.getValue("status");
       return (
-        <Link href={`/dashboard/tests/test-details/${item._id}`}>
+        <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Badge
             className={`capitalize font-medium text-white w-full rounded-full hover:bg-primary flex justify-center py-1.5`}
             style={{
@@ -196,7 +195,7 @@ const columns: ColumnDef<TTest>[] = [
 
       return (
         <div className="flex items-center gap-1">
-          <Link href={`/dashboard/tests/test-details/${item._id}`} passHref>
+          <Link href={`/dashboard/tests/test-details/${item?._id}`} passHref>
             <Button variant={"ghost"} size={"icon"} className="text-primary">
               <Info />
             </Button>
