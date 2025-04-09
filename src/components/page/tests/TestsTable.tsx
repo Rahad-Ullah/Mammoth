@@ -29,21 +29,10 @@ import DashboardTable from "@/components/table";
 import TablePagination from "@/components/table-pagination";
 import columns from "@/components/tableColumns/testTableColumn";
 import { TTest } from "@/types/test";
-import { testsData } from "@/constants/tests";
 import CreateTestModal from "@/components/page/tests/createTestModal";
 import Image from "next/image";
 import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParams";
-
-// Extract unique statuses from data
-const statuses = Array.from(new Set(testsData.map((test) => test.status)));
-
-// Extract unique statuses from data
-const doctors = Array.from(
-  new Set(testsData.map((item) => item.ordering_physician))
-);
-
-// Extract unique facilities from data
-const facilities = Array.from(new Set(testsData.map((item) => item.facility)));
+import { testStatuses } from "@/constants/testStatus";
 
 const TestsTable = ({ tests, meta, filters }) => {
   const updateSearchParams = useUpdateSearchParams();
@@ -54,6 +43,16 @@ const TestsTable = ({ tests, meta, filters }) => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  // Extract unique statuses from data
+  const doctors = Array.from(
+    new Set(tests?.map((item: TTest) => item?.doctor?.name))
+  );
+
+  // Extract unique facilities from data
+  const facilities = Array.from(
+    new Set(tests?.map((item: TTest) => item.ordering_provider))
+  );
 
   const table = useReactTable<TTest>({
     data: tests,
@@ -94,7 +93,7 @@ const TestsTable = ({ tests, meta, filters }) => {
               variant="outline"
               className="capitalize shadow text-[#929292]"
             >
-              {filters?.doctor ? `Doctor: ${filters?.doctor}` : "Doctor"}{" "}
+              {filters?.doctor ? `${filters?.doctor}` : "Doctor"}{" "}
               <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
@@ -104,12 +103,12 @@ const TestsTable = ({ tests, meta, filters }) => {
             >
               All Doctors
             </DropdownMenuItem>
-            {doctors.map((item) => (
+            {doctors.map((item, idx) => (
               <DropdownMenuItem
-                key={item}
-                onClick={() => updateSearchParams("doctor", item)}
+                key={idx}
+                onClick={() => updateSearchParams("doctor", item as string)}
               >
-                {capitalizeSentence(item)}
+                {capitalizeSentence(item as string)}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
@@ -122,9 +121,7 @@ const TestsTable = ({ tests, meta, filters }) => {
               variant="outline"
               className="capitalize shadow text-[#929292]"
             >
-              {filters?.facility
-                ? `Facility: ${filters?.facility}`
-                : "Facility"}{" "}
+              {filters?.facility ? `${filters?.facility}` : "Facility"}{" "}
               <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
@@ -134,12 +131,12 @@ const TestsTable = ({ tests, meta, filters }) => {
             >
               All Facilities
             </DropdownMenuItem>
-            {facilities.map((item) => (
+            {facilities.map((item, idx) => (
               <DropdownMenuItem
-                key={item}
-                onClick={() => updateSearchParams("facility", item)}
+                key={idx}
+                onClick={() => updateSearchParams("facility", item as string)}
               >
-                {capitalizeSentence(item)}
+                {capitalizeSentence(item as string)}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
@@ -152,7 +149,7 @@ const TestsTable = ({ tests, meta, filters }) => {
               variant="outline"
               className="capitalize shadow text-[#929292]"
             >
-              {filters?.status ? `Status: ${filters?.status}` : "Status"}{" "}
+              {filters?.status ? `${filters?.status}` : "Status"}{" "}
               <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
@@ -162,12 +159,12 @@ const TestsTable = ({ tests, meta, filters }) => {
             >
               All Status
             </DropdownMenuItem>
-            {statuses.map((item) => (
+            {testStatuses.map((item, idx) => (
               <DropdownMenuItem
-                key={item}
-                onClick={() => updateSearchParams("status", item)}
+                key={idx}
+                onClick={() => updateSearchParams("status", item as string)}
               >
-                {capitalizeSentence(item)}
+                {capitalizeSentence(item as string)}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
@@ -187,14 +184,14 @@ const TestsTable = ({ tests, meta, filters }) => {
               .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
-                    key={column.id}
+                    key={column?.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {capitalizeSentence(column.id)}
+                    {capitalizeSentence(column?.id)}
                   </DropdownMenuCheckboxItem>
                 );
               })}

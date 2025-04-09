@@ -87,22 +87,22 @@ const PatientsTable = ({ patients, meta, filters }) => {
               variant="outline"
               className="capitalize shadow text-[#929292]"
             >
-              {filters?.insurance
-                ? `Insurance: ${filters?.insurance}`
-                : "Insurance"}{" "}
+              {filters?.insurance ? `${filters?.insurance}` : "Insurance"}{" "}
               <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem
-              onClick={() => updateSearchParams("insurance", null)}
+              onClick={() => updateSearchParams("insuranceCompany", null)}
             >
               All Facility
             </DropdownMenuItem>
             {insurances.map((item, idx) => (
               <DropdownMenuItem
                 key={idx}
-                onClick={() => updateSearchParams("insurance", item as string)}
+                onClick={() =>
+                  updateSearchParams("insuranceCompany", item as string)
+                }
               >
                 {capitalizeSentence(item as string)}
               </DropdownMenuItem>

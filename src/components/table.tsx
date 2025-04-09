@@ -34,8 +34,8 @@ const DashboardTable = ({ table, columns }) => {
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+          {table?.getRowModel().rows?.length ? (
+            table?.getRowModel().rows?.map((row) => (
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
@@ -49,7 +49,7 @@ const DashboardTable = ({ table, columns }) => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell colSpan={columns?.length} className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>

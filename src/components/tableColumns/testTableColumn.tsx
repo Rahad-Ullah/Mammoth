@@ -117,7 +117,7 @@ const columns: ColumnDef<TTest>[] = [
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.doctor.name}
+            {item?.doctor?.name}
           </Button>
         </Link>
       );
@@ -134,7 +134,7 @@ const columns: ColumnDef<TTest>[] = [
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.apply_date.split("T")[0]}
+            {item?.apply_date?.split("T")[0]}
           </Button>
         </Link>
       );
@@ -151,7 +151,7 @@ const columns: ColumnDef<TTest>[] = [
             variant={"ghost"}
             className="capitalize text-red-500 w-full justify-start hover:bg-transparent"
           >
-            {item.report_date.split("T")[0]}
+            {item?.report_date?.split("T")[0]}
           </Button>
         </Link>
       );
