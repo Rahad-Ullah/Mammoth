@@ -24,9 +24,16 @@ type TModalProps = {
     | "default"
     | null
     | undefined;
+  title?: string;
+  btnText?: string;
 };
 
-const AddModalButton = ({ action, btnVariant }: TModalProps) => {
+const AddModalButton = ({
+  action,
+  btnVariant,
+  title,
+  btnText,
+}: TModalProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -36,7 +43,7 @@ const AddModalButton = ({ action, btnVariant }: TModalProps) => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>New option for this category</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Input placeholder="Enter option name" />
@@ -49,7 +56,7 @@ const AddModalButton = ({ action, btnVariant }: TModalProps) => {
               onClick={action}
               className="w-full"
             >
-              Add Option
+              {btnText}
             </Button>
           </DialogClose>
         </DialogFooter>
