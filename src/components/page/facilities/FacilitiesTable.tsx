@@ -30,12 +30,12 @@ import Link from "next/link";
 import DashboardTable from "@/components/table";
 import TablePagination from "@/components/table-pagination";
 import columns from "@/components/tableColumns/facilityTableColumns";
-import { TFacility } from "@/types/facility";
+import { IFacility, TFacility } from "@/types/facility";
 import Image from "next/image";
 import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParams";
 import { facilityStatuses } from "@/constants/facilityStatuses";
 
-const FacilitiesTable = ({ facilities, filters, meta }) => {
+const FacilitiesTable = ({ facilities = [], filters, meta }) => {
   const updateSearchParams = useUpdateSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -48,11 +48,11 @@ const FacilitiesTable = ({ facilities, filters, meta }) => {
   // Extract unique roles from data
   const statuses = Array.from(new Set(facilityStatuses.map((item) => item)));
   const representatives = Array.from(
-    new Set(facilities.map((item) => item?.representative?.name))
+    new Set(facilities?.map((item: IFacility) => item?.representative?.name))
   );
 
   const table = useReactTable<any>({
-    data: facilities,
+    data: facilities || [],
     columns: columns as ColumnDef<TFacility>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

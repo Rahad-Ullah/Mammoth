@@ -55,7 +55,7 @@ const TestsTable = ({ tests, meta, filters }) => {
   );
 
   const table = useReactTable<TTest>({
-    data: tests,
+    data: tests || [],
     columns: columns as ColumnDef<TTest>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

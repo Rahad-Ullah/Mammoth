@@ -9,7 +9,7 @@ import { myFetch } from "@/utils/myFetch";
 import { Pencil, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 
-const CannedDxTab = ({ data }) => {
+const CannedDxTab = ({ data = [] }) => {
   const handleAddNewOption = async (values: { option: string }) => {
     toast.loading("Adding...", { id: "add-canned-dx" });
     try {
@@ -47,33 +47,37 @@ const CannedDxTab = ({ data }) => {
       {/* body */}
       <section className="">
         <ul className="grid gap-4 md:gap-2">
-          {data?.map((item: { _id: string; content: string }) => (
-            <li
-              key={item?._id}
-              className="flex justify-between items-center gap-2 ml-2 md:m-0"
-            >
-              <p className={`flex items-center gap-3 text-sm text-stone-600`}>
-                <span className="size-3 min-w-3 bg-primary-foreground rounded-full"></span>{" "}
-                {item?.content}
-              </p>
-              <div className="flex">
-                <Button
-                  variant={"ghost"}
-                  size={"icon"}
-                  className="text-primary"
-                >
-                  <Pencil />
-                </Button>
-                <Button
-                  variant={"ghost"}
-                  size={"icon"}
-                  className="text-red-500"
-                >
-                  <Trash />
-                </Button>
-              </div>
-            </li>
-          ))}
+          {data?.length > 0 ? (
+            data?.map((item: { _id: string; content: string }) => (
+              <li
+                key={item?._id}
+                className="flex justify-between items-center gap-2 ml-2 md:m-0"
+              >
+                <p className={`flex items-center gap-3 text-sm text-stone-600`}>
+                  <span className="size-3 min-w-3 bg-primary-foreground rounded-full"></span>{" "}
+                  {item?.content}
+                </p>
+                <div className="flex">
+                  <Button
+                    variant={"ghost"}
+                    size={"icon"}
+                    className="text-primary"
+                  >
+                    <Pencil />
+                  </Button>
+                  <Button
+                    variant={"ghost"}
+                    size={"icon"}
+                    className="text-red-500"
+                  >
+                    <Trash />
+                  </Button>
+                </div>
+              </li>
+            ))
+          ) : (
+            <p className="text-center text-stone-600">No data found</p>
+          )}
         </ul>
       </section>
     </TabsContent>

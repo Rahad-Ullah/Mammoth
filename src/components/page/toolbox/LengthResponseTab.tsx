@@ -19,7 +19,7 @@ const LengthResponseTab = ({ data }) => {
         <section className="flex flex-col gap-4 flex-1">
           <div className="bg-muted p-4 rounded-lg flex-1">
             <p className="text-sm lg:text-base text-stone-500">
-              {data?.content}
+              {data?.content || "No data found"}
             </p>
           </div>
           <div className="flex justify-end">

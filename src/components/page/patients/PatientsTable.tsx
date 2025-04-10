@@ -32,7 +32,7 @@ import columns from "@/components/tableColumns/patientTableColumn";
 import Image from "next/image";
 import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParams";
 
-const PatientsTable = ({ patients, meta, filters }) => {
+const PatientsTable = ({ patients = [], meta, filters }) => {
   const updateSearchParams = useUpdateSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -44,12 +44,12 @@ const PatientsTable = ({ patients, meta, filters }) => {
 
   // Extract unique insurances from data
   const insurances = Array.from(
-    new Set(patients.map((item: IPatient) => item.insuranceCompany))
+    new Set(patients?.map((item: IPatient) => item.insuranceCompany))
   );
 
   // Table Pagination, Sorting, Filtering, Column Visibility, Row Selection
   const table = useReactTable<TPatient>({
-    data: patients,
+    data: patients || [],
     columns: columns as ColumnDef<TPatient>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

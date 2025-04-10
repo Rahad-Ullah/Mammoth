@@ -30,7 +30,7 @@ import columns from "@/components/tableColumns/billTableColumn";
 import Image from "next/image";
 import { IBill } from "@/types/bill";
 
-const BillsTable = ({ bills, meta }) => {
+const BillsTable = ({ bills = [], meta }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -41,7 +41,7 @@ const BillsTable = ({ bills, meta }) => {
 
   // Table Pagination, Sorting, Filtering, Column Visibility, Row Selection
   const table = useReactTable<IBill>({
-    data: bills,
+    data: bills || [],
     columns: columns as ColumnDef<IBill>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

@@ -39,7 +39,7 @@ import { IUser } from "@/types/user";
 // Extract unique roles from data
 const roles = Array.from(new Set(userRoles.map((item) => item.title)));
 
-const UsersTable = ({ users, filters, meta }) => {
+const UsersTable = ({ users = [], filters, meta }) => {
   const updateSearchParams = useUpdateSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -50,7 +50,7 @@ const UsersTable = ({ users, filters, meta }) => {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable<IUser>({
-    data: users,
+    data: users || [],
     columns: columns as ColumnDef<IUser>[],
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
