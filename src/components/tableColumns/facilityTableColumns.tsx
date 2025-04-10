@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { TFacility } from "@/types/facility";
-import { TUser } from "@/types/user";
+import { IFacility } from "@/types/facility";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import Link from "next/link";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 
 // table column definition
-const columns: ColumnDef<TFacility>[] = [
+const columns: ColumnDef<IFacility>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -37,44 +36,34 @@ const columns: ColumnDef<TFacility>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "facilityId",
     header: "Sl. No",
     cell: ({ row }) => {
-      const item = row.original as TFacility;
+      const item = row.original as IFacility;
       return (
-        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+        <Link href={`/dashboard/facilities/facility-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.id}
+            {item?.facilityId}
           </Button>
         </Link>
       );
     },
   },
   {
-    accessorKey: "facility_name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Facilities Name
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    accessorKey: "name",
+    header: "Facilities Name",
     cell: ({ row }) => {
-      const item = row.original as TFacility;
+      const item = row.original as IFacility;
       return (
-        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+        <Link href={`/dashboard/facilities/facility-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.facility_name}
+            {item?.name}
           </Button>
         </Link>
       );
@@ -82,21 +71,11 @@ const columns: ColumnDef<TFacility>[] = [
   },
   {
     accessorKey: "address",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Address
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Address",
     cell: ({ row }) => {
-      const item = row.original as TFacility;
+      const item = row.original as IFacility;
       return (
-        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+        <Link href={`/dashboard/facilities/facility-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -109,28 +88,19 @@ const columns: ColumnDef<TFacility>[] = [
   },
   {
     accessorKey: "doctors",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Doctors
-          <ArrowUpDown />
-        </Button>
-      );
-    },
+    header: "Doctors",
     cell: ({ row }) => {
-      const doctors = row.getValue("doctors") as TUser[];
-      const item = row.original as TFacility;
+      const item = row.original as IFacility;
       return (
-        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+        <Link href={`/dashboard/facilities/facility-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {`Dr. ${doctors[0].firstname} ${doctors[0].lastname}, `}
-            <span className="text-primary">{doctors.length - 1}+</span>
+            {`Dr. ${item?.doctors[0]?.name}, `}
+            {item?.doctors?.length > 1 && (
+              <span className="text-primary">{item?.doctors?.length - 1}+</span>
+            )}
           </Button>
         </Link>
       );
@@ -140,14 +110,14 @@ const columns: ColumnDef<TFacility>[] = [
     accessorKey: "representative",
     header: () => <div>Representative</div>,
     cell: ({ row }) => {
-      const item = row.original as TFacility;
+      const item = row.original as IFacility;
       return (
-        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+        <Link href={`/dashboard/facilities/facility-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {item.representative.firstname} {item.representative.lastname}
+            {item?.representative?.name}
           </Button>
         </Link>
       );
@@ -157,10 +127,10 @@ const columns: ColumnDef<TFacility>[] = [
     accessorKey: "status",
     header: () => <div>Status</div>,
     cell: ({ row }) => {
-      const item = row.original as TFacility;
+      const item = row.original as IFacility;
       const status = row.getValue("status");
       return (
-        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+        <Link href={`/dashboard/facilities/facility-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className={`capitalize w-full justify-start hover:bg-transparent`}
@@ -168,7 +138,7 @@ const columns: ColumnDef<TFacility>[] = [
             <div className="flex items-center space-x-2">
               <MdOutlineRadioButtonChecked
                 className={`size-5 ${
-                  status === "active" ? "text-[#319517]" : "text-red-500"
+                  status === "Active" ? "text-[#319517]" : "text-red-500"
                 }`}
               />
               <p>{status as string}</p>
@@ -183,9 +153,9 @@ const columns: ColumnDef<TFacility>[] = [
     enableHiding: false,
     header: () => <div>Action</div>,
     cell: ({ row }) => {
-      const item = row.original as TFacility;
+      const item = row.original as IFacility;
       return (
-        <Link href={`/dashboard/facilities/facility-details/${item.id}`}>
+        <Link href={`/dashboard/facilities/facility-details/${item._id}`}>
           <div className="flex items-center gap-1">
             <Button variant={"ghost"} size={"icon"} className="text-primary">
               <Info />
