@@ -35,7 +35,7 @@ const ToolboxPage = async () => {
 
   return (
     <Tabs
-      defaultValue={"canned-dx"}
+      defaultValue={"Canned Dx's"}
       className="flex flex-col lg:flex-row gap-2 h-[calc(100vh-128px)] sticky top-32"
     >
       <div className="bg-white p-4 rounded-xl">

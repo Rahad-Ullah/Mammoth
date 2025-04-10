@@ -2,24 +2,14 @@ import TestsTable from "@/components/page/tests/TestsTable";
 import { myFetch } from "@/utils/myFetch";
 
 const TestPage = async ({ searchParams }) => {
-  const { doctor, facility, status, searchTerm, page } = await searchParams;
-  // Build query parameters for the backend request
-  const queryParams = new URLSearchParams({
-    ...(doctor && { doctor }),
-    ...(facility && { facility }),
-    ...(status && { status }),
-    ...(searchTerm && { searchTerm }),
-    ...(page && { page }),
-  });
+  const { doctor, facility, status } = await searchParams;
 
-  const res = await myFetch(`/report?${queryParams.toString()}`, {
-    tags: ["tests"],
-  });
+  const res = await myFetch("/report", { tags: ["tests"] });
 
   return (
     <>
       <TestsTable
-        tests={res?.data || []}
+        tests={res?.data}
         meta={res?.pagination}
         filters={{ doctor, facility, status }}
       />

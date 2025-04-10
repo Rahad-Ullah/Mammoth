@@ -12,9 +12,13 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FetchResponse } from "@/utils/myFetch";
 
 type TModalProps = {
-  action?: () => void;
+  action?: (data: { option: string }) => Promise<FetchResponse>;
   btnVariant?:
     | "secondary"
     | "ghost"
@@ -25,15 +29,40 @@ type TModalProps = {
     | null
     | undefined;
   title?: string;
+  placeholderText?: string;
   btnText?: string;
 };
 
+// Define the form schema using zod
+const addOptionSchema = z.object({
+  option: z.string().min(1, "Option is required"),
+});
+
 const AddModalButton = ({
   action,
-  btnVariant,
-  title,
-  btnText,
+  btnVariant = "default",
+  title = "Add New Option",
+  btnText = "Add Option",
+  placeholderText = "Enter option",
 }: TModalProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<z.infer<typeof addOptionSchema>>({
+    resolver: zodResolver(addOptionSchema),
+  });
+
+  const onSubmit = async (data: { option: string }) => {
+    if (action) {
+      const res = await action(data); // Call the action callback with the form data
+      if (res?.success) {
+        reset();
+      }
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -45,21 +74,24 @@ const AddModalButton = ({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <Input placeholder="Enter option name" />
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              variant={btnVariant}
-              type="submit"
-              onClick={action}
-              className="w-full"
-            >
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 py-4">
+          <div>
+            <Input placeholder={placeholderText} {...register("option")} />
+            {errors.option && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.option.message} {/* Display validation error */}
+              </p>
+            )}
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant={"outline"}>Cancel</Button>
+            </DialogClose>
+            <Button variant={btnVariant} type="submit">
               {btnText}
             </Button>
-          </DialogClose>
-        </DialogFooter>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
