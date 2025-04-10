@@ -1,20 +1,28 @@
-import AddModalButton from "@/components/add-modal-button";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toolBoxData } from "@/constants/toolBox";
-import { capitalizeSentence } from "@/utils/capitalizeSentence";
-import { Pencil, Trash } from "lucide-react";
 
-const ToolboxPage = () => {
+import CannedDxTab from "@/components/page/toolbox/CannedDxTab";
+import InsuranceTab from "@/components/page/toolbox/InsuranceTab";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toolBoxData, toolboxTabs } from "@/constants/toolbox";
+import { capitalizeSentence } from "@/utils/capitalizeSentence";
+import { myFetch } from "@/utils/myFetch";
+
+const ToolboxPage = async () => {
+  const cannedDxResponse = await myFetch("/canned-dx", {
+    tags: ["canned-dx"],
+  });
+  const insuranceResponse = await myFetch("/insurance", {
+    tags: ["insurance"],
+  });
+
   return (
     <Tabs
-      defaultValue={Object.keys(toolBoxData)[0]}
+      defaultValue={"canned-dx"}
       className="flex flex-col lg:flex-row gap-2 h-[calc(100vh-128px)] sticky top-32"
     >
       <div className="bg-white p-4 rounded-xl">
         <TabsList className="flex flex-col justify-start items-start gap-2">
-          {Object.keys(toolBoxData).map((item, idx) => {
+          {toolboxTabs.map((item, idx) => {
             return (
               <TabsTrigger
                 value={item}
@@ -29,98 +37,10 @@ const ToolboxPage = () => {
       </div>
 
       {/* tab content 1 */}
-      <TabsContent
-        value={Object.keys(toolBoxData)[0]}
-        className="bg-white p-4 rounded-xl overflow-y-scroll no-scrollbar"
-      >
-        {/* header */}
-        <section className="flex justify-between items-center gap-2">
-          <h1 className="text-xl lg:text-2xl font-medium text-primary">
-            Canned Dx&apos;s
-          </h1>
-          <AddModalButton />
-        </section>
-        <Separator className="my-4" />
-        {/* body */}
-        <section className="">
-          <ul className="grid gap-4 md:gap-2">
-            {toolBoxData.canned_dxs.map((item) => (
-              <li
-                key={item.id}
-                className="flex justify-between items-center gap-2 ml-2 md:m-0"
-              >
-                <p className={`flex items-center gap-3 text-sm text-stone-600`}>
-                  <span className="size-3 min-w-3 bg-primary-foreground rounded-full"></span>{" "}
-                  {item.findings}
-                </p>
-                <div className="flex">
-                  <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    className="text-primary"
-                  >
-                    <Pencil />
-                  </Button>
-                  <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    className="text-red-500"
-                  >
-                    <Trash />
-                  </Button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </TabsContent>
+      <CannedDxTab data={cannedDxResponse?.data} />
 
       {/* tab content 2 */}
-      <TabsContent
-        value={Object.keys(toolBoxData)[1]}
-        className="bg-white p-4 rounded-xl overflow-y-scroll no-scrollbar"
-      >
-        {/* header */}
-        <section className="flex justify-between items-center gap-2">
-          <h1 className="text-xl lg:text-2xl font-medium text-primary">
-            {capitalizeSentence(Object.keys(toolBoxData)[1])}
-          </h1>
-          <AddModalButton />
-        </section>
-        <Separator className="my-4" />
-        {/* body */}
-        <section className="">
-          <ul className="grid gap-4 md:gap-2">
-            {toolBoxData.insurance.map((item) => (
-              <li
-                key={item.id}
-                className="flex justify-between items-center gap-2 ml-2 md:m-0"
-              >
-                <p className={`flex items-center gap-3 text-sm text-stone-600`}>
-                  <span className="size-3 min-w-3 bg-primary-foreground rounded-full"></span>{" "}
-                  {item.organization}
-                </p>
-                <div className="flex">
-                  <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    className="text-primary"
-                  >
-                    <Pencil />
-                  </Button>
-                  <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    className="text-red-500"
-                  >
-                    <Trash />
-                  </Button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </TabsContent>
+      <InsuranceTab data={insuranceResponse?.data} />
 
       {/* tab content 3 */}
       <TabsContent

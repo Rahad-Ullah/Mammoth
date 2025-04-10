@@ -1,3 +1,11 @@
+export const toolboxTabs = [
+  "Canned Dx's",
+  "Insurance",
+  "Report Disclaimer",
+  "Length Dependent Response",
+  "Non Length Dependent Response",
+];
+
 export const toolBoxData = {
   canned_dxs: [
     {

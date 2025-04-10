@@ -88,3 +88,27 @@ export type TTest = {
     }[];
   };
 };
+
+export interface ITest {
+  _id: string;
+  report_no: number;
+  status: string;
+  patient: {
+    _id: string;
+    address: string;
+    name: string;
+  };
+  doctor: {
+    _id: string;
+    name: string;
+  };
+  apply_date: string;
+  report_date: string;
+  facility_location: {
+    _id: string;
+    name: string;
+    address: string;
+    id: string;
+  };
+  ordering_provider: string;
+}

@@ -3,13 +3,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { TTest } from "@/types/test";
+import { ITest } from "@/types/test";
 import { ColumnDef } from "@tanstack/react-table";
 import { Info } from "lucide-react";
 import Link from "next/link";
 
 // table column definition
-const columns: ColumnDef<TTest>[] = [
+const columns: ColumnDef<ITest>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -41,7 +41,7 @@ const columns: ColumnDef<TTest>[] = [
     accessorKey: "report_no",
     header: "Report No.",
     cell: ({ row }) => {
-      const item = row.original as TTest;
+      const item = row.original as ITest;
       return (
         <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
@@ -55,17 +55,17 @@ const columns: ColumnDef<TTest>[] = [
     },
   },
   {
-    accessorKey: "ordering_provider",
-    header: " User Name",
+    accessorKey: "facility_name",
+    header: "Facility Name",
     cell: ({ row }) => {
-      const item = row.original as TTest;
+      const item = row.original as ITest;
       return (
         <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {row.getValue("ordering_provider")}
+            {item?.facility_location?.name}
           </Button>
         </Link>
       );
@@ -75,14 +75,14 @@ const columns: ColumnDef<TTest>[] = [
     accessorKey: "facility_location",
     header: "Facility Location",
     cell: ({ row }) => {
-      const item = row.original as TTest;
+      const item = row.original as ITest;
       return (
         <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
           >
-            {row.getValue("facility_location")}
+            {item?.facility_location?.address}
           </Button>
         </Link>
       );
@@ -92,7 +92,7 @@ const columns: ColumnDef<TTest>[] = [
     accessorKey: "patient",
     header: "Patient Name",
     cell: ({ row }) => {
-      const item = row.original as TTest;
+      const item = row.original as ITest;
       const patient = row.getValue("patient") as { _id: string; name: string };
       return (
         <Link href={`/dashboard/tests/test-details/${item?._id}`}>
@@ -110,7 +110,7 @@ const columns: ColumnDef<TTest>[] = [
     accessorKey: "doctor",
     header: () => <div>Physician</div>,
     cell: ({ row }) => {
-      const item = row.original as TTest;
+      const item = row.original as ITest;
       return (
         <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
@@ -127,7 +127,7 @@ const columns: ColumnDef<TTest>[] = [
     accessorKey: "apply_date",
     header: () => <div>Apply Date</div>,
     cell: ({ row }) => {
-      const item = row.original as TTest;
+      const item = row.original as ITest;
       return (
         <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
@@ -144,7 +144,7 @@ const columns: ColumnDef<TTest>[] = [
     accessorKey: "report_date",
     header: () => <div>Report Date</div>,
     cell: ({ row }) => {
-      const item = row.original as TTest;
+      const item = row.original as ITest;
       return (
         <Link href={`/dashboard/tests/test-details/${item?._id}`}>
           <Button
@@ -161,7 +161,7 @@ const columns: ColumnDef<TTest>[] = [
     accessorKey: "status",
     header: () => <div>Status</div>,
     cell: ({ row }) => {
-      const item = row.original as TTest;
+      const item = row.original as ITest;
       const status = row.getValue("status");
       return (
         <Link href={`/dashboard/tests/test-details/${item?._id}`}>
