@@ -6,6 +6,7 @@ export const toolboxTabs = [
   "Non Length Dependent Response",
 ];
 
+// data given below is for demo use. should remove in production mode
 export const toolBoxData = {
   canned_dxs: [
     {
