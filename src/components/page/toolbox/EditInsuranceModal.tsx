@@ -14,13 +14,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 type TModalProps = {
   item: any;
-  inputValue: any;
   action?: (data: { option: string }, id: string) => Promise<FetchResponse>;
   triggerBtn: React.ReactNode;
   btnVariant?:
@@ -42,9 +41,8 @@ const editOptionSchema = z.object({
   option: z.string().min(1, "Option is required"),
 });
 
-const EditModal = ({
+const EditInsuranceModal = ({
   item,
-  inputValue,
   triggerBtn,
   action,
   btnVariant = "default",
@@ -63,7 +61,7 @@ const EditModal = ({
     resolver: zodResolver(editOptionSchema),
   });
   // set form input default value
-  setValue("option", inputValue);
+  setValue("option", item?.name);
 
   // handle submit
   const onSubmit = async (data: { option: string }) => {
@@ -107,4 +105,4 @@ const EditModal = ({
   );
 };
 
-export default EditModal;
+export default EditInsuranceModal;

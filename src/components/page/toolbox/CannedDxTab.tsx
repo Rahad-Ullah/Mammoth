@@ -128,6 +128,7 @@ const CannedDxTab = ({ data = [] }) => {
                     btnText="Update"
                     action={handleEdit}
                     item={item}
+                    inputValue={item?.content}
                   />
                   <DeleteModal
                     itemId={item?._id}

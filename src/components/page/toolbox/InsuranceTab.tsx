@@ -9,6 +9,7 @@ import { capitalizeSentence } from "@/utils/capitalizeSentence";
 import { myFetch } from "@/utils/myFetch";
 import { Pencil, Plus, Trash } from "lucide-react";
 import toast from "react-hot-toast";
+import EditModal from "@/components/shared/EditModal";
 
 const InsuranceTab = ({ data = [] }) => {
   // handle add new option
@@ -25,6 +26,30 @@ const InsuranceTab = ({ data = [] }) => {
         await revalidate("insurance");
       } else {
         toast.error(res?.message || "Failed to add", { id: "add-insurance" });
+      }
+      return res || { success: false, message: "Unknown error" };
+    } catch (error) {
+      console.error(error);
+    }
+    return { success: false, message: "Unknown error" };
+  };
+
+  // handle edit existing option
+  const handleEdit = async (values: { option: string }, id: string) => {
+    toast.loading("Updating...", { id: "edit-insurance" });
+    try {
+      const res = await myFetch(`/insurance/${id}`, {
+        method: "PUT",
+        body: { name: values?.option },
+      });
+
+      if (res?.success) {
+        toast.success("Updated successfully", { id: "edit-insurance" });
+        await revalidate("insurance");
+      } else {
+        toast.error("Failed to update", {
+          id: "edit-insurance",
+        });
       }
       return res || { success: false, message: "Unknown error" };
     } catch (error) {
@@ -69,13 +94,22 @@ const InsuranceTab = ({ data = [] }) => {
                   {item?.name}
                 </p>
                 <div className="flex">
-                  <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    className="text-primary"
-                  >
-                    <Pencil />
-                  </Button>
+                  <EditModal
+                    triggerBtn={
+                      <Button
+                        variant={"ghost"}
+                        size={"icon"}
+                        className="text-primary"
+                      >
+                        <Pencil />
+                      </Button>
+                    }
+                    title="Edit Insurance"
+                    btnText="Update"
+                    action={handleEdit}
+                    item={item}
+                    inputValue={item?.name}
+                  />
                   <Button
                     variant={"ghost"}
                     size={"icon"}
