@@ -1,7 +1,8 @@
 "use client";
 
-import AddModalButton from "@/components/add-modal-button";
+import AddModal from "@/components/add-modal";
 import DeleteModal from "@/components/shared/DeleteModal";
+import EditModal from "@/components/shared/EditModal";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { TabsContent } from "@/components/ui/tabs";
@@ -11,6 +12,7 @@ import { Pencil, Plus, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 
 const CannedDxTab = ({ data = [] }) => {
+  // handle add new option
   const handleAddNewOption = async (values: { option: string }) => {
     toast.loading("Adding...", { id: "add-canned-dx" });
     try {
@@ -32,6 +34,31 @@ const CannedDxTab = ({ data = [] }) => {
     return { success: false, message: "Unknown error" };
   };
 
+  // handle edit existing option
+  const handleEdit = async (values: { option: string }, id: string) => {
+    toast.loading("Updating...", { id: "edit-canned-dx" });
+    try {
+      const res = await myFetch(`/canned-dx/${id}`, {
+        method: "PUT",
+        body: { content: values?.option },
+      });
+
+      if (res?.success) {
+        toast.success("Updated successfully", { id: "edit-canned-dx" });
+        await revalidate("canned-dx");
+      } else {
+        toast.error("Failed to update", {
+          id: "edit-canned-dx",
+        });
+      }
+      return res || { success: false, message: "Unknown error" };
+    } catch (error) {
+      console.error(error);
+    }
+    return { success: false, message: "Unknown error" };
+  };
+
+  // handle delete existing option
   const handleDelete = async (id: string) => {
     toast.loading("Deleting...", { id: "delete-canned-dx" });
     try {
@@ -62,7 +89,7 @@ const CannedDxTab = ({ data = [] }) => {
         <h1 className="text-xl lg:text-2xl font-medium text-primary">
           {"Canned Dx's"}
         </h1>
-        <AddModalButton
+        <AddModal
           triggerBtn={
             <Button>
               <Plus /> Add
@@ -87,13 +114,21 @@ const CannedDxTab = ({ data = [] }) => {
                   {item?.content}
                 </p>
                 <div className="flex">
-                  <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    className="text-primary"
-                  >
-                    <Pencil />
-                  </Button>
+                  <EditModal
+                    triggerBtn={
+                      <Button
+                        variant={"ghost"}
+                        size={"icon"}
+                        className="text-primary"
+                      >
+                        <Pencil />
+                      </Button>
+                    }
+                    title="Edit Canned Dx"
+                    btnText="Update"
+                    action={handleEdit}
+                    item={item}
+                  />
                   <DeleteModal
                     itemId={item?._id}
                     triggerBtn={

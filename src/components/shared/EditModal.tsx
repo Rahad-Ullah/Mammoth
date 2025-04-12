@@ -1,6 +1,10 @@
 "use client";
 
-import { Button } from "./ui/button";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FetchResponse } from "@/utils/myFetch";
+import { useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -9,16 +13,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
-import { Input } from "./ui/input";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FetchResponse } from "@/utils/myFetch";
-import { useState } from "react";
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 type TModalProps = {
-  action?: (data: { option: string }) => Promise<FetchResponse>;
+  item: { content: string; _id: string };
+  action?: (data: { option: string }, id: string) => Promise<FetchResponse>;
   triggerBtn: React.ReactNode;
   btnVariant?:
     | "secondary"
@@ -39,12 +40,13 @@ const addOptionSchema = z.object({
   option: z.string().min(1, "Option is required"),
 });
 
-const AddModalButton = ({
+const EditModal = ({
+  item,
   triggerBtn,
   action,
   btnVariant = "default",
-  title = "Add New Option",
-  btnText = "Add Option",
+  title = "Edit Option",
+  btnText = "Save",
   placeholderText = "Enter option",
 }: TModalProps) => {
   const [open, setOpen] = useState(false);
@@ -53,16 +55,18 @@ const AddModalButton = ({
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+    setValue,
   } = useForm<z.infer<typeof addOptionSchema>>({
     resolver: zodResolver(addOptionSchema),
   });
+  // set form input default value
+  setValue("option", item?.content);
 
+  // handle submit
   const onSubmit = async (data: { option: string }) => {
     if (action) {
-      const res = await action(data); // Call the action callback with the form data
+      const res = await action(data, item?._id); // Call the action callback with the form data
       if (res?.success) {
-        reset();
         setOpen(false);
       }
     }
@@ -100,4 +104,4 @@ const AddModalButton = ({
   );
 };
 
-export default AddModalButton;
+export default EditModal;

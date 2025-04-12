@@ -1,4 +1,4 @@
-import AddModalButton from "@/components/add-modal-button";
+import AddModal from "@/components/add-modal";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { TabsContent } from "@/components/ui/tabs";
@@ -16,7 +16,7 @@ const InsuranceTab = ({ data = [] }) => {
         <h1 className="text-xl lg:text-2xl font-medium text-primary">
           {capitalizeSentence("Insurance")}
         </h1>
-        <AddModalButton />
+        <AddModal />
       </section>
       <Separator className="my-4" />
       {/* body */}
