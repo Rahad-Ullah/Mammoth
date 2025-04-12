@@ -1,6 +1,5 @@
 "use client";
 
-import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -20,6 +19,7 @@ import { useState } from "react";
 
 type TModalProps = {
   action?: (data: { option: string }) => Promise<FetchResponse>;
+  triggerBtn: React.ReactNode;
   btnVariant?:
     | "secondary"
     | "ghost"
@@ -40,6 +40,7 @@ const addOptionSchema = z.object({
 });
 
 const AddModalButton = ({
+  triggerBtn,
   action,
   btnVariant = "default",
   title = "Add New Option",
@@ -70,9 +71,7 @@ const AddModalButton = ({
   return (
     <Dialog open={open}>
       <DialogTrigger asChild onClick={() => setOpen(true)}>
-        <Button variant={btnVariant}>
-          <Plus /> Add
-        </Button>
+        {triggerBtn}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

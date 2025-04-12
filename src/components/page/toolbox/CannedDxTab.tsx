@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { TabsContent } from "@/components/ui/tabs";
 import { revalidate } from "@/helpers/revalidateHelper";
 import { myFetch } from "@/utils/myFetch";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 
 const CannedDxTab = ({ data = [] }) => {
@@ -62,7 +62,15 @@ const CannedDxTab = ({ data = [] }) => {
         <h1 className="text-xl lg:text-2xl font-medium text-primary">
           {"Canned Dx's"}
         </h1>
-        <AddModalButton title="Add New Canned Dx" action={handleAddNewOption} />
+        <AddModalButton
+          triggerBtn={
+            <Button>
+              <Plus /> Add
+            </Button>
+          }
+          title="Add New Canned Dx"
+          action={handleAddNewOption}
+        />
       </section>
       <Separator className="my-4" />
       {/* body */}
