@@ -87,7 +87,10 @@ const EditProfileModal = ({ user }: { user: TUser }) => {
 
     // Send the form data to the API
     try {
-      const res = await myFetch("/user/profile", "PUT", formData);
+      const res = await myFetch("/user/profile", {
+        method: "PUT",
+        body: formData,
+      });
       if (res?.success) {
         toast.success(res?.message as string, {
           id: "update-profile",

@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FetchResponse } from "@/utils/myFetch";
+import { useState } from "react";
 
 type TModalProps = {
   action?: (data: { option: string }) => Promise<FetchResponse>;
@@ -45,6 +46,8 @@ const AddModalButton = ({
   btnText = "Add Option",
   placeholderText = "Enter option",
 }: TModalProps) => {
+  const [open, setOpen] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -59,13 +62,14 @@ const AddModalButton = ({
       const res = await action(data); // Call the action callback with the form data
       if (res?.success) {
         reset();
+        setOpen(false);
       }
     }
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Dialog open={open}>
+      <DialogTrigger asChild onClick={() => setOpen(true)}>
         <Button variant={btnVariant}>
           <Plus /> Add
         </Button>
@@ -84,7 +88,7 @@ const AddModalButton = ({
             )}
           </div>
           <DialogFooter>
-            <DialogClose asChild>
+            <DialogClose asChild onClick={() => setOpen(false)}>
               <Button variant={"outline"}>Cancel</Button>
             </DialogClose>
             <Button variant={btnVariant} type="submit">

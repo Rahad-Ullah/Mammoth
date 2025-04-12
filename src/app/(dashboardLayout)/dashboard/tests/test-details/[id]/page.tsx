@@ -15,7 +15,9 @@ type PageParams = Promise<{ id: string }>;
 const TestDetailsPage = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
-  const test = testsData.find((item: TTest) => item.report_no === id);
+  const test = testsData?.find(
+    (item) => (item as Partial<TTest>)?.report_no === id
+  ) as TTest | undefined;
   if (!test) return <h1>Data not found</h1>;
 
   return (

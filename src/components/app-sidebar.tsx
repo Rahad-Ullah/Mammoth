@@ -18,8 +18,10 @@ import { NavSettings } from "./nav-settings";
 import { sidebarMenu } from "@/constants/dashboard-sidebar-menu";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { logout } = useAuthContext();
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -40,7 +42,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton>
+            <SidebarMenuButton onClick={() => logout()}>
               <LogOut />
               Log Out
             </SidebarMenuButton>

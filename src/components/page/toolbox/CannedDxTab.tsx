@@ -1,6 +1,7 @@
 "use client";
 
 import AddModalButton from "@/components/add-modal-button";
+import DeleteModal from "@/components/shared/DeleteModal";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { TabsContent } from "@/components/ui/tabs";
@@ -29,6 +30,26 @@ const CannedDxTab = ({ data = [] }) => {
       console.error(error);
     }
     return { success: false, message: "Unknown error" };
+  };
+
+  const handleDelete = async (id: string) => {
+    toast.loading("Deleting...", { id: "delete-canned-dx" });
+    try {
+      const res = await myFetch(`/canned-dx/${id}`, {
+        method: "DELETE",
+      });
+
+      if (res?.success) {
+        toast.success("Deleted successfully", { id: "delete-canned-dx" });
+        await revalidate("canned-dx");
+      } else {
+        toast.error(res?.message || "Failed to delete", {
+          id: "delete-canned-dx",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -65,13 +86,20 @@ const CannedDxTab = ({ data = [] }) => {
                   >
                     <Pencil />
                   </Button>
-                  <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    className="text-red-500"
-                  >
-                    <Trash />
-                  </Button>
+                  <DeleteModal
+                    itemId={item?._id}
+                    triggerBtn={
+                      <Button
+                        variant={"ghost"}
+                        size={"icon"}
+                        className="text-red-500"
+                      >
+                        <Trash />
+                      </Button>
+                    }
+                    actionBtnText="Delete"
+                    action={handleDelete}
+                  />
                 </div>
               </li>
             ))
