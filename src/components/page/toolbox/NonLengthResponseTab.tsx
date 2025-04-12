@@ -1,8 +1,59 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import { myFetch } from "@/utils/myFetch";
+import { revalidate } from "@/helpers/revalidateHelper";
+
+// Define the form schema using zod
+const nonLengthResponseSchema = z.object({
+  content: z.string().min(1, "Content is required."),
+});
 
 const NonLengthResponseTab = ({ data }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof nonLengthResponseSchema>>({
+    resolver: zodResolver(nonLengthResponseSchema),
+    defaultValues: {
+      content: data?.content || "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof nonLengthResponseSchema>) => {
+    toast.loading("Saving changes...", { id: "save-non-length-response" });
+    try {
+      const res = await myFetch("/disclaimer", {
+        method: "POST",
+        body: { ...values, type: "non_length_response" },
+      });
+
+      if (res?.success) {
+        toast.success("Updated successfully!", {
+          id: "save-non-length-response",
+        });
+        await revalidate("non-length-response");
+      } else {
+        toast.error(res?.message || "Failed to update non-length response.", {
+          id: "save-non-length-response",
+        });
+      }
+    } catch (error) {
+      toast.error("An error occurred while saving changes.", {
+        id: "save-non-length-response",
+      });
+      console.error(error);
+    }
+  };
+
   return (
     <TabsContent
       value={"Non Length Dependent Response"}
@@ -16,16 +67,26 @@ const NonLengthResponseTab = ({ data }) => {
           </h1>
         </section>
         {/* body */}
-        <section className="flex flex-col gap-4 flex-1">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4 flex-1"
+        >
           <div className="bg-muted p-4 rounded-lg flex-1">
-            <p className="text-sm lg:text-base text-stone-500">
-              {data?.content || "No data found"}
-            </p>
+            <Textarea
+              {...register("content")}
+              placeholder="Write non-length dependent response here"
+              className="h-full shadow-none border-none text-sm lg:text-base text-stone-500"
+            />
+            {errors.content && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.content.message}
+              </p>
+            )}
           </div>
           <div className="flex justify-end">
-            <Button>Save & Change</Button>
+            <Button type="submit">Save & Change</Button>
           </div>
-        </section>
+        </form>
       </div>
     </TabsContent>
   );

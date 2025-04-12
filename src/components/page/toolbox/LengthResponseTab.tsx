@@ -1,8 +1,59 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { TabsContent } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import { myFetch } from "@/utils/myFetch";
+import { revalidate } from "@/helpers/revalidateHelper";
+
+// Define the form schema using zod
+const lengthResponseSchema = z.object({
+  content: z.string().min(1, "Content is required."),
+});
 
 const LengthResponseTab = ({ data }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof lengthResponseSchema>>({
+    resolver: zodResolver(lengthResponseSchema),
+    defaultValues: {
+      content: data?.content || "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof lengthResponseSchema>) => {
+    toast.loading("Saving changes...", { id: "save-length-response" });
+    try {
+      const res = await myFetch("/disclaimer", {
+        method: "POST",
+        body: { ...values, type: "length_response" },
+      });
+
+      if (res?.success) {
+        toast.success("Updated successfully!", {
+          id: "save-length-response",
+        });
+        await revalidate("length-response");
+      } else {
+        toast.error(res?.message || "Failed to update length response.", {
+          id: "save-length-response",
+        });
+      }
+    } catch (error) {
+      toast.error("An error occurred while saving changes.", {
+        id: "save-length-response",
+      });
+      console.error(error);
+    }
+  };
+
   return (
     <TabsContent
       value={"Length Dependent Response"}
@@ -16,16 +67,26 @@ const LengthResponseTab = ({ data }) => {
           </h1>
         </section>
         {/* body */}
-        <section className="flex flex-col gap-4 flex-1">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4 flex-1"
+        >
           <div className="bg-muted p-4 rounded-lg flex-1">
-            <p className="text-sm lg:text-base text-stone-500">
-              {data?.content || "No data found"}
-            </p>
+            <Textarea
+              {...register("content")}
+              placeholder="Write length dependent response here"
+              className="h-full shadow-none border-none text-sm lg:text-base text-stone-500"
+            />
+            {errors.content && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.content.message}
+              </p>
+            )}
           </div>
           <div className="flex justify-end">
-            <Button>Save & Change</Button>
+            <Button type="submit">Save & Change</Button>
           </div>
-        </section>
+        </form>
       </div>
     </TabsContent>
   );

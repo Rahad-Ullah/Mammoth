@@ -9,6 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { myFetch } from "@/utils/myFetch";
+import { revalidate } from "@/helpers/revalidateHelper";
 
 // Define the form schema using zod
 const disclaimerSchema = z.object({
@@ -39,6 +40,7 @@ const ReportDisclaimerTab = ({ data }) => {
         toast.success("Disclaimer updated successfully!", {
           id: "save-disclaimer",
         });
+        await revalidate("report-disclaimer");
       } else {
         toast.error(res?.message || "Failed to update disclaimer.", {
           id: "save-disclaimer",
