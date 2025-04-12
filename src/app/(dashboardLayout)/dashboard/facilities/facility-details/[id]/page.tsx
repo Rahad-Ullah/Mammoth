@@ -1,17 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import FacilityCard from "@/components/page/facilityDetails/facilityCard";
 import GraySection from "@/components/page/testDetails/grayPortion";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { facilitiesData } from "@/constants/facilities";
-import { testsData } from "@/constants/tests";
+import { IFacility } from "@/types/facility";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
+import { myFetch } from "@/utils/myFetch";
 
 type PageParams = Promise<{ id: string }>;
 
 const FacilityDetailsPage = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
-  const facility = facilitiesData.find((item: any) => item.id === Number(id));
+  const res = await myFetch(`/facility/${id}`);
+
+  const facility = res?.data[0] as IFacility;
   if (!facility) return <h1>Data not found</h1>;
 
   return (
@@ -37,28 +38,25 @@ const FacilityDetailsPage = async ({ params }: { params: PageParams }) => {
             <ul className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <span className="text-zinc-400">Facility ID</span>
-                <span># {facility.id}</span>
+                <span># {facility?.id}</span>
               </li>
               <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <span className="text-zinc-400">Account Type</span>
-                <span>{capitalizeSentence(facility.account_type)}</span>
+                <span>{capitalizeSentence(facility?.accountType)}</span>
               </li>
               <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <span className="text-zinc-400">Status</span>
                 <span className="text-primary">
-                  {capitalizeSentence(facility.status)}
+                  {capitalizeSentence(facility?.status)}
                 </span>
               </li>
               <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <span className="text-zinc-400">Representative Name</span>
-                <span>
-                  {facility.representative.first_name}{" "}
-                  {facility.representative.first_name}
-                </span>
+                <span>{facility?.representative?.name}</span>
               </li>
               <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <span className="text-zinc-400">Representative Phone</span>
-                <span>{facility.representative.phone}</span>
+                <span>{facility?.representative?.phone}</span>
               </li>
             </ul>
           </section>
@@ -69,44 +67,45 @@ const FacilityDetailsPage = async ({ params }: { params: PageParams }) => {
               <section className="grid gap-4">
                 <h1 className="text-xl font-medium">Doctors</h1>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  {facility.doctors.map((item, idx) => (
+                  {facility?.doctors?.map((item, idx) => (
                     <div key={idx}>
                       <GraySection>
                         <div className="grid gap-6">
                           <h2 className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-between">
                             <span className="text-zinc-500">ID</span>
-                            <span>{item.id}</span>
+                            <span>{item?.id}</span>
                           </h2>
                           <h2 className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-between">
                             <span className="text-zinc-500">Name</span>
-                            <span>
-                              {item.first_name} {item.last_name}
-                            </span>
+                            <span>{item?.name}</span>
                           </h2>
                           <h2 className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-between">
                             <span className="text-zinc-500">Company</span>
-                            <span>{item.company}</span>
+                            <span>{item?.company_name}</span>
                           </h2>
                           <h2 className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-between">
                             <span className="text-zinc-500">Email</span>
-                            <span>{item.email}</span>
+                            <span>{item?.email}</span>
                           </h2>
                           <h2 className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-between">
                             <span className="text-zinc-500">Phone No</span>
-                            <span>{item.phone}</span>
+                            <span>{item?.phone}</span>
                           </h2>
                           <h2 className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-between">
                             <span className="text-zinc-500">APT Number</span>
-                            <span>{item.apt_number}</span>
+                            <span>{item?.apt_number}</span>
                           </h2>
                           <h2 className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-between">
                             <span className="text-zinc-500">NPI Number</span>
-                            <span>{item.npi}</span>
+                            <span>{item?.npi_number}</span>
                           </h2>
                         </div>
                       </GraySection>
                     </div>
                   ))}
+                  {!(facility?.doctors?.length > 0) && (
+                    <p className="text-stone-500">No doctor found</p>
+                  )}
                 </div>
               </section>
 
@@ -114,18 +113,19 @@ const FacilityDetailsPage = async ({ params }: { params: PageParams }) => {
               <section className="grid gap-4">
                 <GraySection>
                   <h1 className="text-xl font-medium">Disorders:</h1>
-                  <div className="flex flex-wrap gap-6">
-                    <h2 className="text-lg">Metabolic</h2>
-                    <ul className="text-zinc-500 grid gap-4">
-                      {testsData[0].disorder_observation.metabolic.map(
-                        (item, idx: number) => (
-                          <li key={idx}>
-                            {item.code} {item.description}
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  </div>
+                  {facility?.disorders?.map((item, idx) => (
+                    <div key={idx} className="flex flex-wrap gap-6">
+                      <h2 className="text-lg">{item?.name}</h2>
+                      <ul className="text-zinc-500 grid gap-4">
+                        {item?.disorders?.map((item, idx) => (
+                          <li key={idx}>E03.9 {item?.name}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                  {!(facility?.disorders?.length > 0) && (
+                    <p className="text-stone-500">No data found</p>
+                  )}
                 </GraySection>
 
                 <GraySection>
@@ -134,10 +134,11 @@ const FacilityDetailsPage = async ({ params }: { params: PageParams }) => {
                   </h1>
                   <div className="flex gap-6">
                     <ul className="text-zinc-500 grid gap-4">
-                      {testsData[0].reason_for_skin_biopsy.map(
-                        (item, idx: number) => (
-                          <li key={idx}>{item}</li>
-                        )
+                      {facility?.reasons?.map((item, idx) => (
+                        <li key={idx}>{item?.name}</li>
+                      ))}
+                      {!(facility?.reasons?.length > 0) && (
+                        <li className="text-stone-500">No data found</li>
                       )}
                     </ul>
                   </div>
@@ -145,36 +146,26 @@ const FacilityDetailsPage = async ({ params }: { params: PageParams }) => {
 
                 <GraySection>
                   <h1 className="text-xl font-medium">Clinical Symptoms:</h1>
-                  <div className="flex flex-wrap gap-6">
-                    <h2 className="text-lg">Neck Pain</h2>
-                    <ul className="text-zinc-500 grid gap-4">
-                      {testsData[0].clinical_symptoms.neck_pain.map(
-                        (item, idx: number) => (
+                  {facility?.clinical_symptoms?.map((item, idx) => (
+                    <div key={idx} className="flex flex-wrap gap-6">
+                      <h2 className="text-lg">{item?.title}</h2>
+                      <ul className="text-zinc-500 grid gap-4">
+                        {item?.disorders?.map((nestedItem, idx) => (
                           <li key={idx}>
-                            {item.code} {item.description} -{" "}
-                            <span className="text-red-500">
-                              {item.side} Side
-                            </span>
+                            E03.9 {nestedItem?.name} -{" "}
+                            {nestedItem?.sides?.map((side, idx) => (
+                              <span key={idx} className="text-red-500">
+                                {side} Side{", "}
+                              </span>
+                            ))}
                           </li>
-                        )
-                      )}
-                    </ul>
-                  </div>
-                  <div className="flex flex-wrap gap-6">
-                    <h2 className="text-lg">Leg Pain</h2>
-                    <ul className="text-zinc-500 grid gap-4">
-                      {testsData[0].clinical_symptoms.neck_pain.map(
-                        (item, idx: number) => (
-                          <li key={idx}>
-                            {item.code} {item.description} -{" "}
-                            <span className="text-red-500">
-                              {item.side} Side
-                            </span>
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  </div>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                  {!(facility?.clinical_symptoms?.length > 0) && (
+                    <p className="text-stone-500">No data found</p>
+                  )}
                 </GraySection>
               </section>
             </section>
