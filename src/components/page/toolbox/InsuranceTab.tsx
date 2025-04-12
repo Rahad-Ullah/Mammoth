@@ -10,6 +10,7 @@ import { myFetch } from "@/utils/myFetch";
 import { Pencil, Plus, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import EditModal from "@/components/shared/EditModal";
+import DeleteModal from "@/components/shared/DeleteModal";
 
 const InsuranceTab = ({ data = [] }) => {
   // handle add new option
@@ -56,6 +57,27 @@ const InsuranceTab = ({ data = [] }) => {
       console.error(error);
     }
     return { success: false, message: "Unknown error" };
+  };
+
+  // handle delete existing option
+  const handleDelete = async (id: string) => {
+    toast.loading("Deleting...", { id: "delete-insurance" });
+    try {
+      const res = await myFetch(`/insurance/${id}`, {
+        method: "DELETE",
+      });
+
+      if (res?.success) {
+        toast.success("Deleted successfully", { id: "delete-insurance" });
+        await revalidate("insurance");
+      } else {
+        toast.error(res?.message || "Failed to delete", {
+          id: "delete-insurance",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -110,13 +132,20 @@ const InsuranceTab = ({ data = [] }) => {
                     item={item}
                     inputValue={item?.name}
                   />
-                  <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    className="text-red-500"
-                  >
-                    <Trash />
-                  </Button>
+                  <DeleteModal
+                    itemId={item?._id}
+                    triggerBtn={
+                      <Button
+                        variant={"ghost"}
+                        size={"icon"}
+                        className="text-red-500"
+                      >
+                        <Trash />
+                      </Button>
+                    }
+                    actionBtnText="Delete"
+                    action={handleDelete}
+                  />
                 </div>
               </li>
             ))
