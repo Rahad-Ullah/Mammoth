@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { config } from "@/config/env-config";
 import Image from "next/image";
 
 const UserCard = ({ user }: { user: any }) => {
@@ -7,7 +8,11 @@ const UserCard = ({ user }: { user: any }) => {
     <div className="flex flex-col xl:flex-row gap-10">
       <figure className="p-2 col-span-1">
         <Image
-          src={user.image}
+          src={
+            user.image.includes("i.ibb.co")
+              ? user.image
+              : `${config.baseURL}${user.image}`
+          }
           alt="user image"
           width={200}
           height={200}
@@ -21,13 +26,11 @@ const UserCard = ({ user }: { user: any }) => {
         <ul className="grid grid-cols-1 xl:grid-cols-2 gap-6 h-fit">
           <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <span className="text-zinc-400">Name </span>
-            <span>
-              : {user.firstname} {user.lastname}
-            </span>
+            <span>: {user.name}</span>
           </li>
           <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <span className="text-zinc-400">Company </span>
-            <span>: {user.company_name}</span>
+            <span>: {user.company_name || "N/A"}</span>
           </li>
           <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <span className="text-zinc-400">Email </span>

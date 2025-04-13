@@ -43,7 +43,7 @@ const columns: ColumnDef<IUser>[] = [
     cell: ({ row }) => {
       const item = row.original as IUser;
       return (
-        <Link href={`/dashboard/users/user-details/${item.id}`}>
+        <Link href={`/dashboard/users/user-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -60,7 +60,7 @@ const columns: ColumnDef<IUser>[] = [
     cell: ({ row }) => {
       const item = row.original as IUser;
       return (
-        <Link href={`/dashboard/users/user-details/${item.id}`}>
+        <Link href={`/dashboard/users/user-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -77,7 +77,7 @@ const columns: ColumnDef<IUser>[] = [
     cell: ({ row }) => {
       const item = row.original as IUser;
       return (
-        <Link href={`/dashboard/users/user-details/${item.id}`}>
+        <Link href={`/dashboard/users/user-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -94,7 +94,7 @@ const columns: ColumnDef<IUser>[] = [
     cell: ({ row }) => {
       const item = row.original as IUser;
       return (
-        <Link href={`/dashboard/users/user-details/${item.id}`}>
+        <Link href={`/dashboard/users/user-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="w-full justify-start hover:bg-transparent"
@@ -111,7 +111,7 @@ const columns: ColumnDef<IUser>[] = [
     cell: ({ row }) => {
       const item = row.original as IUser;
       return (
-        <Link href={`/dashboard/users/user-details/${item.id}`}>
+        <Link href={`/dashboard/users/user-details/${item._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -129,7 +129,7 @@ const columns: ColumnDef<IUser>[] = [
       const role = row.getValue("role");
       const item = row.original as IUser;
       return (
-        <Link href={`/dashboard/users/user-details/${item.id}`}>
+        <Link href={`/dashboard/users/user-details/${item._id}`}>
           <Badge
             className={`capitalize font-medium text-white rounded-full hover:bg-primary py-1.5 w-full flex justify-center`}
             style={{
@@ -170,7 +170,7 @@ const columns: ColumnDef<IUser>[] = [
               <Lock />
             </Button>
           )}
-          <Link href={`/dashboard/users/user-details/${item.id}`} passHref>
+          <Link href={`/dashboard/users/user-details/${item._id}`} passHref>
             <Button variant={"ghost"} size={"icon"} className="text-primary">
               <Info />
             </Button>

@@ -1,7 +1,6 @@
 import UserCard from "@/components/page/userDetails/userCard";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { testsData } from "@/constants/tests";
-import { usersData } from "@/constants/users";
+import { myFetch } from "@/utils/myFetch";
 import Link from "next/link";
 
 type PageParams = Promise<{ id: string }>;
@@ -9,16 +8,16 @@ type PageParams = Promise<{ id: string }>;
 const UserDetailsPage = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
-  const user = usersData.find((item) => item.id === Number(id));
-  if (!user) return <h1>Data not found</h1>;
+  const res = await myFetch(`/user/users/${id}`);
 
-  const tests = testsData.slice(1, 6);
+  const userData = res?.data;
+  if (!userData) return <h1 className="text-stone-500">Data not found</h1>;
 
   return (
     <section className="flex flex-col gap-6 h-full">
       <Card>
         <CardHeader>
-          <UserCard user={user} />
+          <UserCard user={userData?.user} />
         </CardHeader>
       </Card>
       <Card className="h-full">
@@ -27,37 +26,36 @@ const UserDetailsPage = async ({ params }: { params: PageParams }) => {
         </CardHeader>
         <CardContent>
           <ul>
-            {tests.map((test) => (
+            {userData?.reports.map((test) => (
               <Link
-                href={`/dashboard/tests/user-record-history/${test.report_no}`}
-                key={test.report_no}
+                href={`/dashboard/tests/user-record-history/${test?._id}`}
+                key={test?._id}
               >
                 <li className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-6">
                   <p className="flex gap-6 text-zinc-400">
                     Patient Name{" "}
-                    <span className="text-zinc-500">
-                      {test.patient.first_name} {test.patient.last_name}
-                    </span>
+                    <span className="text-zinc-500">{test?.patient?.name}</span>
                   </p>
                   <p className="flex gap-6 text-zinc-400">
                     Ordering Physician{" "}
-                    <span className="text-zinc-500">
-                      {test.ordering_physician}
-                    </span>
+                    <span className="text-zinc-500">{test?.doctor?.name}</span>
                   </p>
                   <p className="flex gap-6 text-zinc-400">
                     Apply Date{" "}
                     <span className="text-zinc-500">
-                      {new Date(test.apply_date).toLocaleString()}
+                      {new Date(test?.apply_date).toLocaleString()}
                     </span>
                   </p>
                   <p className="flex gap-6 text-zinc-400">
                     {" "}
-                    <span className="text-primary">{test.status}</span>
+                    <span className="text-primary">{test?.status}</span>
                   </p>
                 </li>
               </Link>
             ))}
+            {!(userData?.reports?.length > 0) && (
+              <li className="text-stone-500">No data found</li>
+            )}
           </ul>
         </CardContent>
       </Card>
