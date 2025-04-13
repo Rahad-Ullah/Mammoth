@@ -38,7 +38,7 @@ const FacilityDetailsPage = async ({ params }: { params: PageParams }) => {
             <ul className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <span className="text-zinc-400">Facility ID</span>
-                <span># {facility?.id}</span>
+                <span># {facility?.facilityId}</span>
               </li>
               <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <span className="text-zinc-400">Account Type</span>
@@ -118,7 +118,7 @@ const FacilityDetailsPage = async ({ params }: { params: PageParams }) => {
                       <h2 className="text-lg">{item?.name}</h2>
                       <ul className="text-zinc-500 grid gap-4">
                         {item?.disorders?.map((item, idx) => (
-                          <li key={idx}>E03.9 {item?.name}</li>
+                          <li key={idx}> {item?.name}</li>
                         ))}
                       </ul>
                     </div>
@@ -152,7 +152,7 @@ const FacilityDetailsPage = async ({ params }: { params: PageParams }) => {
                       <ul className="text-zinc-500 grid gap-4">
                         {item?.disorders?.map((nestedItem, idx) => (
                           <li key={idx}>
-                            E03.9 {nestedItem?.name} -{" "}
+                            {nestedItem?.name} -{" "}
                             {nestedItem?.sides?.map((side, idx) => (
                               <span key={idx} className="text-red-500">
                                 {side} Side{", "}

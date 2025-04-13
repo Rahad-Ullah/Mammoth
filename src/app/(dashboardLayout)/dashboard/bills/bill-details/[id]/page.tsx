@@ -57,7 +57,7 @@ const BillDetailsPage = async ({ params }: { params: PageParams }) => {
 
               {/* Billing */}
               <section>
-                <BillingSection />
+                <BillingSection bill={bill}/>
               </section>
 
               {/* Note */}
