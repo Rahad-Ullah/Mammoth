@@ -16,7 +16,9 @@ type PageParams = Promise<{ id: string }>;
 const BillDetailsPage = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
-  const billResponse = await myFetch(`/bill/${id}`);
+  const billResponse = await myFetch(`/bill/${id}`, {
+    tags: ["single-bill"],
+  });
 
   const bill = billResponse?.data;
   if (!bill) return <h1>Data not found</h1>;
@@ -59,7 +61,7 @@ const BillDetailsPage = async ({ params }: { params: PageParams }) => {
               </section>
 
               {/* Note */}
-              <NoteSection />
+              <NoteSection bill={bill} />
             </section>
             {/* Anatomy Image section */}
             <section>
