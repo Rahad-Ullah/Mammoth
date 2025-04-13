@@ -1,26 +1,25 @@
 import PatientCard from "@/components/page/billDetails/patientCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { billingData } from "@/constants/billingData";
 import Image from "next/image";
-import pdfIcon from "../../../../../../assets/icons/pdf.svg";
+import pdfIcon from "@/assets/icons/pdf.svg";
 import TestInfo from "@/components/page/testDetails/testInfo";
 import GeneralTestDetails from "@/components/page/testDetails/generalTestDetails";
 import DocumentSection from "@/components/page/testDetails/documentSection";
 import BillingSection from "@/components/page/testDetails/billingSection";
 import NoteSection from "@/components/page/testDetails/noteSection";
 import AnatomyWrapper from "@/components/page/testDetails/anatomy/anatomyWrapper";
-import { testsData } from "@/constants/tests";
+import { myFetch } from "@/utils/myFetch";
 
 type PageParams = Promise<{ id: string }>;
 
 const BillDetailsPage = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
-  const bill = billingData.find((item) => item.id === Number(id));
-  if (!bill) return <h1>Data not found</h1>;
+  const billResponse = await myFetch(`/bill/${id}`);
 
-  const test = testsData[0];
+  const bill = billResponse?.data;
+  if (!bill) return <h1>Data not found</h1>;
 
   return (
     <section className="grid gap-6">
@@ -35,7 +34,7 @@ const BillDetailsPage = async ({ params }: { params: PageParams }) => {
           <h1 className="text-xl font-medium text-primary">Patient:</h1>
         </CardHeader>
         <CardContent>
-          <PatientCard bill={bill} patient={bill.patient} />
+          <PatientCard patient={bill?.patient} />
         </CardContent>
       </Card>
       <Card>
@@ -43,15 +42,15 @@ const BillDetailsPage = async ({ params }: { params: PageParams }) => {
           <h1 className="text-xl font-medium text-primary">Chart Details:</h1>
         </CardHeader>
         <CardContent className="grid gap-10">
-          <TestInfo test={test} />
+          <TestInfo bill={bill} />
           <section className="flex flex-col-reverse lg:flex-row gap-8">
             {/* left section */}
             <section className="w-full lg:w-2/3 grid gap-8">
-              <GeneralTestDetails test={test} />
+              <GeneralTestDetails test={bill?.report} />
 
               {/* Document */}
               <section>
-                <DocumentSection test={test} />
+                <DocumentSection test={bill?.report} />
               </section>
 
               {/* Billing */}
@@ -64,7 +63,7 @@ const BillDetailsPage = async ({ params }: { params: PageParams }) => {
             </section>
             {/* Anatomy Image section */}
             <section>
-              <AnatomyWrapper testPoints={test.biopsy_samples} />
+              <AnatomyWrapper testPoints={bill?.report?.biopsy_sample} />
             </section>
           </section>
         </CardContent>

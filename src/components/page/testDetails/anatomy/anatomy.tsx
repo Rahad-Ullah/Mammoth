@@ -24,7 +24,7 @@ const ImageAnnotation = ({ testPoints }) => {
     const interval = setInterval(() => {
       testPoints?.forEach((point) => {
         const circle =
-          circleRefs.current[`${point.abbreviation}-${point.side}`];
+          circleRefs.current[`${point.sample_area}-${point.sample_side}`];
         if (circle) {
           // Get the current scale
           const currentScale = circle.scaleX();
@@ -100,27 +100,28 @@ const ImageAnnotation = ({ testPoints }) => {
           {anatomyPointsData.map((point) => {
             const isSelected = testPoints?.some(
               (item) =>
-                item.abbreviation === point.abbreviation &&
-                item.side === point.side
+                item.sample_area === point.sample_area &&
+                item.sample_side === point.sample_side
             );
 
             return (
-              <React.Fragment key={`${point.abbreviation}-${point.side}`}>
+              <React.Fragment key={`${point.sample_area}-${point.sample_side}`}>
                 <Circle
                   ref={(el) => {
-                    circleRefs.current[`${point.abbreviation}-${point.side}`] =
-                      el;
+                    circleRefs.current[
+                      `${point.sample_area}-${point.sample_side}`
+                    ] = el;
                   }}
                   x={point.x}
                   y={point.y}
                   radius={isSelected ? 5 : 4}
                   fill={isSelected ? "red" : "turquoise"}
                 />
-                {point.side === "Right" && !isHidden && (
+                {point.sample_side === "Right" && !isHidden && (
                   <Text
                     x={point.x + 15} // Slight offset for text visibility
                     y={point.y - 5} // Slight offset for text visibility
-                    text={`← ${point.location} (${point.abbreviation})`}
+                    text={`← ${point.sample_area}`}
                     fontSize={12}
                     fontFamily="Poppins"
                     fill="gray"

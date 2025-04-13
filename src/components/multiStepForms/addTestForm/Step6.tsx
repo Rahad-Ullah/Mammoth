@@ -45,7 +45,7 @@ const Step6 = ({
     ...new Set(
       anatomyPointsData.map((item) =>
         JSON.stringify({
-          location: item.location,
+          location: item.sample_area,
           abbreviation: item.abbreviation,
         })
       )
