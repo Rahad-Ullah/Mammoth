@@ -15,7 +15,7 @@ const noteSchema = z.object({
   note: z.string().optional(),
 });
 
-const NoteSection = ({ bill }) => {
+const NoteSection = ({ testId, note }) => {
   const {
     register,
     handleSubmit,
@@ -23,14 +23,14 @@ const NoteSection = ({ bill }) => {
   } = useForm<z.infer<typeof noteSchema>>({
     resolver: zodResolver(noteSchema),
     defaultValues: {
-      note: bill?.report?.note || "",
+      note: note || "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof noteSchema>) => {
     toast.loading("Saving note...", { id: "save-note" });
     try {
-      const res = await myFetch(`/report/note/${bill?.report?._id}`, {
+      const res = await myFetch(`/report/note/${testId}`, {
         method: "POST",
         body: values,
       });
@@ -38,6 +38,7 @@ const NoteSection = ({ bill }) => {
       if (res?.success) {
         toast.success("Note added successfully!", { id: "save-note" });
         revalidate("single-bill");
+        revalidate("single-test");
       } else {
         toast.error(res?.message || "Failed to add note.", { id: "save-note" });
       }
@@ -65,7 +66,7 @@ const NoteSection = ({ bill }) => {
         </div>
         <div className="grid justify-end">
           <Button type="submit">
-            <NotepadText/> Save Note
+            <NotepadText /> Save Note
           </Button>
         </div>
       </form>
