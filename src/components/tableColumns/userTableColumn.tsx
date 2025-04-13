@@ -3,10 +3,30 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { revalidate } from "@/helpers/revalidateHelper";
 import { IUser } from "@/types/user";
+import { myFetch } from "@/utils/myFetch";
 import { ColumnDef } from "@tanstack/react-table";
 import { Info, Lock, LockOpen } from "lucide-react";
 import Link from "next/link";
+import toast from "react-hot-toast";
+
+// handle user lock
+const handleUserLock = async (id: string) => {
+  try {
+    const res = await myFetch(`/user/lock/${id}`, {
+      method: "PUT",
+    });
+    if (res?.success) {
+      revalidate("users");
+    } else {
+      toast.error("Failed to update");
+    }
+  } catch (error) {
+    toast.error("Failed to update");
+    console.error(error);
+  }
+};
 
 // table column definition
 const columns: ColumnDef<IUser>[] = [
@@ -161,12 +181,22 @@ const columns: ColumnDef<IUser>[] = [
       return (
         <div className="flex items-center gap-1">
           {!item.isLocked && (
-            <Button variant={"ghost"} size={"icon"} className="text-zinc-400">
+            <Button
+              onClick={() => handleUserLock(item?._id)}
+              variant={"ghost"}
+              size={"icon"}
+              className="text-zinc-400"
+            >
               <LockOpen />
             </Button>
           )}
           {item.isLocked && (
-            <Button variant={"ghost"} size={"icon"} className="text-red-500">
+            <Button
+              onClick={() => handleUserLock(item?._id)}
+              variant={"ghost"}
+              size={"icon"}
+              className="text-red-500"
+            >
               <Lock />
             </Button>
           )}
