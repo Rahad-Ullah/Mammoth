@@ -1,6 +1,7 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import GraySection from "./grayPortion";
-import { capitalizeSentence } from "@/utils/capitalizeSentence";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -11,196 +12,443 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { myFetch } from "@/utils/myFetch";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import { revalidate } from "@/helpers/revalidateHelper";
 
-const PathologistSection = ({ test }) => {
+// Define the form schema using zod
+const pathologistSchema = z.object({
+  finalDiagnosis: z.array(
+    z.object({
+      sampleId: z.string(),
+      cannedDx: z.string().min(1, "CannedDx is required."),
+      diagnosis: z.string().min(1, "Diagnosis is required."),
+    })
+  ),
+  microscopicExamination: z.array(
+    z.object({
+      sampleId: z.string(),
+      examination: z.string().min(1, "Examination is required."),
+    })
+  ),
+  grossDescription: z.array(
+    z.object({
+      sampleId: z.string(),
+      description: z.string().min(1, "Description is required."),
+    })
+  ),
+  comments: z.array(
+    z.object({
+      sampleId: z.string(),
+      comment: z.string().optional(),
+    })
+  ),
+  biopsiesDemonstrate: z.number().min(1, "This field is required."),
+  nerveFiberDensity: z.string().min(1, "This field is required."),
+  neuropathyType: z.string().min(1, "Please select a neuropathy type."),
+});
+
+const PathologistSection = ({ test, cannedDxs }) => {
+  const form = useForm<z.infer<typeof pathologistSchema>>({
+    resolver: zodResolver(pathologistSchema),
+    defaultValues: {
+      finalDiagnosis: test?.biopsy_sample?.map((sample) => ({
+        sampleId: sample._id,
+        cannedDx: sample?.microscopic_diagnosis?.canned_dx || "",
+        diagnosis: sample?.microscopic_diagnosis?.description || "",
+      })),
+      microscopicExamination: test?.biopsy_sample?.map((sample) => ({
+        sampleId: sample._id,
+        examination: sample?.microscopic_examination || "",
+      })),
+      grossDescription: test?.biopsy_sample?.map((sample) => ({
+        sampleId: sample._id,
+        description: sample?.gross_description || "",
+      })),
+      comments: test?.biopsy_sample?.map((sample) => ({
+        sampleId: sample._id,
+        comment: sample?.comment || "",
+      })),
+      biopsiesDemonstrate:
+        test?.additional_biopsies_details?.biopsies_demonstrate || "",
+      nerveFiberDensity:
+        test?.additional_biopsies_details?.nerve_fibber_density_consistent ||
+        "",
+      neuropathyType: test?.additional_biopsies_details?.neuropathy || "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof pathologistSchema>) => {
+    // Transform the form data into the required format
+    const transformedData = {
+      samples: values.finalDiagnosis.map((diagnosis, idx) => ({
+        _id: diagnosis.sampleId,
+        microscopic_diagnosis: {
+          canned_dx: diagnosis.cannedDx,
+          description: diagnosis.diagnosis,
+        },
+        microscopic_examination:
+          values.microscopicExamination[idx]?.examination || "",
+        gross_description: values.grossDescription[idx]?.description || "",
+        comment: values.comments[idx]?.comment || "",
+      })),
+      additional_details: {
+        biopsies_demonstrate: parseInt(
+          values.biopsiesDemonstrate.toString(),
+          10
+        ),
+        nerve_fibber_density_consistent: values.nerveFiberDensity,
+        neuropathy: values.neuropathyType,
+      },
+    };
+
+    toast.loading("Submitting...", { id: "update-boipsy-sample-taost" });
+    try {
+      const res = await myFetch(`/report/biopsy/${test?._id}`, {
+        method: "PUT",
+        body: transformedData,
+      });
+
+      if (res?.success) {
+        toast.success("Biopsy updated successfully!", {
+          id: "update-boipsy-sample-taost",
+        });
+        revalidate("single-test");
+      } else {
+        toast.error(res?.message || "Failed to submit data.", {
+          id: "update-boipsy-sample-taost",
+        });
+      }
+    } catch (error) {
+      toast.error("An error occurred while submitting data.", {
+        id: "update-boipsy-sample-taost",
+      });
+      console.error(error);
+    }
+  };
+
   return (
     <section className="grid gap-8">
-      <h1 className="text-2xl font-medium text-primary">
-        Pathologist Section:
-      </h1>
-      {/*  Final Microscopic Diagnosis */}
-      <GraySection>
-        <div className="flex flex-wrap justify-between items-center gap-4">
-          <h1 className="text-xl font-medium">Final Microscopic Diagnosis:</h1>
-          <p className="flex flex-wrap gap-2 text-sm text-zinc-400">
-            {Object.entries(
-              test.pathologist_section.final_microscopic_diagnosis
-            ).map(([key, value]) => (
-              <span key={key}>
-                {capitalizeSentence(key)} {value as string}
-              </span>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <h1 className="text-2xl font-medium text-primary">
+            Pathologist Section:
+          </h1>
+
+          {/* Final Microscopic Diagnosis */}
+          <GraySection>
+            <div className="flex flex-wrap justify-between items-center gap-4">
+              <h1 className="text-xl font-medium">
+                Final Microscopic Diagnosis:
+              </h1>
+              <p className="flex flex-wrap gap-2 text-sm text-zinc-400">
+                Normal &gt; 9 Borderline 7.2-8.9 Mild 3.9-7.1 Moderate 2.1-3.8
+                Severe 0-2
+              </p>
+            </div>
+
+            {test?.biopsy_sample?.map((item, idx) => (
+              <div key={idx} className="grid gap-5">
+                <div className="flex flex-wrap justify-between items-center gap-2 px-1">
+                  <p>
+                    {idx + 1}. Sample taken from{" "}
+                    <span className="text-primary font-medium">
+                      {item?.sample_area}
+                    </span>{" "}
+                    <span className="text-red-500 capitalize">
+                      {item?.sample_side}
+                    </span>{" "}
+                    Side
+                  </p>
+                  <p className="text-sm text-zinc-400">
+                    Specimen Id: {item.specimen_id}
+                  </p>
+                </div>
+                <FormField
+                  control={form.control}
+                  name={`finalDiagnosis.${idx}.cannedDx`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Canned Dx</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className="bg-white max-w-screen-sm">
+                          <SelectValue placeholder="Choose Canned Dx..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {cannedDxs?.map(
+                            (
+                              dx: { _id: string; content: string },
+                              idx: number
+                            ) => (
+                              <SelectItem key={idx} value={dx.content}>
+                                {dx.content}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`finalDiagnosis.${idx}.diagnosis`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Diagnosis</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={"Write diagnosis here..."}
+                          className="bg-white"
+                          rows={6}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             ))}
-          </p>
-        </div>
+          </GraySection>
 
-        {test.pathologist_section.samples.map((item, idx) => (
-          <div key={idx} className="grid gap-5">
-            <div className="flex flex-wrap justify-between items-center gap-2 px-1">
-              <p>
-                {idx + 1}. Sample taken from{" "}
-                <span className="text-primary font-medium">
-                  ({item.abbreviation}) {item.location}
-                </span>{" "}
-                <span className="text-red-500 capitalize">{item.side}</span>{" "}
-                Side
-              </p>
-              <p className="text-sm text-zinc-400">
-                Specimen Id: {item.specimen_id}
-              </p>
+          {/* Microscopic Examination */}
+          <GraySection>
+            <div className="">
+              <h1 className="text-xl font-medium">Microscopic Examination:</h1>
             </div>
-            <Input
-              placeholder="Choose Canned Dx...."
-              className="bg-white md:w-2/5"
-            />
-            <Textarea
-              placeholder={item.diagnosis}
-              className="bg-white"
-              rows={6}
-            />
-          </div>
-        ))}
-      </GraySection>
 
-      {/*Microscopic Examination */}
-      <GraySection>
-        <div className="">
-          <h1 className="text-xl font-medium">Microscopic Examination:</h1>
-        </div>
+            {test?.biopsy_sample?.map((item, idx) => (
+              <div key={idx} className="grid gap-5">
+                <div className="flex flex-wrap justify-between items-center gap-2 px-1">
+                  <p>
+                    {idx + 1}. Sample taken from{" "}
+                    <span className="text-primary font-medium">
+                      {item?.sample_area}
+                    </span>{" "}
+                    <span className="text-red-500 capitalize">
+                      {item?.sample_side}
+                    </span>{" "}
+                    Side
+                  </p>
+                  <p className="text-sm text-zinc-400">
+                    Specimen Id: {item.specimen_id}
+                  </p>
+                </div>
+                <FormField
+                  control={form.control}
+                  name={`microscopicExamination.${idx}.examination`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Examination</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={"Write examination here..."}
+                          className="bg-white"
+                          rows={6}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            ))}
+          </GraySection>
 
-        {test.pathologist_section.microscopic_examination.map((item, idx) => (
-          <div key={idx} className="grid gap-5">
-            <div className="flex flex-wrap justify-between items-center gap-2 px-1">
-              <p>
-                {idx + 1}. Sample taken from{" "}
-                <span className="text-primary font-medium">
-                  ({item.abbreviation}) {item.location}
-                </span>{" "}
-                <span className="text-red-500 capitalize">{item.side}</span>{" "}
-                Side
-              </p>
-              <p className="text-sm text-zinc-400">
-                Specimen Id: {item.specimen_id}
-              </p>
+          {/* Gross Description */}
+          <GraySection>
+            <div className="">
+              <h1 className="text-xl font-medium">Gross Description:</h1>
             </div>
-            <Textarea
-              placeholder={item.diagnosis}
-              className="bg-white"
-              rows={6}
-            />
-          </div>
-        ))}
-      </GraySection>
 
-      {/* Gross Description */}
-      <GraySection>
-        <div className="">
-          <h1 className="text-xl font-medium">Gross Description:</h1>
-        </div>
+            {test?.biopsy_sample?.map((item, idx) => (
+              <div key={idx} className="grid gap-5">
+                <div className="flex flex-wrap justify-between items-center gap-2 px-1">
+                  <p>
+                    {idx + 1}. Sample taken from{" "}
+                    <span className="text-primary font-medium">
+                      {item?.sample_area}
+                    </span>{" "}
+                    <span className="text-red-500 capitalize">
+                      {item?.sample_side}
+                    </span>{" "}
+                    Side
+                  </p>
+                  <p className="text-sm text-zinc-400">
+                    Specimen Id: {item.specimen_id}
+                  </p>
+                </div>
+                <FormField
+                  control={form.control}
+                  name={`grossDescription.${idx}.description`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={"Write description here..."}
+                          className="bg-white"
+                          rows={6}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            ))}
+          </GraySection>
 
-        {test.pathologist_section.gross_description.map((item, idx) => (
-          <div key={idx} className="grid gap-5">
-            <div className="flex flex-wrap justify-between items-center gap-2 px-1">
-              <p>
-                {idx + 1}. Sample taken from{" "}
-                <span className="text-primary font-medium">
-                  ({item.abbreviation}) {item.location}
-                </span>{" "}
-                <span className="text-red-500 capitalize">{item.side}</span>{" "}
-                Side
-              </p>
-              <p className="text-sm text-zinc-400">
-                Specimen Id: {item.specimen_id}
-              </p>
+          {/* Comments */}
+          <GraySection>
+            <div className="">
+              <h1 className="text-xl font-medium">Comment</h1>
             </div>
-            <Textarea
-              placeholder={item.diagnosis}
-              className="bg-white"
-              rows={6}
-            />
-          </div>
-        ))}
-      </GraySection>
 
-      {/* Comments */}
-      <GraySection>
-        <div className="">
-          <h1 className="text-xl font-medium">Comment</h1>
-        </div>
+            {test?.biopsy_sample?.map((item, idx) => (
+              <div key={idx} className="grid gap-5">
+                <div className="flex flex-wrap justify-between items-center gap-2 px-1">
+                  <p>
+                    {idx + 1}. Sample taken from{" "}
+                    <span className="text-primary font-medium">
+                      {item?.sample_area}
+                    </span>{" "}
+                    <span className="text-red-500 capitalize">
+                      {item?.sample_side}
+                    </span>{" "}
+                    Side
+                  </p>
+                  <p className="text-sm text-zinc-400">
+                    Specimen Id: {item.specimen_id}
+                  </p>
+                </div>
+                <FormField
+                  control={form.control}
+                  name={`comments.${idx}.comment`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Comment</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={"Write comment here..."}
+                          className="bg-white"
+                          rows={6}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            ))}
+          </GraySection>
 
-        {test.pathologist_section.comments.map((item, idx) => (
-          <div key={idx} className="grid gap-5">
-            <div className="flex flex-wrap justify-between items-center gap-2 px-1">
-              <p>
-                {idx + 1}. Sample taken from{" "}
-                <span className="text-primary font-medium">
-                  ({item.abbreviation}) {item.location}
-                </span>{" "}
-                <span className="text-red-500 capitalize">{item.side}</span>{" "}
-                Side
-              </p>
-              <p className="text-sm text-zinc-400">
-                Specimen Id: {item.specimen_id}
-              </p>
+          {/* Fill out the following */}
+          <GraySection>
+            <div className="">
+              <h1 className="text-xl font-medium">Fill out the following</h1>
             </div>
-            <Textarea
-              placeholder={item.comment}
-              className="bg-white"
-              rows={6}
+            <FormField
+              control={form.control}
+              name="biopsiesDemonstrate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>The biopsies demonstrate</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      className="bg-white"
+                      placeholder="Number of fibers"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-        ))}
-      </GraySection>
-
-      {/* Fill out the following */}
-      <GraySection>
-        <div className="">
-          <h1 className="text-xl font-medium">Fill out the following</h1>
-        </div>
-        <div className="grid gap-3">
-          <Label>The biopsies demonstrate</Label>
-          <Input className="bg-white" placeholder="Number of fibers" />
-        </div>
-
-        <div className="grid gap-3">
-          <Label>Nerve fibber density consistent with</Label>
-          <Select>
-            <SelectTrigger className="bg-white">
-              <SelectValue placeholder="Choose one of the following" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Option 1">Option 1</SelectItem>
-              <SelectItem value="Option 2">Option 2</SelectItem>
-              <SelectItem value="Option 3">Option 3</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="grid gap-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox id="length" />
-            <label
-              htmlFor="length"
-              className="text-sm text-zinc-500 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Length- dependent neuropathy
-            </label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox id="non-length" />
-            <label
-              htmlFor="non-length"
-              className="text-sm text-zinc-500 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Non Length- dependent neuropathy
-            </label>
-          </div>
-        </div>
-
-        <div className="grid justify-end">
-          <Button className="px-16">Confirm</Button>
-        </div>
-      </GraySection>
+            <FormField
+              control={form.control}
+              name="nerveFiberDensity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nerve fiber density consistent with</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="bg-white">
+                      <SelectValue placeholder="Choose one of the following" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Option 1">Option 1</SelectItem>
+                      <SelectItem value="Option 2">Option 2</SelectItem>
+                      <SelectItem value="Option 3">Option 3</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="neuropathyType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Neuropathy Type</FormLabel>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    value={field.value}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="Length - dependent neuropathy"
+                        id="Length - dependent neuropathy"
+                        className="size-5"
+                      />
+                      <Label htmlFor="Length - dependent neuropathy">
+                        Length - dependent neuropathy
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="Non length - dependent neuropathy"
+                        id="Non length - dependent neuropathy"
+                        className="size-5"
+                      />
+                      <Label htmlFor="Non length - dependent neuropathy">
+                        Non length - dependent neuropathy
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid justify-end">
+              <Button type="submit" className="px-16">
+                Confirm
+              </Button>
+            </div>
+          </GraySection>
+        </form>
+      </Form>
     </section>
   );
 };

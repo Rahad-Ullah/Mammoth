@@ -7,18 +7,23 @@ import NoteSection from "@/components/page/testDetails/noteSection";
 import PathologistSection from "@/components/page/testDetails/pathologistSection";
 import TestInfo from "@/components/page/testDetails/testInfo";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { testsData } from "@/constants/tests";
-import { TTest } from "@/types/test";
+import { myFetch } from "@/utils/myFetch";
 
 type PageParams = Promise<{ id: string }>;
 
 const TestDetailsPage = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
-  const test = testsData?.find(
-    (item) => (item as Partial<TTest>)?.report_no === id
-  ) as TTest | undefined;
-  if (!test) return <h1>Data not found</h1>;
+  const res = await myFetch(`/report/${id}`, {
+    tags: ["single-test"],
+  });
+
+  const test = res?.data;
+  if (!test) return <h1 className="text-stone-500">Data not found</h1>;
+
+  const cannedDxRes = await myFetch(`/canned-dx`, {
+    tags: ["canned-dx"],
+  });
 
   return (
     <section className="grid gap-6">
@@ -28,7 +33,7 @@ const TestDetailsPage = async ({ params }: { params: PageParams }) => {
           <h1 className="text-2xl font-medium text-primary">Patient:</h1>
         </CardHeader>
         <CardContent>
-          <PatientCard bill={test} patient={test.patient} />
+          <PatientCard patient={test.patient} />
         </CardContent>
       </Card>
       {/* Test Details section */}
@@ -50,16 +55,14 @@ const TestDetailsPage = async ({ params }: { params: PageParams }) => {
 
               {/* Pathologist section */}
               <section>
-                <PathologistSection test={test} />
+                <PathologistSection test={test} cannedDxs={cannedDxRes?.data} />
               </section>
 
               {/* Billing */}
-              <section>
-                <BillingSection />
-              </section>
+              <section>{/* <BillingSection /> */}</section>
 
               {/* Note */}
-              <NoteSection />
+              <NoteSection testId={test?._id} note={test?.note} />
             </section>
             {/* Anatomy Image section */}
             <section>
