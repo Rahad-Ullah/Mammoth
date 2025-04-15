@@ -44,7 +44,7 @@ const BillDetailsPage = async ({ params }: { params: PageParams }) => {
           <h1 className="text-xl font-medium text-primary">Chart Details:</h1>
         </CardHeader>
         <CardContent className="grid gap-10">
-          <TestInfo test={bill?.report} patient={bill?.patient} />
+          <TestInfo test={bill?.report} />
           <section className="flex flex-col-reverse lg:flex-row gap-8">
             {/* left section */}
             <section className="w-full lg:w-2/3 grid gap-8">

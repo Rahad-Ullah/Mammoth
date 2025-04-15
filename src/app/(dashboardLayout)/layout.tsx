@@ -1,15 +1,15 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import DashboardBreadcrumb from "@/components/dashboard-breadcrumb";
 import NavUserWrapper from "@/components/nav-user-wrapper";
+import SearchBar from "@/components/shared/SearchBar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
-import { Bell, Search } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -35,16 +35,7 @@ export default function DashboardLayout({
           </div>
           {/* searchbar */}
           <div className="flex justify-center items-center gap-4 md:gap-6">
-            <div className="relative hidden md:block">
-              <Input
-                type="search"
-                id="search"
-                placeholder="Search your interest"
-                className="rounded-full bg-[#F1F1F1] px-5 h-10 placeholder:text-[#B6B6B6]"
-                size={28}
-              />
-              <Search className="absolute right-2 top-2 text-zinc-500" />
-            </div>
+            <SearchBar />
             {/* notification */}
             <Button size={"icon"} className="rounded-full">
               <Bell />
