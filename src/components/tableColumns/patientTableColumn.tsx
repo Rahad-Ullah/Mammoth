@@ -40,7 +40,7 @@ const columns: ColumnDef<IPatient>[] = [
     cell: ({ row }) => {
       const item = row.original as IPatient;
       return (
-        <Link href={`/dashboard/patients/patient-details/${item?.id}`}>
+        <Link href={`/dashboard/patients/patient-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -57,7 +57,7 @@ const columns: ColumnDef<IPatient>[] = [
     cell: ({ row }) => {
       const item = row.original as IPatient;
       return (
-        <Link href={`/dashboard/patients/patient-details/${item?.id}`}>
+        <Link href={`/dashboard/patients/patient-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -74,7 +74,7 @@ const columns: ColumnDef<IPatient>[] = [
     cell: ({ row }) => {
       const item = row.original as IPatient;
       return (
-        <Link href={`/dashboard/patients/patient-details/${item?.id}`}>
+        <Link href={`/dashboard/patients/patient-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -91,7 +91,7 @@ const columns: ColumnDef<IPatient>[] = [
     cell: ({ row }) => {
       const item = row.original as IPatient;
       return (
-        <Link href={`/dashboard/patients/patient-details/${item?.id}`}>
+        <Link href={`/dashboard/patients/patient-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="w-full justify-start hover:bg-transparent"
@@ -108,7 +108,7 @@ const columns: ColumnDef<IPatient>[] = [
     cell: ({ row }) => {
       const item = row.original as IPatient;
       return (
-        <Link href={`/dashboard/patients/patient-details/${item?.id}`}>
+        <Link href={`/dashboard/patients/patient-details/${item?._id}`}>
           <Button
             variant={"ghost"}
             className="capitalize w-full justify-start hover:bg-transparent"
@@ -128,7 +128,7 @@ const columns: ColumnDef<IPatient>[] = [
       return (
         <div className="flex items-center gap-1">
           <Link
-            href={`/dashboard/patients/patient-details/${item?.id}`}
+            href={`/dashboard/patients/patient-details/${item?._id}`}
             passHref
           >
             <Button variant={"ghost"} size={"icon"} className="text-primary">

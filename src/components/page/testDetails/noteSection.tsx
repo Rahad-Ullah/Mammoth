@@ -39,6 +39,7 @@ const NoteSection = ({ testId, note }) => {
         toast.success("Note added successfully!", { id: "save-note" });
         revalidate("single-bill");
         revalidate("single-test");
+        revalidate("single-patient");
       } else {
         toast.error(res?.message || "Failed to add note.", { id: "save-note" });
       }
@@ -54,7 +55,7 @@ const NoteSection = ({ testId, note }) => {
     <div className="grid gap-6">
       <h1 className="text-2xl font-medium text-primary">Note:</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-        <div>
+        <div className="ml-1">
           <Textarea
             rows={8}
             placeholder="Write note here..."

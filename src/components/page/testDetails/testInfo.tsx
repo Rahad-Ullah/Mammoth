@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const TestInfo = ({ test, patient }: { test: any; patient?: any }) => {
+const TestInfo = ({ test }: { test: any }) => {
   return (
     <ul className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -8,7 +8,7 @@ const TestInfo = ({ test, patient }: { test: any; patient?: any }) => {
       </li>
       <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <span className="text-zinc-400">Sensory Symptoms</span>
-        <span>{patient?.sensorySymptoms[0] || "N/A"}</span>
+        <span>{test?.patient?.sensorySymptoms[0] || "N/A"}</span>
       </li>
       <li className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <span className="text-zinc-400">Status</span>

@@ -12,18 +12,19 @@ import {
 } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { patientsData } from "@/constants/patients";
-import { testsData } from "@/constants/tests";
+import { myFetch } from "@/utils/myFetch";
 
 type PageParams = Promise<{ id: string }>;
 
 const PatientDetailsPage = async ({ params }: { params: PageParams }) => {
   const { id } = await params;
 
-  const patient = patientsData.find((item) => item.id === Number(id));
-  if (!patient) return <h1>Data not found</h1>;
+  const res = await myFetch(`/patient/${id}`, {
+    tags: ["single-patient"],
+  });
 
-  const tests = testsData.filter((item) => item.patient.id === patient.id);
+  const patientData = res?.data;
+  if (!patientData) return <h1 className="text-stone-600">Data not found</h1>;
 
   return (
     <section className="grid gap-4">
@@ -32,11 +33,11 @@ const PatientDetailsPage = async ({ params }: { params: PageParams }) => {
           <h1 className="text-xl font-medium text-primary">Patient:</h1>
         </CardHeader>
         <CardContent>
-          <PatientCard bill={patient} patient={patient} />
+          <PatientCard patient={patientData?.patient} />
         </CardContent>
       </Card>
       <Accordion type="single" collapsible className="grid gap-4">
-        {tests.map((test) => (
+        {patientData?.reports.map((test) => (
           <AccordionItem
             key={test.report_no}
             value={test.report_no}
@@ -75,7 +76,7 @@ const PatientDetailsPage = async ({ params }: { params: PageParams }) => {
                   </section>
 
                   {/* Note */}
-                  <NoteSection />
+                  <NoteSection testId={test?._id} note={test?.note} />
                 </section>
                 {/* Anatomy Image section */}
                 <section>

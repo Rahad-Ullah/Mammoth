@@ -20,7 +20,7 @@ const handleUserLock = async (id: string) => {
     if (res?.success) {
       revalidate("users");
     } else {
-      toast.error("Failed to update");
+      toast.error(res?.message || "Failed to update");
     }
   } catch (error) {
     toast.error("Failed to update");
