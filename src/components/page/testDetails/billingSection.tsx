@@ -20,6 +20,7 @@ const billingSchema = z.object({
 });
 
 const BillingSection = ({ bill }) => {
+  console.log(bill);
   const {
     register,
     handleSubmit,
@@ -28,7 +29,7 @@ const BillingSection = ({ bill }) => {
     resolver: zodResolver(billingSchema),
     defaultValues: {
       bill_date: bill?.bill_date
-        ? new Date(bill.bill_date).toISOString().split("T")[0]
+        ? new Date(bill?.bill_date).toISOString().split("T")[0]
         : "", // Format the date as YYYY-MM-DD
       total_amount: bill?.total_amount || 0,
     },
@@ -46,6 +47,7 @@ const BillingSection = ({ bill }) => {
         toast.success("Billing information sent successfully!", {
           id: "send-billing",
         });
+        revalidate("bills");
         revalidate("single-bill");
       } else {
         toast.error(res?.message || "Failed to send billing information.", {

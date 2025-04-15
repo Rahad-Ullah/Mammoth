@@ -59,7 +59,9 @@ const TestDetailsPage = async ({ params }: { params: PageParams }) => {
               </section>
 
               {/* Billing */}
-              <section>{/* <BillingSection /> */}</section>
+              <section>
+                <BillingSection bill={{ report: test }} />
+              </section>
 
               {/* Note */}
               <NoteSection testId={test?._id} note={test?.note} />
