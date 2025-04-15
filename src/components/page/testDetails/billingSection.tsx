@@ -20,7 +20,6 @@ const billingSchema = z.object({
 });
 
 const BillingSection = ({ bill }) => {
-  console.log(bill);
   const {
     register,
     handleSubmit,
