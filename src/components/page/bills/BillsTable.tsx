@@ -21,6 +21,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
@@ -29,8 +30,13 @@ import TablePagination from "@/components/table-pagination";
 import columns from "@/components/tableColumns/billTableColumn";
 import Image from "next/image";
 import { IBill } from "@/types/bill";
+import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParams";
 
-const BillsTable = ({ bills = [], meta }) => {
+// Extract unique roles from data
+const paymentStatus = ["Paid", "Unpaid"];
+
+const BillsTable = ({ bills = [], meta, filters }) => {
+  const updateSearchParams = useUpdateSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -71,6 +77,43 @@ const BillsTable = ({ bills = [], meta }) => {
         <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
           <Image src={excelIcon} alt="pdf" width={24} height={24} />
         </Button>
+
+        {/* Status Filter Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="capitalize shadow text-[#929292]"
+            >
+              {filters?.status
+                ? filters?.status === "true"
+                  ? "Paid"
+                  : "Unpaid"
+                : "Status"}
+              <ChevronDown className="text-primary" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem
+              onClick={() => updateSearchParams("status", null)}
+            >
+              All Status
+            </DropdownMenuItem>
+            {paymentStatus.map((status) => (
+              <DropdownMenuItem
+                key={status}
+                onClick={() =>
+                  updateSearchParams(
+                    "status",
+                    status === "Paid" ? "true" : "false"
+                  )
+                }
+              >
+                {capitalizeSentence(status)}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* Columns Filter Dropdown */}
         <DropdownMenu>

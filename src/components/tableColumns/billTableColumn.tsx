@@ -121,6 +121,24 @@ const columns: ColumnDef<IBill>[] = [
     },
   },
   {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      const item = row.original as IBill;
+      const status = item?.isBilled ? "Paid" : "Unpaid";
+      return (
+        <Link href={`/dashboard/bills/bill-details/${item._id}`}>
+          <Button
+            variant={"ghost"}
+            className="capitalize w-full justify-start hover:bg-transparent px-6"
+          >
+            {status}
+          </Button>
+        </Link>
+      );
+    },
+  },
+  {
     id: "actions",
     enableHiding: false,
     header: () => <div>Action</div>,
