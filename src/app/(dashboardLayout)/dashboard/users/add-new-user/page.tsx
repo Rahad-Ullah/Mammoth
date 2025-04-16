@@ -93,7 +93,6 @@ const AddNewUserPage = () => {
         method: "POST",
         body: formData,
       });
-      console.log(res);
 
       if (res?.success) {
         toast.success("User added successfully!", { id: "add-user" });

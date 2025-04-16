@@ -4,16 +4,17 @@ import { createContext, useContext, useState } from "react";
 
 // Define the initial form data structure
 const initialFormData = {
-  facility_name: "",
-  contact_name: "",
-  email: "",
-  phone: "",
-  address: "",
-  suite: "",
-  fax: "",
-  notify_email_1: "",
-  notify_email_2: "",
-  account_type: "",
+  name: "Popular Diagonstic Center",
+  contactName: "Rahad Ullah",
+  email: "rahadullah10@gmail.com",
+  phone: "+8801859543996",
+  address: "Bansree, Dhaka",
+  suite: "Suite 200",
+  fax: "1112223334",
+  notificationEmail1: "hello@popular.com",
+  notificationEmail2: "sales@popular.com",
+  accountType: "Laboratory",
+  representative: "67d7dbf68becba8261535243",
 };
 
 // Define the form context type
@@ -43,10 +44,12 @@ export const FormProvider = ({ children }) => {
 };
 
 // Custom Hook to use form context
-export const useFormContext = () => {
+export const useFacilityFormContext = () => {
   const context = useContext(FormContext);
   if (!context) {
-    throw new Error("useFormContext must be used within a FormProvider");
+    throw new Error(
+      "useFacilityFormContext must be used within a FormProvider"
+    );
   }
   return context;
 };

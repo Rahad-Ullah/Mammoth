@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useFormContext } from "@/contexts/FormContext";
 import Step1 from "@/components/multiStepForms/addTestForm/Step1";
 import Step2 from "@/components/multiStepForms/addTestForm/Step2";
 import Step3 from "@/components/multiStepForms/addTestForm/Step3";
@@ -9,9 +8,10 @@ import Step4 from "@/components/multiStepForms/addTestForm/Step4";
 import Step5 from "@/components/multiStepForms/addTestForm/Step5";
 import Step6 from "@/components/multiStepForms/addTestForm/Step6";
 import { Progress } from "@/components/ui/progress";
+import { useFacilityFormContext } from "@/contexts/facilityFormContext";
 
 const AddNewTestPage = () => {
-  const { step, setStep } = useFormContext();
+  const { step, setStep } = useFacilityFormContext();
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,8 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { facilitiesData } from "@/constants/facilities";
-import { useFormContext } from "@/contexts/FormContext";
+import { facilityTypes } from "@/constants/facilityStatuses";
+import { useFacilityFormContext } from "@/contexts/facilityFormContext";
 import { addFacilityFormSchema } from "@/schemas/formSchemas/addFacilityForm";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,14 +26,10 @@ import { ChevronRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const Step1 = ({ nextStep }) => {
-  const formContext = useFormContext();
+const Step1 = ({ nextStep, representatives }) => {
+  const formContext = useFacilityFormContext();
 
   const { formData, setFormData } = formContext;
-
-  const accountTypes = Array.from(
-    new Set(facilitiesData.map((item) => item.account_type))
-  );
 
   // 1. Define your form schema.
   const formSchema = addFacilityFormSchema();
@@ -59,7 +57,7 @@ const Step1 = ({ nextStep }) => {
             {/* Facility Name Field */}
             <FormField
               control={form.control}
-              name="facility_name"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Facility Name</FormLabel>
@@ -74,7 +72,7 @@ const Step1 = ({ nextStep }) => {
             {/* Contact Name Field */}
             <FormField
               control={form.control}
-              name="contact_name"
+              name="contactName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Contact Name</FormLabel>
@@ -109,7 +107,7 @@ const Step1 = ({ nextStep }) => {
                 <FormItem>
                   <FormLabel>Phone Number</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="1234567890" {...field} />
+                    <Input placeholder="1234567890" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -149,7 +147,7 @@ const Step1 = ({ nextStep }) => {
             {/* Notification email 1 */}
             <FormField
               control={form.control}
-              name="notify_email_1"
+              name="notificationEmail1"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Notification Email 1</FormLabel>
@@ -164,7 +162,7 @@ const Step1 = ({ nextStep }) => {
             {/* Notification email 2 */}
             <FormField
               control={form.control}
-              name="notify_email_2"
+              name="notificationEmail2"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Notification Email 2</FormLabel>
@@ -194,7 +192,7 @@ const Step1 = ({ nextStep }) => {
             {/* Account Type Field */}
             <FormField
               control={form.control}
-              name="account_type"
+              name="accountType"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Account Type</FormLabel>
@@ -202,15 +200,44 @@ const Step1 = ({ nextStep }) => {
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <FormControl className="capitalize">
+                    <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a type" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
-                      {accountTypes.map((item) => (
+                    <SelectContent className="capitalize">
+                      {facilityTypes.map((item) => (
                         <SelectItem key={item} value={item}>
                           {capitalizeSentence(item)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Account Type Field */}
+            <FormField
+              control={form.control}
+              name="representative"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Representative</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a person" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="capitalize">
+                      {representatives.map((item) => (
+                        <SelectItem key={item?._id} value={item?._id}>
+                          {capitalizeSentence(item?.name)}
                         </SelectItem>
                       ))}
                     </SelectContent>

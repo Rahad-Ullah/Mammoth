@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { disorderTypes } from "@/constants/disorderTypes";
-import { useFormContext } from "@/contexts/FormContext";
+import { useFacilityFormContext } from "@/contexts/facilityFormContext";
 import {
   ChevronLeft,
   ChevronRight,
@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 
 const Step4 = ({ prevStep }) => {
-  const { setStep, setFormData, initialFormData } = useFormContext();
+  const { setStep, setFormData, initialFormData } = useFacilityFormContext();
 
   const handleSubmit = () => {
     // handle form submission

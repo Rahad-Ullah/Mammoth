@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useFormContext } from "@/contexts/FormContext";
 import {
   Dialog,
   DialogClose,
@@ -15,10 +14,11 @@ import { Button } from "@/components/ui/button";
 import { FilePlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { useFacilityFormContext } from "@/contexts/facilityFormContext";
 
 const CreateTestModal = () => {
   const router = useRouter();
-  const { step, setStep } = useFormContext();
+  const { step, setStep } = useFacilityFormContext();
 
   const nextStep = () => setStep(step + 1);
 
