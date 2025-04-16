@@ -31,16 +31,14 @@ import DashboardTable from "@/components/table";
 import TablePagination from "@/components/table-pagination";
 import Image from "next/image";
 import { userRoles } from "@/constants/user-roles";
-import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParams";
 import { IUser } from "@/types/user";
-
-
+import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 
 // Extract unique roles from data
 const roles = Array.from(new Set(userRoles.map((item) => item.title)));
 
 const UsersTable = ({ users = [], filters, meta }) => {
-  const updateSearchParams = useUpdateSearchParams();
+  const updateMultiSearchParams = useUpdateMultiSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -81,27 +79,33 @@ const UsersTable = ({ users = [], filters, meta }) => {
           <Image src={excelIcon} alt="pdf" width={24} height={24} />
         </Button>
 
-        {/* Status Filter Dropdown */}
+        {/* Role Filter Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
               className="capitalize shadow text-[#929292]"
             >
-              {filters?.role ? `${filters?.role}` : "Status"}{" "}
+              {filters?.role ? `${filters?.role}` : "Role"}{" "}
               <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuItem onClick={() => updateSearchParams("role", null)}>
-              All Status
+            <DropdownMenuItem
+              onClick={() =>
+                updateMultiSearchParams({ role: null, page: null })
+              }
+            >
+              All Roles
             </DropdownMenuItem>
-            {roles.map((role) => (
+            {roles.map((item) => (
               <DropdownMenuItem
-                key={role}
-                onClick={() => updateSearchParams("role", role)}
+                key={item}
+                onClick={() =>
+                  updateMultiSearchParams({ role: item, page: null })
+                }
               >
-                {capitalizeSentence(role)}
+                {capitalizeSentence(item)}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>

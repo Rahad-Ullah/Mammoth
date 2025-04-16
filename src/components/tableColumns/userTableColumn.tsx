@@ -144,7 +144,7 @@ const columns: ColumnDef<IUser>[] = [
   },
   {
     accessorKey: "role",
-    header: () => <div>Status</div>,
+    header: () => <div>Role</div>,
     cell: ({ row }) => {
       const role = row.getValue("role");
       const item = row.original as IUser;

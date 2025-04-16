@@ -30,10 +30,10 @@ import TablePagination from "@/components/table-pagination";
 import { IPatient, TPatient } from "@/types/patient";
 import columns from "@/components/tableColumns/patientTableColumn";
 import Image from "next/image";
-import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParams";
+import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 
 const PatientsTable = ({ patients = [], meta, filters }) => {
-  const updateSearchParams = useUpdateSearchParams();
+  const updateMultiSearchParams = useUpdateMultiSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -93,7 +93,9 @@ const PatientsTable = ({ patients = [], meta, filters }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem
-              onClick={() => updateSearchParams("insuranceCompany", null)}
+              onClick={() =>
+                updateMultiSearchParams({ insuranceCompany: null, page: null })
+              }
             >
               All Facility
             </DropdownMenuItem>
@@ -101,7 +103,10 @@ const PatientsTable = ({ patients = [], meta, filters }) => {
               <DropdownMenuItem
                 key={idx}
                 onClick={() =>
-                  updateSearchParams("insuranceCompany", item as string)
+                  updateMultiSearchParams({
+                    insuranceCompany: item,
+                    page: null,
+                  })
                 }
               >
                 {capitalizeSentence(item as string)}

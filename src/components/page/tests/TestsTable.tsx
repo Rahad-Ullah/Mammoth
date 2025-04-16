@@ -31,11 +31,11 @@ import columns from "@/components/tableColumns/testTableColumn";
 import { TTest } from "@/types/test";
 import CreateTestModal from "@/components/page/tests/createTestModal";
 import Image from "next/image";
-import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParams";
 import { testStatuses } from "@/constants/testStatus";
+import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 
 const TestsTable = ({ tests, meta, filters }) => {
-  const updateSearchParams = useUpdateSearchParams();
+  const updateMultiSearchParams = useUpdateMultiSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -99,14 +99,24 @@ const TestsTable = ({ tests, meta, filters }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem
-              onClick={() => updateSearchParams("doctor", null)}
+              onClick={() =>
+                updateMultiSearchParams({
+                  page: null,
+                  doctor: null,
+                })
+              }
             >
               All Doctors
             </DropdownMenuItem>
             {doctors.map((item, idx) => (
               <DropdownMenuItem
                 key={idx}
-                onClick={() => updateSearchParams("doctor", item as string)}
+                onClick={() =>
+                  updateMultiSearchParams({
+                    page: null,
+                    doctor: item as string,
+                  })
+                }
               >
                 {capitalizeSentence(item as string)}
               </DropdownMenuItem>
@@ -127,14 +137,24 @@ const TestsTable = ({ tests, meta, filters }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem
-              onClick={() => updateSearchParams("facility", null)}
+              onClick={() =>
+                updateMultiSearchParams({
+                  page: null,
+                  facility: null,
+                })
+              }
             >
               All Facilities
             </DropdownMenuItem>
             {facilities.map((item, idx) => (
               <DropdownMenuItem
                 key={idx}
-                onClick={() => updateSearchParams("facility", item as string)}
+                onClick={() =>
+                  updateMultiSearchParams({
+                    page: null,
+                    facility: item as string,
+                  })
+                }
               >
                 {capitalizeSentence(item as string)}
               </DropdownMenuItem>
@@ -155,14 +175,18 @@ const TestsTable = ({ tests, meta, filters }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem
-              onClick={() => updateSearchParams("status", null)}
+              onClick={() =>
+                updateMultiSearchParams({ page: null, status: null })
+              }
             >
               All Status
             </DropdownMenuItem>
             {testStatuses.map((item, idx) => (
               <DropdownMenuItem
                 key={idx}
-                onClick={() => updateSearchParams("status", item as string)}
+                onClick={() =>
+                  updateMultiSearchParams({ page: null, status: item })
+                }
               >
                 {capitalizeSentence(item as string)}
               </DropdownMenuItem>

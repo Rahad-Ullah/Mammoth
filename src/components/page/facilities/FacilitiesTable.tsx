@@ -32,11 +32,11 @@ import TablePagination from "@/components/table-pagination";
 import columns from "@/components/tableColumns/facilityTableColumns";
 import { IFacility, TFacility } from "@/types/facility";
 import Image from "next/image";
-import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParams";
 import { facilityStatuses } from "@/constants/facilityStatuses";
+import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 
 const FacilitiesTable = ({ facilities = [], filters, meta }) => {
-  const updateSearchParams = useUpdateSearchParams();
+  const updateMultiSearchParams = useUpdateMultiSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -96,14 +96,18 @@ const FacilitiesTable = ({ facilities = [], filters, meta }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem
-              onClick={() => updateSearchParams("doctor", null)}
+              onClick={() =>
+                updateMultiSearchParams({ doctor: null, page: null })
+              }
             >
               All Doctor
             </DropdownMenuItem>
             {representatives.map((item, idx) => (
               <DropdownMenuItem
                 key={idx}
-                onClick={() => updateSearchParams("doctor", item as string)}
+                onClick={() =>
+                  updateMultiSearchParams({ doctor: item, page: null })
+                }
               >
                 {capitalizeSentence(item as string)}
               </DropdownMenuItem>
@@ -126,7 +130,9 @@ const FacilitiesTable = ({ facilities = [], filters, meta }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem
-              onClick={() => updateSearchParams("representative", null)}
+              onClick={() =>
+                updateMultiSearchParams({ representative: null, page: null })
+              }
             >
               All Representative
             </DropdownMenuItem>
@@ -134,7 +140,7 @@ const FacilitiesTable = ({ facilities = [], filters, meta }) => {
               <DropdownMenuItem
                 key={idx}
                 onClick={() =>
-                  updateSearchParams("representative", item as string)
+                  updateMultiSearchParams({ representative: item, page: null })
                 }
               >
                 {capitalizeSentence(item as string)}
@@ -150,20 +156,24 @@ const FacilitiesTable = ({ facilities = [], filters, meta }) => {
               variant="outline"
               className="capitalize shadow text-[#929292]"
             >
-              {filters?.status ? `${filters?.status}` : "Activity"}{" "}
+              {filters?.status ? `${filters?.status}` : "Status"}
               <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem
-              onClick={() => updateSearchParams("status", null)}
+              onClick={() =>
+                updateMultiSearchParams({ status: null, page: null })
+              }
             >
-              All Activity
+              All Status
             </DropdownMenuItem>
             {statuses.map((item) => (
               <DropdownMenuItem
                 key={item}
-                onClick={() => updateSearchParams("status", item)}
+                onClick={() =>
+                  updateMultiSearchParams({ status: item, page: null })
+                }
               >
                 {capitalizeSentence(item)}
               </DropdownMenuItem>

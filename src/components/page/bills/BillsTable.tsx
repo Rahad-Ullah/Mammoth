@@ -30,13 +30,13 @@ import TablePagination from "@/components/table-pagination";
 import columns from "@/components/tableColumns/billTableColumn";
 import Image from "next/image";
 import { IBill } from "@/types/bill";
-import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParams";
+import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 
 // Extract unique roles from data
 const paymentStatus = ["Paid", "Unpaid"];
 
 const BillsTable = ({ bills = [], meta, filters }) => {
-  const updateSearchParams = useUpdateSearchParams();
+  const updateMultiSearchParams = useUpdateMultiSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -95,7 +95,9 @@ const BillsTable = ({ bills = [], meta, filters }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem
-              onClick={() => updateSearchParams("status", null)}
+              onClick={() =>
+                updateMultiSearchParams({ status: null, page: null })
+              }
             >
               All Status
             </DropdownMenuItem>
@@ -103,10 +105,10 @@ const BillsTable = ({ bills = [], meta, filters }) => {
               <DropdownMenuItem
                 key={status}
                 onClick={() =>
-                  updateSearchParams(
-                    "status",
-                    status === "Paid" ? "true" : "false"
-                  )
+                  updateMultiSearchParams({
+                    status: status === "Paid" ? "true" : "false",
+                    page: null,
+                  })
                 }
               >
                 {capitalizeSentence(status)}
