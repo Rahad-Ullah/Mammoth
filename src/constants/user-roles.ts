@@ -2,26 +2,26 @@ export const userRoles = [
   {
     id: 1,
     title: "Admin",
-    value: "admin",
+    value: "Admin",
   },
   {
     id: 2,
     title: "Doctor",
-    value: "doctor",
+    value: "Doctor",
   },
   {
     id: 3,
     title: "Pathologist",
-    value: "pathologist",
+    value: "Pathologist",
   },
   {
     id: 4,
     title: "Histologist",
-    value: "histologist",
+    value: "Histologist",
   },
   {
     id: 5,
     title: "Representative",
-    value: "representative",
+    value: "Representative",
   },
 ] as const;

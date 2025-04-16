@@ -36,9 +36,12 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { facilitiesData } from "@/constants/facilities";
+import toast from "react-hot-toast";
+import { myFetch } from "@/utils/myFetch";
+import { revalidate } from "@/helpers/revalidateHelper";
 
 const AddNewUserPage = () => {
-  const [role, setRole] = React.useState("admin");
+  const [role, setRole] = React.useState("Admin");
   const [imagePreview, setImagePreview] = React.useState<string | null>(null);
   const [signaturePreview, setSignaturePreview] = React.useState<string | null>(
     null
@@ -53,23 +56,57 @@ const AddNewUserPage = () => {
     defaultValues: {
       image: null,
       signature: null,
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone: "",
-      address: "",
-      company: "",
-      npi_number: "",
-      apt_number: "",
+      firstname: "Kamran",
+      lastname: "Chowdhuri",
+      email: "kamran@gmail.com",
+      password: "12345678",
+      phone: "0123456789",
+      address: "Bansree, Dhaka",
+      company_name: "Betopia Ltd.",
+      npi_number: "0123475",
+      apt_number: "012345",
       facility_location: "",
     },
   });
 
   // 3. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    toast.loading("Submitting...", { id: "add-user" });
+
+    try {
+      // Create a FormData object
+      const formData = new FormData();
+
+      // Append all form values to FormData
+      Object.entries(values).forEach(([key, value]) => {
+        if (value) {
+          formData.append(key, value as string | Blob);
+        }
+      });
+      if (role) formData.append("role", role); // append role
+      // append signature as image
+      if (values.signature) formData.append("image", values.signature);
+      formData.delete("signature"); // delete signature to avoid conflict
+
+      // Send the FormData to the API
+      const res = await myFetch("/user", {
+        method: "POST",
+        body: formData,
+      });
+      console.log(res);
+
+      if (res?.success) {
+        toast.success("User added successfully!", { id: "add-user" });
+        await revalidate("users");
+      } else {
+        toast.error(res?.message || "Failed to add user.", { id: "add-user" });
+      }
+    } catch (error) {
+      toast.error("An error occurred while adding the user.", {
+        id: "add-user",
+      });
+      console.error(error);
+    }
   }
 
   return (
@@ -105,7 +142,7 @@ const AddNewUserPage = () => {
             {/* First Name Field */}
             <FormField
               control={form.control}
-              name="first_name"
+              name="firstname"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
@@ -120,7 +157,7 @@ const AddNewUserPage = () => {
             {/* Last Name Field */}
             <FormField
               control={form.control}
-              name="last_name"
+              name="lastname"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
@@ -141,6 +178,25 @@ const AddNewUserPage = () => {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="me@example.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* password Field */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Enter password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -180,7 +236,7 @@ const AddNewUserPage = () => {
             {/* Company Name Field */}
             <FormField
               control={form.control}
-              name="company"
+              name="company_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Company Name</FormLabel>
@@ -193,7 +249,7 @@ const AddNewUserPage = () => {
             />
 
             {/* NPI Number for only doctor */}
-            {role === "doctor" && (
+            {role === "Doctor" && (
               <FormField
                 control={form.control}
                 name="npi_number"
@@ -214,7 +270,7 @@ const AddNewUserPage = () => {
             )}
 
             {/* APT Number for only doctor */}
-            {role === "doctor" && (
+            {role === "Doctor" && (
               <FormField
                 control={form.control}
                 name="apt_number"
@@ -230,78 +286,8 @@ const AddNewUserPage = () => {
               />
             )}
 
-            {/* Image Upload Field */}
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Upload Profile Image</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          field.onChange(file);
-                          setImagePreview(URL.createObjectURL(file));
-                        }
-                      }}
-                    />
-                  </FormControl>
-                  {imagePreview && (
-                    <Image
-                      src={imagePreview}
-                      alt="Image Preview"
-                      width={160}
-                      height={160}
-                      className="mt-2 w-32 h-32 object-cover rounded-md"
-                    />
-                  )}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Signature image Upload Field */}
-            {role === "doctor" && (
-              <FormField
-                control={form.control}
-                name="signature"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Signature</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            field.onChange(file);
-                            setSignaturePreview(URL.createObjectURL(file));
-                          }
-                        }}
-                      />
-                    </FormControl>
-                    {signaturePreview && (
-                      <Image
-                        src={signaturePreview}
-                        alt="Preview"
-                        width={160}
-                        height={160}
-                        className="mt-2 w-32 h-32 object-cover rounded-md"
-                      />
-                    )}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-
             {/* Facility Location for only doctor */}
-            {role === "doctor" && (
+            {role === "Doctor" && (
               <FormField
                 control={form.control}
                 name="facility_location"
@@ -365,6 +351,76 @@ const AddNewUserPage = () => {
                         </Command>
                       </PopoverContent>
                     </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {/* Image Upload Field */}
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Upload Profile Image</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          field.onChange(file);
+                          setImagePreview(URL.createObjectURL(file));
+                        }
+                      }}
+                    />
+                  </FormControl>
+                  {imagePreview && (
+                    <Image
+                      src={imagePreview}
+                      alt="Image Preview"
+                      width={160}
+                      height={160}
+                      className="mt-2 w-32 h-32 object-cover rounded-md"
+                    />
+                  )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Signature image Upload Field */}
+            {role === "Doctor" && (
+              <FormField
+                control={form.control}
+                name="signature"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Signature</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            field.onChange(file);
+                            setSignaturePreview(URL.createObjectURL(file));
+                          }
+                        }}
+                      />
+                    </FormControl>
+                    {signaturePreview && (
+                      <Image
+                        src={signaturePreview}
+                        alt="Preview"
+                        width={250}
+                        height={160}
+                        className="mt-2 w-60 h-32 object-cover rounded-md"
+                      />
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
