@@ -1,3 +1,5 @@
+import AddDisorderModal from "@/components/page/addFacility/AddDisorderModal";
+import EditDisorderModal from "@/components/page/addFacility/EditDisorderModal";
 import {
   Accordion,
   AccordionContent,
@@ -5,18 +7,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { disorderTypes } from "@/constants/disorderTypes";
 import { useFacilityFormContext } from "@/contexts/facilityFormContext";
+import { revalidate } from "@/helpers/revalidateHelper";
+import { myFetch } from "@/utils/myFetch";
 import {
   ChevronLeft,
   ChevronRight,
@@ -26,15 +19,147 @@ import {
   Plus,
   Trash,
 } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
-const Step5 = ({ prevStep }) => {
-  const { setStep, setFormData, initialFormData } = useFacilityFormContext();
+const Step5 = ({ prevStep, resetStep, clinicalSymptoms }) => {
+  const { formData, setFormData } = useFacilityFormContext();
 
-  const handleSubmit = () => {
-    // handle form submission
-    console.log("Form submitted");
-    setStep(1);
-    setFormData(initialFormData);
+  // Initialize local state for formatted diseases
+  const [formatedDieses, setFormatedDieses] = useState(
+    clinicalSymptoms?.map((item) => ({
+      title: item?.title,
+      isHidden: false,
+      disorders: item?.disorders?.map((nestedItem) => ({
+        name: nestedItem?.type,
+        isHidden: false,
+      })),
+    }))
+  );
+
+  // Toggle visibility of a disease
+  const toggleDiesesVisibility = (idx: number) => {
+    setFormatedDieses((prev) =>
+      prev.map((item, i) =>
+        i === idx ? { ...item, isHidden: !item.isHidden } : item
+      )
+    );
+  };
+
+  // Toggle visibility of a disorder (nested item)
+  const toggleDisorderVisibility = (
+    diseaseIdx: number,
+    disorderIdx: number
+  ) => {
+    setFormatedDieses((prev) =>
+      prev.map((disease, i) =>
+        i === diseaseIdx
+          ? {
+              ...disease,
+              disorders: disease.disorders.map((disorder, j) =>
+                j === disorderIdx
+                  ? { ...disorder, isHidden: !disorder.isHidden }
+                  : disorder
+              ),
+            }
+          : disease
+      )
+    );
+  };
+
+  // Add a new disorder (nested item)
+  const addDisorder = (diseaseIdx: number, newDisorderName: string) => {
+    setFormatedDieses((prev) =>
+      prev.map((disease, i) =>
+        i === diseaseIdx
+          ? {
+              ...disease,
+              disorders: [
+                ...disease.disorders,
+                { name: newDisorderName, isHidden: false },
+              ],
+            }
+          : disease
+      )
+    );
+  };
+
+  const handleAddDisorder = async (newItem: string, dieasesIdx: number) => {
+    addDisorder(dieasesIdx, newItem);
+  };
+
+  // Edit a disorder (nested item)
+  const editDisorder = (
+    diseaseIdx: number,
+    disorderIdx: number,
+    newName: string
+  ) => {
+    setFormatedDieses((prev) =>
+      prev.map((disease, i) =>
+        i === diseaseIdx
+          ? {
+              ...disease,
+              disorders: disease.disorders.map((disorder, j) =>
+                j === disorderIdx ? { ...disorder, name: newName } : disorder
+              ),
+            }
+          : disease
+      )
+    );
+  };
+
+  const handleEditDisorder = async (
+    item: string,
+    dieasesIdx: number,
+    disorderIdx: number
+  ) => {
+    editDisorder(dieasesIdx, disorderIdx, item);
+  };
+
+  // Delete a disorder (nested item)
+  const deleteDisorder = (diseaseIdx: number, disorderIdx: number) => {
+    setFormatedDieses((prev) =>
+      prev.map((disease, i) =>
+        i === diseaseIdx
+          ? {
+              ...disease,
+              disorders: disease.disorders.filter((_, j) => j !== disorderIdx),
+            }
+          : disease
+      )
+    );
+  };
+
+  // handle next button
+  const handleSubmit = async () => {
+    const newFormData = { ...formData, clinical_symptoms: formatedDieses };
+    setFormData(newFormData);
+    toast.loading("Submitting...", {
+      id: "create-facility",
+    });
+
+    try {
+      const res = await myFetch(`/facility`, {
+        method: "POST",
+        body: newFormData,
+      });
+      if (res?.success) {
+        toast.success(res.message || "Facililty created successfully", {
+          id: "create-facility",
+        });
+        resetStep();
+        revalidate("facilities");
+      } else {
+        toast.error(res.message || "Failed to submit facility", {
+          id: "create-facility",
+        });
+      }
+    } catch (error) {
+      toast.error("Unknown error occured to create facility", {
+        id: "create-facility",
+      });
+      console.error(error);
+    }
   };
 
   return (
@@ -42,111 +167,88 @@ const Step5 = ({ prevStep }) => {
       {/* body */}
       <section className="pb-6 flex-1">
         <Accordion type="single" collapsible className="w-full grid gap-2">
-          {disorderTypes.painTypes.map((item) => (
+          {formatedDieses?.map((item, itemIdx: number) => (
             <AccordionItem
-              key={item.id}
-              value={item.id.toString()}
+              key={itemIdx}
+              value={item.title}
               className="border-none"
             >
               <div className="flex justify-between items-center gap-2">
                 <div className="bg-zinc-100 rounded-lg w-full p-4 flex justify-between items-center gap-4">
                   <p className="font-medium flex items-center gap-5">
-                    {item.title}
+                    {item?.title}
                     <span className="text-xs font-medium text-zinc-400">
-                      {item.disorders.length} items
+                      {item?.disorders?.length} items
                     </span>
                   </p>
                   <div className="flex items-center gap-4">
-                    {!item.isHidden && (
-                      <Button
-                        variant={"ghost"}
-                        size={"icon"}
-                        className="text-zinc-500"
-                      >
-                        <Eye />
-                      </Button>
-                    )}
-                    {item.isHidden && (
-                      <Button
-                        variant={"ghost"}
-                        size={"icon"}
-                        className="text-zinc-500"
-                      >
-                        <EyeOff />
-                      </Button>
-                    )}
-                    <Dialog>
-                      <DialogTrigger asChild>
+                    <Button
+                      onClick={() => toggleDiesesVisibility(itemIdx)}
+                      variant={"ghost"}
+                      size={"icon"}
+                      className="text-zinc-500"
+                    >
+                      {!item?.isHidden ? <Eye /> : <EyeOff />}
+                    </Button>
+                    <AddDisorderModal
+                      triggerBtn={
                         <Button variant={"secondary"} className="h-10">
                           <Plus /> Add
                         </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                          <DialogTitle>
-                            New option for this category
-                          </DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                          <Input placeholder="Enter option name" />
-                        </div>
-                        <DialogFooter>
-                          <DialogClose asChild>
-                            <Button type="submit" className="w-full">
-                              Add Option
-                            </Button>
-                          </DialogClose>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
+                      }
+                      diseaseIdx={itemIdx}
+                      action={handleAddDisorder}
+                    />
                   </div>
                 </div>
                 <AccordionTrigger className="bg-zinc-100 p-7 rounded-lg"></AccordionTrigger>
               </div>
               <AccordionContent className="p-2 md:p-5 lg:pr-20">
                 <ul className="grid gap-4 md:gap-2">
-                  {item.disorders.map((disorder) => (
+                  {item?.disorders?.map((disorder, nestedIdx: number) => (
                     <li
-                      key={disorder.id}
+                      key={nestedIdx}
                       className="flex justify-between items-center gap-2"
                     >
                       <p
                         className={`flex items-center gap-3 text-sm ${
-                          disorder.isHidden
+                          disorder?.isHidden
                             ? "text-stone-400"
                             : "text-stone-600"
                         } `}
                       >
                         <span className="size-3 min-w-3 bg-primary-foreground rounded-full"></span>{" "}
-                        {disorder.type}
+                        {disorder?.name}
                       </p>
                       <div className="flex">
+                        <EditDisorderModal
+                          triggerBtn={
+                            <Button
+                              variant={"ghost"}
+                              size={"icon"}
+                              className="text-primary"
+                            >
+                              <Pencil />
+                            </Button>
+                          }
+                          diseaseIdx={itemIdx}
+                          disorderIdx={nestedIdx}
+                          inputValue={disorder?.name}
+                          action={handleEditDisorder}
+                        />
+
                         <Button
+                          onClick={() =>
+                            toggleDisorderVisibility(itemIdx, nestedIdx)
+                          }
                           variant={"ghost"}
                           size={"icon"}
-                          className="text-primary"
+                          className="text-zinc-500"
                         >
-                          <Pencil />
+                          {!disorder?.isHidden ? <Eye /> : <EyeOff />}
                         </Button>
-                        {!disorder.isHidden && (
-                          <Button
-                            variant={"ghost"}
-                            size={"icon"}
-                            className="text-zinc-500"
-                          >
-                            <Eye />
-                          </Button>
-                        )}
-                        {disorder.isHidden && (
-                          <Button
-                            variant={"ghost"}
-                            size={"icon"}
-                            className="text-zinc-500"
-                          >
-                            <EyeOff />
-                          </Button>
-                        )}
                         <Button
+                          onClick={() => deleteDisorder(itemIdx, nestedIdx)}
                           variant={"ghost"}
                           size={"icon"}
                           className="text-red-500"
@@ -160,6 +262,9 @@ const Step5 = ({ prevStep }) => {
               </AccordionContent>
             </AccordionItem>
           ))}
+          {!(formatedDieses?.length > 0) && (
+            <p className="text-stone-500 text-center py-8">No data found</p>
+          )}
         </Accordion>
       </section>
 

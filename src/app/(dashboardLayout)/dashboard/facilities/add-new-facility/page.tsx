@@ -23,7 +23,10 @@ const AddNewFacilityPage = async () => {
       tags: ["pain-description"],
     }
   );
-  // console.log(medicalDiagnosis?.data);
+
+  const clinicalSymptomsRes = await myFetch(`/pain`, {
+    tags: ["pains"],
+  });
 
   return (
     <>
@@ -32,6 +35,7 @@ const AddNewFacilityPage = async () => {
         dieases={dieasesRes?.data}
         medicalDiagnosis={medicalDiagnosisRes?.data}
         painDescription={painDescriptionRes?.data}
+        clinicalSymptoms={clinicalSymptomsRes?.data}
       />
     </>
   );

@@ -13,11 +13,13 @@ const AddFacilityForm = ({
   dieases = [],
   medicalDiagnosis = [],
   painDescription = [],
+  clinicalSymptoms = [],
 }) => {
   const { step, setStep } = useFacilityFormContext();
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
+  const resetStep = () => setStep(1);
 
   return (
     <div className="bg-white p-6 rounded-xl flex flex-col gap-6 h-full">
@@ -49,7 +51,9 @@ const AddFacilityForm = ({
             painDescription={painDescription}
           />
         )}
-        {step === 5 && <Step5 prevStep={prevStep} />}
+        {step === 5 && (
+          <Step5 prevStep={prevStep} resetStep={resetStep} clinicalSymptoms={clinicalSymptoms} />
+        )}
       </div>
     </div>
   );

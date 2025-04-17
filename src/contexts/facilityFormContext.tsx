@@ -10,7 +10,7 @@ type TMedicalDiagnosis = {
 
 // Define the initial form data structure
 const initialFormData = {
-  name: "Popular Diagonstic Center",
+  name: "",
   contactName: "Rahad Ullah",
   email: "rahadullah10@gmail.com",
   phone: "+8801859543996",
