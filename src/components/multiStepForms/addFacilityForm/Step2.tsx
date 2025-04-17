@@ -20,7 +20,7 @@ import {
 import { useState } from "react";
 
 const Step2 = ({ prevStep, nextStep, dieases }) => {
-  const { setFormData, initialFormData } = useFacilityFormContext();
+  const { formData, setFormData } = useFacilityFormContext();
 
   // Initialize local state for formatted diseases
   const [formatedDieses, setFormatedDieses] = useState(
@@ -129,7 +129,7 @@ const Step2 = ({ prevStep, nextStep, dieases }) => {
 
   // handle next button
   const handleNextButton = async () => {
-    setFormData({ ...initialFormData, disorders: formatedDieses });
+    setFormData({ ...formData, disorders: formatedDieses });
     nextStep();
   };
 
