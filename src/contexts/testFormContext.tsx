@@ -4,20 +4,30 @@ import { createContext, useContext, useState } from "react";
 
 // Define the initial form data structure
 const initialFormData = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  phone: "",
-  address: "",
-  apt_number: "",
-  gender: "",
-  date_of_birth: "",
-  insurance_company: "",
-  member_id: "",
-  reasons: [] as string[],
-  sensory_symptoms: [] as string[],
-  ethnicity: "",
-  ordering_physician: "",
+  patient_info: {
+    firstname: "Delware",
+    lastname: "Hossen",
+    email: "delware@gmail.com",
+    phone: "01234567890",
+    address: "Bansree, Dhaka",
+    aptNumber: "12345",
+    gender: "Male",
+    dateOfBirth: "1990-05-15",
+    insuranceCompany: "ABC Health Insurance",
+    memberId: "1234565",
+    reasonsForVisit: ["Routine Checkup", "Mild Fever"] as string[],
+    sensorySymptoms: ["Tingling in Hands"] as string[],
+    ethnicity: "Asian",
+    orderingPhysician: "67d7d5c43ec57598786279af",
+  },
+  report_info: {
+    dieases: [],
+    medical_terms: [],
+    clinical_symptoms: [],
+    facility_location: "",
+    ordering_provider: "",
+  },
+  biopsy_info: [],
 };
 
 // Define the form context type

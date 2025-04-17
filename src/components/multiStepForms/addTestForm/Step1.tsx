@@ -25,22 +25,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import React from "react";
 import TagInput from "@/components/tag-input";
-import { usersData } from "@/constants/users";
+import { ethnicityData } from "@/constants/tests";
 
-const Step1 = ({ nextStep }) => {
+const Step1 = ({ nextStep, doctors }) => {
   const formContext = useTestFormContext();
 
   // get the form data from from context
   const { formData, setFormData } = formContext;
-
-  // format doctor names for ordering physician field
-  const doctorNames = [
-    ...new Set(
-      usersData
-        .filter((person) => person.role === "doctor")
-        .map((doctor) => `${doctor.first_name} ${doctor.last_name}`)
-    ),
-  ];
 
   // 1. Define your form schema.
   const formSchema = addTestFormSchema();
@@ -48,12 +39,12 @@ const Step1 = ({ nextStep }) => {
   // 2. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: formData,
+    defaultValues: formData?.patient_info,
   });
 
   // 3. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setFormData(values);
+    setFormData({ ...formData, patient_info: values });
     nextStep();
   }
 
@@ -68,7 +59,7 @@ const Step1 = ({ nextStep }) => {
             {/* First Name Field */}
             <FormField
               control={form.control}
-              name="first_name"
+              name="firstname"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
@@ -83,7 +74,7 @@ const Step1 = ({ nextStep }) => {
             {/* Last Name Field */}
             <FormField
               control={form.control}
-              name="last_name"
+              name="lastname"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
@@ -143,7 +134,7 @@ const Step1 = ({ nextStep }) => {
             {/* APT Field */}
             <FormField
               control={form.control}
-              name="apt_number"
+              name="aptNumber"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>APT Number</FormLabel>
@@ -172,8 +163,8 @@ const Step1 = ({ nextStep }) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -184,7 +175,7 @@ const Step1 = ({ nextStep }) => {
             {/* Date of birth */}
             <FormField
               control={form.control}
-              name="date_of_birth"
+              name="dateOfBirth"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Date of Birth</FormLabel>
@@ -199,12 +190,12 @@ const Step1 = ({ nextStep }) => {
             {/* Insurance Field */}
             <FormField
               control={form.control}
-              name="insurance_company"
+              name="insuranceCompany"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Insurance Company</FormLabel>
                   <FormControl>
-                    <Input placeholder="AETNA" {...field} />
+                    <Input placeholder="ABC Health Insurance" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -214,7 +205,7 @@ const Step1 = ({ nextStep }) => {
             {/* Member Id Field */}
             <FormField
               control={form.control}
-              name="member_id"
+              name="memberId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Member ID</FormLabel>
@@ -229,7 +220,7 @@ const Step1 = ({ nextStep }) => {
             {/* Reasons for Visit Input */}
             <FormField
               control={form.control}
-              name="reasons" // The name of the form field
+              name="reasonsForVisit" // The name of the form field
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Reason(s) for visit</FormLabel>
@@ -248,7 +239,7 @@ const Step1 = ({ nextStep }) => {
             {/* Sensory Symptoms Input */}
             <FormField
               control={form.control}
-              name="sensory_symptoms" // The name of the form field
+              name="sensorySymptoms" // The name of the form field
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Sensory Symptoms</FormLabel>
@@ -281,24 +272,11 @@ const Step1 = ({ nextStep }) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="asian">Asian</SelectItem>
-                      <SelectItem value="black">
-                        Black or African American
-                      </SelectItem>
-                      <SelectItem value="hispanic">
-                        Hispanic or Latino
-                      </SelectItem>
-                      <SelectItem value="caucasian">Caucasian</SelectItem>
-                      <SelectItem value="native_american">
-                        Native American or Alaska Native
-                      </SelectItem>
-                      <SelectItem value="pacific_islander">
-                        Native Hawaiian or Other Pacific Islander
-                      </SelectItem>
-                      <SelectItem value="middle_eastern">
-                        Middle Eastern or North African
-                      </SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      {ethnicityData?.map((item, idx) => (
+                        <SelectItem key={idx} value={item}>
+                          {item}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -309,7 +287,7 @@ const Step1 = ({ nextStep }) => {
             {/* Ordering Physician */}
             <FormField
               control={form.control}
-              name="ordering_physician"
+              name="orderingPhysician"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Ordering Physician</FormLabel>
@@ -323,9 +301,9 @@ const Step1 = ({ nextStep }) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {doctorNames.map((doctorName, idx) => (
-                        <SelectItem key={idx} value={doctorName}>
-                          {doctorName}
+                      {doctors.map((doctor, idx) => (
+                        <SelectItem key={idx} value={doctor?._id}>
+                          {doctor?.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -337,11 +315,7 @@ const Step1 = ({ nextStep }) => {
 
             {/* submit button */}
             <div className="col-span-2 flex justify-end gap-4">
-              <Button
-                onClick={() => nextStep()}
-                type="submit"
-                className="md:px-6"
-              >
+              <Button type="submit" className="md:px-6">
                 Next <ChevronRight />
               </Button>
             </div>
