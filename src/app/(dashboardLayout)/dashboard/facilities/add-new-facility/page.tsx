@@ -6,9 +6,25 @@ const AddNewFacilityPage = async () => {
     tags: ["users"],
   });
 
+  const dieasesRes = await myFetch(`/dieases`, {
+    tags: ["dieases"],
+  });
+
+  const medicalDiagnosisRes = await myFetch(
+    `/medical-terms?type=medical_diagnosis`,
+    {
+      tags: ["medical-diagnosis"],
+    }
+  );
+  // console.log(medicalDiagnosis?.data);
+
   return (
     <>
-      <AddFacilityForm representatives={usersRes?.data} />
+      <AddFacilityForm
+        representatives={usersRes?.data}
+        dieases={dieasesRes?.data}
+        medicalDiagnosis={medicalDiagnosisRes?.data}
+      />
     </>
   );
 };

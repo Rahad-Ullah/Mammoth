@@ -14,16 +14,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 type TModalProps = {
-  item: any;
+  diseaseIdx: number;
+  disorderIdx: number;
   inputValue: any;
   action?: (
-    data: { option: string },
-    id: string
+    item: string,
+    diseaseIdx: number,
+    disorderIdx: number
   ) => Promise<FetchResponse> | any;
   triggerBtn: React.ReactNode;
   btnVariant?:
@@ -45,8 +47,9 @@ const editOptionSchema = z.object({
   option: z.string().min(1, "Option is required"),
 });
 
-const EditModal = ({
-  item,
+const EditDisorderModal = ({
+  diseaseIdx,
+  disorderIdx,
   inputValue,
   triggerBtn,
   action,
@@ -71,10 +74,8 @@ const EditModal = ({
   // handle submit
   const onSubmit = async (data: { option: string }) => {
     if (action) {
-      const res = await action(data, item?._id); // Call the action callback with the form data
-      if (res?.success) {
-        setOpen(false);
-      }
+      await action(data?.option, diseaseIdx, disorderIdx); // Call the action callback with the form data
+      setOpen(false);
     }
   };
 
@@ -110,4 +111,4 @@ const EditModal = ({
   );
 };
 
-export default EditModal;
+export default EditDisorderModal;

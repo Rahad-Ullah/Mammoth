@@ -15,6 +15,9 @@ const initialFormData = {
   notificationEmail2: "sales@popular.com",
   accountType: "Laboratory",
   representative: "67d7dbf68becba8261535243",
+  disorders: [],
+  reasons: [],
+  clinical_symptoms: [],
 };
 
 // Define the form context type
@@ -33,6 +36,7 @@ const FormContext = createContext<FormContextType | null>(null);
 export const FormProvider = ({ children }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [step, setStep] = useState(1);
+  console.log(formData);
 
   return (
     <FormContext.Provider

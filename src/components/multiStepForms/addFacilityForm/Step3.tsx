@@ -20,7 +20,7 @@ import {
   Trash,
 } from "lucide-react";
 
-const Step3 = ({ nextStep, prevStep }) => {
+const Step3 = ({ nextStep, prevStep, medicalDiagnosis }) => {
   // const { formData, setFormData } = useFormContext();
 
   return (
@@ -56,7 +56,7 @@ const Step3 = ({ nextStep, prevStep }) => {
       {/* body */}
       <section className="py-6 flex-1">
         <ul className="grid gap-4 md:gap-2">
-          {facilityOptions.facilityDetails.map((item) => (
+          {facilityOptions.facilityTypes.map((item) => (
             <li
               key={item.id}
               className="flex justify-between items-center gap-2"
@@ -66,8 +66,8 @@ const Step3 = ({ nextStep, prevStep }) => {
                   item.isHidden ? "text-stone-400" : "text-stone-600"
                 } `}
               >
-                <span className="size-3 min-w-3 bg-primary-foreground rounded-full"></span>{" "}
-                {item.description}
+                <span className="min-w-3 h-3 bg-primary-foreground rounded-full"></span>{" "}
+                {item.title}
               </p>
               <div className="flex">
                 <Button

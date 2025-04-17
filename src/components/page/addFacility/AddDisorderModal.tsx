@@ -14,17 +14,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 type TModalProps = {
-  item: any;
-  inputValue: any;
-  action?: (
-    data: { option: string },
-    id: string
-  ) => Promise<FetchResponse> | any;
+  diseaseIdx: number;
+  action?: (item: string, diseaseIdx: number) => Promise<FetchResponse> | any;
   triggerBtn: React.ReactNode;
   btnVariant?:
     | "secondary"
@@ -45,13 +41,12 @@ const editOptionSchema = z.object({
   option: z.string().min(1, "Option is required"),
 });
 
-const EditModal = ({
-  item,
-  inputValue,
+const AddDisorderModal = ({
+  diseaseIdx,
   triggerBtn,
   action,
   btnVariant = "default",
-  title = "Edit Option",
+  title = "Add New Option",
   btnText = "Save",
   placeholderText = "Enter option",
 }: TModalProps) => {
@@ -61,20 +56,17 @@ const EditModal = ({
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
+    reset,
   } = useForm<z.infer<typeof editOptionSchema>>({
     resolver: zodResolver(editOptionSchema),
   });
-  // set form input default value
-  setValue("option", inputValue);
 
   // handle submit
   const onSubmit = async (data: { option: string }) => {
     if (action) {
-      const res = await action(data, item?._id); // Call the action callback with the form data
-      if (res?.success) {
-        setOpen(false);
-      }
+      await action(data?.option, diseaseIdx); // Call the action callback with the form data
+      setOpen(false);
+      reset();
     }
   };
 
@@ -110,4 +102,4 @@ const EditModal = ({
   );
 };
 
-export default EditModal;
+export default AddDisorderModal;
