@@ -17,12 +17,17 @@ const TestPage = async ({ searchParams }) => {
     tags: ["tests"],
   });
 
+  const facilitiesRes = await myFetch(`/facility?status=Active`, {
+    tags: ["facilities"],
+  });
+
   return (
     <>
       <TestsTable
         tests={res?.data}
         meta={res?.pagination}
         filters={{ doctor, facility, status }}
+        facilitiesData={facilitiesRes?.data}
       />
     </>
   );

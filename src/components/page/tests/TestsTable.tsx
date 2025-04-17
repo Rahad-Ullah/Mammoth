@@ -34,7 +34,7 @@ import Image from "next/image";
 import { testStatuses } from "@/constants/testStatus";
 import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 
-const TestsTable = ({ tests, meta, filters }) => {
+const TestsTable = ({ tests = [], meta, filters, facilitiesData = [] }) => {
   const updateMultiSearchParams = useUpdateMultiSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -223,7 +223,7 @@ const TestsTable = ({ tests, meta, filters }) => {
         </DropdownMenu>
 
         {/* Add new user button */}
-        <CreateTestModal />
+        <CreateTestModal facilities={facilitiesData} />
       </section>
 
       {/* table and pagination*/}

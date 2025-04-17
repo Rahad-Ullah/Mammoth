@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -12,25 +12,40 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FilePlus } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { useFacilityFormContext } from "@/contexts/facilityFormContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useTestFormContext } from "@/contexts/testFormContext";
 
-const CreateTestModal = () => {
+const CreateTestModal = ({ facilities }) => {
   const router = useRouter();
-  const { step, setStep } = useFacilityFormContext();
+  const [step, setStep] = useState(1);
+  const [open, setOpen] = useState(false);
+  const [facility, setFacility] = useState("");
+  const { formData, setFormData } = useTestFormContext();
 
   const nextStep = () => setStep(step + 1);
+  const resetStep = () => setStep(1);
 
   // handle confirmation
   const handleConfirm = () => {
-    setStep(1);
+    setFormData({
+      ...formData,
+      report_info: { ...formData?.report_info, facility_location: facility },
+    });
+    setOpen(false);
+    resetStep();
     router.push(`/dashboard/tests/add-new-test`);
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Dialog open={open}>
+      <DialogTrigger asChild onClick={() => setOpen(true)}>
         <Button variant={"default"}>
           <FilePlus /> Intake
         </Button>
@@ -42,7 +57,7 @@ const CreateTestModal = () => {
               <DialogTitle>Would you like to start a new intake?</DialogTitle>
             </DialogHeader>
             <DialogFooter className="flex-row gap-6">
-              <DialogClose asChild>
+              <DialogClose asChild onClick={() => setOpen(false)}>
                 <Button variant={"outline"} className="w-full">
                   No
                 </Button>
@@ -76,6 +91,17 @@ const CreateTestModal = () => {
                 <Button variant={"outline"} className="w-full">
                   Quick Intake
                 </Button>
+                <DialogClose
+                  asChild
+                  onClick={() => {
+                    setOpen(false);
+                    resetStep();
+                  }}
+                >
+                  <Button variant={"outline"} className="w-full">
+                    Cancel
+                  </Button>
+                </DialogClose>
               </div>
             </DialogFooter>
           </div>
@@ -84,15 +110,43 @@ const CreateTestModal = () => {
         {step === 3 && (
           <div className="grid gap-6">
             <DialogHeader>
-              <DialogTitle>Location in the system to Facility.</DialogTitle>
+              <DialogTitle>Available facility in the system.</DialogTitle>
             </DialogHeader>
             <div>
-              <Input placeholder="Enter location" />
+              <Select onValueChange={(value) => setFacility(value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a facility" />
+                </SelectTrigger>
+                <SelectContent>
+                  {facilities?.length > 0 ? (
+                    facilities?.map((item, idx: number) => (
+                      <SelectItem key={idx} value={item?._id}>
+                        {item?.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <p className="text-sm text-stone-500 py-2 text-center">
+                      No data found
+                    </p>
+                  )}
+                </SelectContent>
+              </Select>
             </div>
-            <DialogFooter>
+            <DialogFooter className="flex !flex-col !space-x-0 gap-4">
               <Button onClick={handleConfirm} className="w-full">
                 Confirm
               </Button>
+              <DialogClose
+                asChild
+                onClick={() => {
+                  setOpen(false);
+                  resetStep();
+                }}
+              >
+                <Button variant={"outline"} className="w-full">
+                  Cancel
+                </Button>
+              </DialogClose>
             </DialogFooter>
           </div>
         )}
