@@ -14,6 +14,12 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
+type TMedicalDiagnosis = {
+  name: string;
+  type: string;
+  isHidden: boolean;
+};
+
 const Step3 = ({ nextStep, prevStep, medicalDiagnosis }) => {
   const { formData, setFormData } = useFacilityFormContext();
 
@@ -27,8 +33,8 @@ const Step3 = ({ nextStep, prevStep, medicalDiagnosis }) => {
 
   // Toggle visibility of an item
   const toggleItemVisible = (idx: number) => {
-    setFormatedDiagnosis((prev) =>
-      prev.map((item, i) =>
+    setFormatedDiagnosis((prev: TMedicalDiagnosis[]) =>
+      prev.map((item, i: number) =>
         i === idx ? { ...item, isHidden: !item.isHidden } : item
       )
     );
@@ -36,19 +42,18 @@ const Step3 = ({ nextStep, prevStep, medicalDiagnosis }) => {
 
   // handle add new item
   const addItem = (newItem: { name: string; type?: string }) => {
-    setFormatedDiagnosis((prev) => [
+    setFormatedDiagnosis((prev: TMedicalDiagnosis[]) => [
       ...prev,
       { name: newItem.name, type: newItem.type, isHidden: false },
     ]);
   };
-
   const handleAddItem = (data: { option: string }) => {
     addItem({ name: data.option, type: "medical_diagnosis" });
   };
 
   // handle edit item
   const editItem = (idx: number, newName: string) => {
-    setFormatedDiagnosis((prev) =>
+    setFormatedDiagnosis((prev: TMedicalDiagnosis[]) =>
       prev.map((item, i) => (i === idx ? { ...item, name: newName } : item))
     );
   };
@@ -58,7 +63,9 @@ const Step3 = ({ nextStep, prevStep, medicalDiagnosis }) => {
 
   // handle delete item
   const deleteItem = (idx: number) => {
-    setFormatedDiagnosis((prev) => prev.filter((_, i) => i !== idx));
+    setFormatedDiagnosis((prev: TMedicalDiagnosis[]) =>
+      prev.filter((_, i) => i !== idx)
+    );
   };
 
   // handle next button
@@ -89,50 +96,54 @@ const Step3 = ({ nextStep, prevStep, medicalDiagnosis }) => {
       {/* body */}
       <section className="py-6 flex-1">
         <ul className="grid gap-4 md:gap-2">
-          {formatedDiagnosis?.map((item, idx) => (
-            <li key={idx} className="flex justify-between items-center gap-2">
-              <p
-                className={`flex items-center gap-3 text-sm ${
-                  item?.isHidden ? "text-stone-400" : "text-stone-600"
-                } `}
-              >
-                <span className="min-w-3 h-3 bg-primary-foreground rounded-full"></span>
-                {item?.name}
-              </p>
-              <div className="flex">
-                <AddEditItemModal
-                  triggerBtn={
-                    <Button
-                      variant={"ghost"}
-                      size={"icon"}
-                      className="text-primary"
-                    >
-                      <Pencil />
-                    </Button>
-                  }
-                  id={idx}
-                  inputValue={item?.name}
-                  action={handleEditItem}
-                />
-                <Button
-                  onClick={() => toggleItemVisible(idx)}
-                  variant={"ghost"}
-                  size={"icon"}
-                  className="text-zinc-500"
+          {formatedDiagnosis?.length > 0 ? (
+            formatedDiagnosis?.map((item: TMedicalDiagnosis, idx: number) => (
+              <li key={idx} className="flex justify-between items-center gap-2">
+                <p
+                  className={`flex items-center gap-3 text-sm ${
+                    item?.isHidden ? "text-stone-400" : "text-stone-600"
+                  } `}
                 >
-                  {!item.isHidden ? <Eye /> : <EyeOff />}
-                </Button>
-                <Button
-                  onClick={() => deleteItem(idx)}
-                  variant={"ghost"}
-                  size={"icon"}
-                  className="text-red-500"
-                >
-                  <Trash />
-                </Button>
-              </div>
-            </li>
-          ))}
+                  <span className="min-w-3 h-3 bg-primary-foreground rounded-full"></span>
+                  {item?.name}
+                </p>
+                <div className="flex">
+                  <AddEditItemModal
+                    triggerBtn={
+                      <Button
+                        variant={"ghost"}
+                        size={"icon"}
+                        className="text-primary"
+                      >
+                        <Pencil />
+                      </Button>
+                    }
+                    id={idx}
+                    inputValue={item?.name}
+                    action={handleEditItem}
+                  />
+                  <Button
+                    onClick={() => toggleItemVisible(idx)}
+                    variant={"ghost"}
+                    size={"icon"}
+                    className="text-zinc-500"
+                  >
+                    {!item.isHidden ? <Eye /> : <EyeOff />}
+                  </Button>
+                  <Button
+                    onClick={() => deleteItem(idx)}
+                    variant={"ghost"}
+                    size={"icon"}
+                    className="text-red-500"
+                  >
+                    <Trash />
+                  </Button>
+                </div>
+              </li>
+            ))
+          ) : (
+            <p className="text-stone-500 text-center py-8">No data found</p>
+          )}
         </ul>
       </section>
 

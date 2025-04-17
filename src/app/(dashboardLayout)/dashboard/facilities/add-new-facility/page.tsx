@@ -16,6 +16,13 @@ const AddNewFacilityPage = async () => {
       tags: ["medical-diagnosis"],
     }
   );
+
+  const painDescriptionRes = await myFetch(
+    `/medical-terms?type=pain_description`,
+    {
+      tags: ["pain-description"],
+    }
+  );
   // console.log(medicalDiagnosis?.data);
 
   return (
@@ -24,6 +31,7 @@ const AddNewFacilityPage = async () => {
         representatives={usersRes?.data}
         dieases={dieasesRes?.data}
         medicalDiagnosis={medicalDiagnosisRes?.data}
+        painDescription={painDescriptionRes?.data}
       />
     </>
   );

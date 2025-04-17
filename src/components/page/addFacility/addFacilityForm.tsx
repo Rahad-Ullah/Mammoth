@@ -12,6 +12,7 @@ const AddFacilityForm = ({
   representatives = [],
   dieases = [],
   medicalDiagnosis = [],
+  painDescription = [],
 }) => {
   const { step, setStep } = useFacilityFormContext();
 
@@ -41,7 +42,13 @@ const AddFacilityForm = ({
             medicalDiagnosis={medicalDiagnosis}
           />
         )}
-        {step === 4 && <Step4 prevStep={prevStep} nextStep={nextStep} />}
+        {step === 4 && (
+          <Step4
+            prevStep={prevStep}
+            nextStep={nextStep}
+            painDescription={painDescription}
+          />
+        )}
         {step === 5 && <Step5 prevStep={prevStep} />}
       </div>
     </div>

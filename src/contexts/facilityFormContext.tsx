@@ -2,6 +2,12 @@
 
 import { createContext, useContext, useState } from "react";
 
+type TMedicalDiagnosis = {
+  name: string;
+  type: string;
+  isHidden: boolean;
+};
+
 // Define the initial form data structure
 const initialFormData = {
   name: "Popular Diagonstic Center",
@@ -16,7 +22,7 @@ const initialFormData = {
   accountType: "Laboratory",
   representative: "67d7dbf68becba8261535243",
   disorders: [],
-  reasons: [],
+  reasons: [] as TMedicalDiagnosis[],
   clinical_symptoms: [],
 };
 
@@ -36,7 +42,6 @@ const FormContext = createContext<FormContextType | null>(null);
 export const FormProvider = ({ children }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [step, setStep] = useState(1);
-  console.log(formData);
 
   return (
     <FormContext.Provider
