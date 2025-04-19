@@ -20,6 +20,12 @@ interface IClinicalSymptom {
   }[];
 }
 
+interface IBiopsySample {
+  sample_area: string;
+  sample_side: string;
+  specimen_id: string;
+}
+
 // Define the initial form data structure
 const initialFormData = {
   patient_info: {
@@ -45,7 +51,7 @@ const initialFormData = {
     facility_location: "",
     ordering_provider: "",
   },
-  biopsy_info: [],
+  biopsy_info: [] as IBiopsySample[],
 };
 
 // Define the form context type

@@ -129,7 +129,7 @@ const Step5 = ({
         clinical_symptoms: selectedSymptoms,
       },
     });
-    // nextStep()
+    nextStep();
   };
   return (
     <div className="grid gap-8">

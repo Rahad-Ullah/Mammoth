@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Trash, XIcon } from "lucide-react";
 import AnatomyWrapper from "@/components/page/testDetails/anatomy/anatomyWrapper";
@@ -25,6 +27,7 @@ import { anatomyPointsData } from "@/constants/anatomyPointsData";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useTestFormContext } from "@/contexts/testFormContext";
 
 const formSchema = addBiopsySampleFormSchema();
 
@@ -35,8 +38,9 @@ const Step6 = ({
   prevStep: () => void;
   resetStep: () => void;
 }) => {
+  const { formData, setFormData } = useTestFormContext();
   const [sampleSites, setSampleSites] = React.useState<
-    { area: string; side: string; specimen_id: string }[]
+    { sample_area: string; sample_side: string; specimen_id: string }[]
   >([]);
   const router = useRouter();
 
@@ -46,7 +50,6 @@ const Step6 = ({
       anatomyPointsData.map((item) =>
         JSON.stringify({
           sample_area: item.sample_area,
-          sample_side: item.sample_side,
         })
       )
     ),
@@ -56,8 +59,8 @@ const Step6 = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      area: "",
-      side: "",
+      sample_area: "",
+      sample_side: "",
       specimen_id: "",
     },
   });
@@ -68,9 +71,21 @@ const Step6 = ({
     setSampleSites([...sampleSites, values]);
   }
 
+  // handle delete site
+  const handleDeleteSite = (index: number) => {
+    setSampleSites((prevSites) => prevSites.filter((_, idx) => idx !== index));
+  };
+
   const handleSubmit = () => {
-    resetStep();
-    router.push(`/dashboard/tests`);
+    setFormData({
+      ...formData,
+      report_info: {
+        ...formData?.report_info,
+      },
+      biopsy_info: sampleSites,
+    });
+    // resetStep();
+    // router.push(`/dashboard/tests`);
   };
   return (
     <div className="grid gap-8">
@@ -84,23 +99,19 @@ const Step6 = ({
                 {sampleSites.map((item, idx: number) => (
                   <li key={idx} className="flex flex-wrap justify-between">
                     <p>
-                      {idx + 1}. Sample taken from{" "}
+                      {idx + 1}. Sample taken from{"  "}
                       <span className="text-primary font-medium">
-                        (
-                        {
-                          sampleAreas.find((item) => item.area === item.area)
-                            .abbreviation
-                        }
-                        ) {item.area}
-                      </span>{" "}
+                        {item.sample_area}{" "}
+                      </span>
                       <span className="text-red-500 capitalize">
-                        {item.side}
-                      </span>{" "}
+                        {item.sample_side}{" "}
+                      </span>
                       Side
                     </p>
                     <p className="text-sm text-zinc-400 flex items-center gap-4">
                       Specimen Id: {item.specimen_id}
                       <Button
+                        onClick={() => handleDeleteSite(idx)}
                         variant={"ghost"}
                         size={"icon"}
                         className="text-destructive"
@@ -121,7 +132,7 @@ const Step6 = ({
                 {/* area */}
                 <FormField
                   control={form.control}
-                  name="area"
+                  name="sample_area"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Select Sample Area</FormLabel>
@@ -137,10 +148,10 @@ const Step6 = ({
                         <SelectContent>
                           {sampleAreas.map((area) => (
                             <SelectItem
-                              key={area.location}
-                              value={area.location}
+                              key={area.sample_area}
+                              value={area.sample_area}
                             >
-                              {area.location} ({area.abbreviation})
+                              {area.sample_area}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -153,7 +164,7 @@ const Step6 = ({
                 {/* area side */}
                 <FormField
                   control={form.control}
-                  name="side"
+                  name="sample_side"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Select Sample Side</FormLabel>
@@ -218,21 +229,24 @@ const Step6 = ({
               Please remove any of the following that dont apply and add
               whatever you would like{" "}
             </h3>
-            <div className="bg-muted p-6 rounded-xl flex items-center gap-4 flex-wrap">
-              <span className="flex items-center gap-2 bg-background p-2 rounded-lg w-fit">
-                <span>G60.3</span>{" "}
-                <XIcon
-                  size={20}
-                  className="text-red-500/80 hover:text-destructive cursor-pointer"
-                />
-              </span>
-              <span className="flex items-center gap-2 bg-background p-2 rounded-lg w-fit">
-                <span>G60.3</span>{" "}
-                <XIcon
-                  size={20}
-                  className="text-red-500/80 hover:text-destructive cursor-pointer"
-                />
-              </span>
+            <div className="bg-muted p-6 rounded-xl grid gap-4">
+              <h1 className="font-medium">ICD&apos;s</h1>
+              <ul className="flex items-center gap-4 flex-wrap">
+                <li className="flex items-center gap-2 bg-background p-2 rounded-lg w-fit">
+                  <span>G60.3</span>{" "}
+                  <XIcon
+                    size={20}
+                    className="text-red-500/80 hover:text-destructive cursor-pointer"
+                  />
+                </li>
+                <li className="flex items-center gap-2 bg-background p-2 rounded-lg w-fit">
+                  <span>G60.3</span>{" "}
+                  <XIcon
+                    size={20}
+                    className="text-red-500/80 hover:text-destructive cursor-pointer"
+                  />
+                </li>
+              </ul>
             </div>
           </div>
         </section>

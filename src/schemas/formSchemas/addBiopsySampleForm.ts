@@ -3,10 +3,10 @@ import { z } from "zod";
 // zod validation schema for add user form
 export const addBiopsySampleFormSchema = () => {
   return z.object({
-    area: z.string().min(1, {
+    sample_area: z.string().min(1, {
       message: "Must be select 1 sample area.",
     }),
-    side: z.string().min(1, {
+    sample_side: z.string().min(1, {
       message: "Must be select 1 option.",
     }),
     specimen_id: z.string().min(5, {
