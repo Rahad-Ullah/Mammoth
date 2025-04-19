@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import {
   Accordion,
@@ -8,109 +9,146 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { disorderTypes } from "@/constants/disorderTypes";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import AnatomyWrapper from "@/components/page/testDetails/anatomy/anatomyWrapper";
+import { useTestFormContext } from "@/contexts/testFormContext";
 
-interface Disorder {
-  type: string;
-  sides: string[];
-}
-
-interface AccordionItemType {
-  id: number;
+interface ClinicalSymptom {
   title: string;
-  disorders: Disorder[];
+  disorders: {
+    name: string;
+    sides: string[];
+  }[];
 }
 
 const Step5 = ({
   prevStep,
   nextStep,
+  clinicalSymptoms,
 }: {
   prevStep: () => void;
   nextStep: () => void;
+  clinicalSymptoms: any[];
 }) => {
-  const [selectedDisorders, setSelectedDisorders] = useState<
-    { title: string; disorders: Disorder[] }[]
-  >([]);
+  const { formData, setFormData } = useTestFormContext();
+  const [selectedSymptoms, setSelectedSymptoms] = useState<ClinicalSymptom[]>(
+    formData?.report_info?.clinical_symptoms
+  );
 
-  // Handle the checkbox change and update selected disorders
+  // Handle the checkbox change and update selected disorder sides
   const handleCheckboxChange = (
-    accordionTitle: string,
-    disorderType: string,
-    side: string,
-    checked: boolean
+    symptomIdx: number,
+    disorderIdx: number,
+    side: string
   ) => {
-    setSelectedDisorders((prevSelected) => {
-      const existingItem = prevSelected.find(
-        (item) => item.title === accordionTitle
+    setSelectedSymptoms((prevSelected) => {
+      const symptom = clinicalSymptoms[symptomIdx]; // Get the selected symptom using its index
+      const disorder = symptom.disorders[disorderIdx]; // Get the selected disorder using its index
+
+      // Check if the symptom already exists in selectedSymptoms
+      const existingSymptom = prevSelected.find(
+        (item) => item.title === symptom.title
       );
 
-      // If the item doesn't exist, add it
-      if (!existingItem) {
+      if (existingSymptom) {
+        // Check if the disorder already exists in the symptom
+        const existingDisorder = existingSymptom.disorders.find(
+          (d) => d.name === disorder.name
+        );
+
+        if (existingDisorder) {
+          // Check if the side is already selected
+          if (existingDisorder.sides.includes(side)) {
+            // Remove the side immutably
+            const updatedSides = existingDisorder.sides.filter(
+              (s) => s !== side
+            );
+
+            // Remove the disorder if no sides remain
+            const updatedDisorders =
+              updatedSides.length > 0
+                ? existingSymptom.disorders.map((d) =>
+                    d.name === disorder.name ? { ...d, sides: updatedSides } : d
+                  )
+                : existingSymptom.disorders.filter(
+                    (d) => d.name !== disorder.name
+                  );
+
+            // Remove the symptom if no disorders remain
+            return updatedDisorders.length > 0
+              ? prevSelected.map((s) =>
+                  s.title === symptom.title
+                    ? { ...s, disorders: updatedDisorders }
+                    : s
+                )
+              : prevSelected.filter((s) => s.title !== symptom.title);
+          } else {
+            // Add the side immutably
+            const updatedDisorders = existingSymptom.disorders.map((d) =>
+              d.name === disorder.name ? { ...d, sides: [...d.sides, side] } : d
+            );
+
+            return prevSelected.map((s) =>
+              s.title === symptom.title
+                ? { ...s, disorders: updatedDisorders }
+                : s
+            );
+          }
+        } else {
+          // Add the disorder with the selected side immutably
+          const updatedDisorders = [
+            ...existingSymptom.disorders,
+            { name: disorder.name, sides: [side] },
+          ];
+
+          return prevSelected.map((s) =>
+            s.title === symptom.title
+              ? { ...s, disorders: updatedDisorders }
+              : s
+          );
+        }
+      } else {
+        // Add the symptom with the selected disorder and side immutably
         return [
           ...prevSelected,
           {
-            title: accordionTitle,
-            disorders: checked ? [{ type: disorderType, sides: [side] }] : [],
+            title: symptom.title,
+            disorders: [{ name: disorder.name, sides: [side] }],
           },
         ];
       }
-
-      // If the item exists, update it
-      const updatedDisorders = existingItem.disorders.map((disorder) => {
-        if (disorder.type === disorderType) {
-          // If side is already selected, remove it
-          if (checked) {
-            return {
-              ...disorder,
-              sides: [...new Set([...disorder.sides, side])], // Ensure no duplicates
-            };
-          } else {
-            return {
-              ...disorder,
-              sides: disorder.sides.filter((item) => item !== side),
-            };
-          }
-        }
-        return disorder;
-      });
-
-      // If the disorder does not exist in the list, add it
-      if (!existingItem.disorders.find((d) => d.type === disorderType)) {
-        updatedDisorders.push({
-          type: disorderType,
-          sides: checked ? [side] : [],
-        });
-      }
-
-      // Replace the old item with the updated one
-      return prevSelected.map((item) =>
-        item.title === accordionTitle
-          ? { ...item, disorders: updatedDisorders }
-          : item
-      );
     });
   };
 
+  // handle next button
+  const handleNext = () => {
+    setFormData({
+      ...formData,
+      report_info: {
+        ...formData?.report_info,
+        clinical_symptoms: selectedSymptoms,
+      },
+    });
+    // nextStep()
+  };
   return (
     <div className="grid gap-8">
       {/* Body section */}
       <div className="flex flex-col-reverse lg:flex-row gap-8">
         <section className="w-full lg:w-2/3">
           <Accordion type="single" collapsible className="w-full grid gap-4">
-            {disorderTypes.painTypes.map((item: AccordionItemType) => (
+            {clinicalSymptoms?.map((item: ClinicalSymptom, idx: number) => (
               <AccordionItem
-                key={item.id}
-                value={item.id.toString()}
+                key={idx}
+                value={item?.title}
                 className="border-none"
               >
                 <div className="flex justify-between items-center gap-2">
                   <div className="bg-zinc-100 rounded-lg w-full p-4 flex items-center gap-4">
                     <p className="font-medium flex items-center gap-5">
-                      {item.title}
+                      {item?.title}
                       <span className="text-xs font-medium text-zinc-400">
-                        {item.disorders.length} items
+                        {item?.disorders?.length} items
                       </span>
                     </p>
                   </div>
@@ -119,26 +157,30 @@ const Step5 = ({
 
                 <AccordionContent className="p-2 md:p-5 lg:pr-20">
                   <div className="grid gap-6">
-                    {item.disorders.map((disorder) => (
-                      <div key={disorder.type} className="grid gap-4">
-                        <p className="text-stone-700">{disorder.type}</p>
+                    {item?.disorders?.map((disorder, nestedIdx: number) => (
+                      <div key={nestedIdx} className="grid gap-4">
+                        <p className="text-stone-700">{disorder?.name}</p>
                         <div className="flex items-center gap-4 ml-8">
                           {/* Checkbox for "Both" side */}
                           <span className="flex items-center gap-2">
                             <Checkbox
-                              id={disorder.type + "-Both"}
-                              value={disorder.type}
-                              onCheckedChange={(checked) =>
-                                handleCheckboxChange(
-                                  item.title,
-                                  disorder.type,
-                                  "Both",
-                                  !!checked
-                                )
+                              id={disorder?.name + "Both"}
+                              value={"Both"}
+                              checked={selectedSymptoms.some(
+                                (symptom) =>
+                                  symptom.title === item.title &&
+                                  symptom.disorders.some(
+                                    (d) =>
+                                      d.name === disorder.name &&
+                                      d.sides.includes("Both")
+                                  )
+                              )}
+                              onCheckedChange={() =>
+                                handleCheckboxChange(idx, nestedIdx, "Both")
                               }
                             />
                             <Label
-                              htmlFor={disorder.type + "-Both"}
+                              htmlFor={disorder?.name + "Both"}
                               className="text-sm text-stone-600 font-normal"
                             >
                               Both Sides
@@ -148,19 +190,23 @@ const Step5 = ({
                           {/* Checkbox for "Left" side */}
                           <span className="flex items-center gap-2">
                             <Checkbox
-                              id={disorder.type + "-Left"}
-                              value={disorder.type}
-                              onCheckedChange={(checked) =>
-                                handleCheckboxChange(
-                                  item.title,
-                                  disorder.type,
-                                  "Left",
-                                  !!checked
-                                )
+                              id={disorder?.name + "Left"}
+                              value={"Left"}
+                              checked={selectedSymptoms.some(
+                                (symptom) =>
+                                  symptom.title === item.title &&
+                                  symptom.disorders.some(
+                                    (d) =>
+                                      d.name === disorder.name &&
+                                      d.sides.includes("Left")
+                                  )
+                              )}
+                              onCheckedChange={() =>
+                                handleCheckboxChange(idx, nestedIdx, "Left")
                               }
                             />
                             <Label
-                              htmlFor={disorder.type + "-Left"}
+                              htmlFor={disorder?.name + "Left"}
                               className="text-sm text-stone-600 font-normal"
                             >
                               Left Side
@@ -170,19 +216,23 @@ const Step5 = ({
                           {/* Checkbox for "Right" side */}
                           <span className="flex items-center gap-2">
                             <Checkbox
-                              id={disorder.type + "-Right"}
-                              value={disorder.type}
-                              onCheckedChange={(checked) =>
-                                handleCheckboxChange(
-                                  item.title,
-                                  disorder.type,
-                                  "Right",
-                                  !!checked
-                                )
+                              id={disorder?.name + "Right"}
+                              value={"Right"}
+                              checked={selectedSymptoms.some(
+                                (symptom) =>
+                                  symptom.title === item.title &&
+                                  symptom.disorders.some(
+                                    (d) =>
+                                      d.name === disorder.name &&
+                                      d.sides.includes("Right")
+                                  )
+                              )}
+                              onCheckedChange={() =>
+                                handleCheckboxChange(idx, nestedIdx, "Right")
                               }
                             />
                             <Label
-                              htmlFor={disorder.type + "-Right"}
+                              htmlFor={disorder?.name + "Right"}
                               className="text-sm text-stone-600 font-normal"
                             >
                               Right Side
@@ -192,19 +242,23 @@ const Step5 = ({
                           {/* Checkbox for "Middle" side */}
                           <span className="flex items-center gap-2">
                             <Checkbox
-                              id={disorder.type + "-Middle"}
-                              value={disorder.type}
-                              onCheckedChange={(checked) =>
-                                handleCheckboxChange(
-                                  item.title,
-                                  disorder.type,
-                                  "Middle",
-                                  !!checked
-                                )
+                              id={disorder?.name + "Middle"}
+                              value={"Middle"}
+                              checked={selectedSymptoms.some(
+                                (symptom) =>
+                                  symptom.title === item.title &&
+                                  symptom.disorders.some(
+                                    (d) =>
+                                      d.name === disorder.name &&
+                                      d.sides.includes("Middle")
+                                  )
+                              )}
+                              onCheckedChange={() =>
+                                handleCheckboxChange(idx, nestedIdx, "Middle")
                               }
                             />
                             <Label
-                              htmlFor={disorder.type + "-Middle"}
+                              htmlFor={disorder?.name + "Middle"}
                               className="text-sm text-stone-600 font-normal"
                             >
                               Middle
@@ -229,7 +283,7 @@ const Step5 = ({
         <Button onClick={prevStep} className="md:px-6">
           <ChevronLeft /> Back
         </Button>
-        <Button onClick={nextStep} className="md:px-6">
+        <Button onClick={handleNext} className="md:px-6">
           Next <ChevronRight />
         </Button>
       </div>

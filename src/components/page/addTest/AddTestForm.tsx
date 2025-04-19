@@ -8,14 +8,15 @@ import Step4 from "@/components/multiStepForms/addTestForm/Step4";
 import Step5 from "@/components/multiStepForms/addTestForm/Step5";
 import Step6 from "@/components/multiStepForms/addTestForm/Step6";
 import { Progress } from "@/components/ui/progress";
-import { useFacilityFormContext } from "@/contexts/facilityFormContext";
+import { useTestFormContext } from "@/contexts/testFormContext";
 
 const AddTestForm = ({
   doctors = [],
   dieases = [],
   medicalTerms = [],
+  clinicalSymptoms = []
 }) => {
-  const { step, setStep } = useFacilityFormContext();
+  const { step, setStep } = useTestFormContext();
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -37,7 +38,7 @@ const AddTestForm = ({
         )}
         {step === 3 && <Step3 prevStep={prevStep} nextStep={nextStep} medicalTerms={medicalTerms}/>}
         {step === 4 && <Step4 prevStep={prevStep} nextStep={nextStep} medicalTerms={medicalTerms}/>}
-        {step === 5 && <Step5 prevStep={prevStep} nextStep={nextStep} />}
+        {step === 5 && <Step5 prevStep={prevStep} nextStep={nextStep} clinicalSymptoms={clinicalSymptoms}/>}
         {step === 6 && <Step6 prevStep={prevStep} resetStep={resetStep} />}
       </div>
     </div>

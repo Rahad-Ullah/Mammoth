@@ -12,6 +12,13 @@ interface IDiagnosis {
   content: string;
   type: string;
 }
+interface IClinicalSymptom {
+  title: string;
+  disorders: {
+    name: string;
+    sides: string[];
+  }[];
+}
 
 // Define the initial form data structure
 const initialFormData = {
@@ -34,7 +41,7 @@ const initialFormData = {
   report_info: {
     dieases: [] as IDiease[],
     medical_terms: [] as IDiagnosis[],
-    clinical_symptoms: [],
+    clinical_symptoms: [] as IClinicalSymptom[],
     facility_location: "",
     ordering_provider: "",
   },
@@ -56,9 +63,9 @@ const FormContext = createContext<FormContextType | null>(null);
 // Create Provider Component
 export const TestFormProvider = ({ children }) => {
   const [formData, setFormData] = useState(initialFormData);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(5);
 
-  console.log(formData);
+  // console.log(formData);
 
   return (
     <FormContext.Provider
