@@ -36,7 +36,7 @@ const AddTestForm = ({
           <Step2 prevStep={prevStep} nextStep={nextStep} dieases={dieases} />
         )}
         {step === 3 && <Step3 prevStep={prevStep} nextStep={nextStep} medicalTerms={medicalTerms}/>}
-        {step === 4 && <Step4 prevStep={prevStep} nextStep={nextStep} />}
+        {step === 4 && <Step4 prevStep={prevStep} nextStep={nextStep} medicalTerms={medicalTerms}/>}
         {step === 5 && <Step5 prevStep={prevStep} nextStep={nextStep} />}
         {step === 6 && <Step6 prevStep={prevStep} resetStep={resetStep} />}
       </div>

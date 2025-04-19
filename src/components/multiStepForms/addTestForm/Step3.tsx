@@ -24,7 +24,11 @@ const Step3 = ({
   const { formData, setFormData } = useTestFormContext();
   const [selectedMedicalDiagnosises, setSelectedMedicalDiagnosises] = useState<
     Diagnosis[]
-  >(formData?.report_info?.medical_terms);
+  >(
+    formData?.report_info?.medical_terms?.filter(
+      (item) => item?.type === "medical_diagnosis"
+    )
+  );
 
   // filter only medical diagnosis
   const medicalDiagnosises = medicalTerms?.filter(

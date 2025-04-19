@@ -1,46 +1,78 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import AnatomyWrapper from "@/components/page/testDetails/anatomy/anatomyWrapper";
-import { facilityOptions } from "@/constants/facilityOptions";
+import { useTestFormContext } from "@/contexts/testFormContext";
 
-interface Disorder {
-  id: number;
-  description: string;
+interface MedicalTerms {
+  content: string;
+  type: string;
 }
 
 const Step4 = ({
   prevStep,
   nextStep,
+  medicalTerms,
 }: {
   prevStep: () => void;
   nextStep: () => void;
+  medicalTerms: any[];
 }) => {
-  // State to hold selected disorders (simplified structure)
-  const [selectedDisorderOptions, setSelectedDisorderOptions] = useState<
-    Disorder[]
-  >([]);
+  const { formData, setFormData } = useTestFormContext();
+  const [selectedPainDescription, setSelectedPainDescription] = useState<
+    MedicalTerms[]
+  >(
+    formData?.report_info?.medical_terms?.filter(
+      (item) => item?.type === "pain_description"
+    )
+  );
+
+  // filter only pain descriptions
+  const painDescriptions = medicalTerms?.filter(
+    (item) => item?.type === "pain_description"
+  );
 
   // Function to handle checkbox change
-  const handleCheckboxChange = (
-    facilityId: number,
-    facilityDescription: string,
-    checked: boolean
-  ) => {
-    setSelectedDisorderOptions((prevSelected) => {
-      // If the checkbox is checked, add the facility to the selectedDisorders
-      if (checked) {
+  const handleCheckboxChange = (idx: number) => {
+    setSelectedPainDescription((prevSelected) => {
+      const selectedItem = painDescriptions[idx]; // Get the selected item using its index
+
+      // Check if the item is already in the state
+      const isAlreadySelected = prevSelected.some(
+        (item) => item.content === selectedItem.name
+      );
+
+      if (isAlreadySelected) {
+        // If the item is already selected, remove it from the state
+        return prevSelected.filter(
+          (item) => item.content !== selectedItem.name
+        );
+      } else {
+        // If the item is not selected, add it to the state
         return [
           ...prevSelected,
-          { id: facilityId, description: facilityDescription },
+          { content: selectedItem.name, type: selectedItem.type },
         ];
-      } else {
-        // If the checkbox is unchecked, remove the facility from the selectedDisorders
-        return prevSelected.filter((item) => item.id !== facilityId);
       }
     });
+  };
+
+  // handle next button
+  const handleNext = () => {
+    setFormData({
+      ...formData,
+      report_info: {
+        ...formData?.report_info,
+        medical_terms: [
+          ...formData?.report_info?.medical_terms,
+          ...selectedPainDescription,
+        ],
+      },
+    });
+    nextStep();
   };
 
   return (
@@ -49,22 +81,20 @@ const Step4 = ({
       <div className="flex flex-col-reverse lg:flex-row gap-8">
         <section className="w-full lg:w-2/3">
           <div className="grid gap-4">
-            {facilityOptions.facilityDetails.map((item) => (
-              <div key={item.id} className="flex gap-2">
+            {painDescriptions?.map((item, idx) => (
+              <div key={idx} className="flex gap-2">
                 {/* Render checkboxes for each facility */}
                 <Checkbox
-                  id={item.description}
-                  value={item.description}
-                  onCheckedChange={(checked) =>
-                    handleCheckboxChange(item.id, item.description, !!checked)
-                  }
+                  id={item?.name}
+                  value={item?.name}
+                  checked={selectedPainDescription.some(
+                    (selectedItem) => selectedItem.content === item.name
+                  )} // Check if the item exists in the selectedMedicalDiagnosises state
+                  onCheckedChange={() => handleCheckboxChange(idx)}
                   className="mt-1"
                 />
-                <Label
-                  htmlFor={item.description}
-                  className="text-sm text-stone-600"
-                >
-                  {item.description}
+                <Label htmlFor={item?.name} className="text-sm text-stone-600">
+                  {item?.name}
                 </Label>
               </div>
             ))}
@@ -82,7 +112,7 @@ const Step4 = ({
         <Button onClick={prevStep} className="md:px-6">
           <ChevronLeft /> Back
         </Button>
-        <Button onClick={nextStep} className="md:px-6">
+        <Button onClick={handleNext} className="md:px-6">
           Next <ChevronRight />
         </Button>
       </div>
