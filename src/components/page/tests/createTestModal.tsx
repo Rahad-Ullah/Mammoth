@@ -21,12 +21,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTestFormContext } from "@/contexts/testFormContext";
+import { IFacility } from "@/types/facility";
 
 const CreateTestModal = ({ facilities }) => {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [open, setOpen] = useState(false);
-  const [facility, setFacility] = useState("");
+  const [facility, setFacility] = useState<IFacility | null>(null);
   const { formData, setFormData } = useTestFormContext();
 
   const nextStep = () => setStep(step + 1);
@@ -36,7 +37,11 @@ const CreateTestModal = ({ facilities }) => {
   const handleConfirm = () => {
     setFormData({
       ...formData,
-      report_info: { ...formData?.report_info, facility_location: facility },
+      report_info: {
+        ...formData?.report_info,
+        facility_location: facility?._id as string,
+        ordering_provider: facility?.name as string,
+      },
     });
     setOpen(false);
     resetStep();
@@ -113,14 +118,18 @@ const CreateTestModal = ({ facilities }) => {
               <DialogTitle>Available facility in the system.</DialogTitle>
             </DialogHeader>
             <div>
-              <Select onValueChange={(value) => setFacility(value)}>
+              <Select
+                onValueChange={(value) =>
+                  setFacility(value as unknown as IFacility)
+                }
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a facility" />
                 </SelectTrigger>
                 <SelectContent>
                   {facilities?.length > 0 ? (
                     facilities?.map((item, idx: number) => (
-                      <SelectItem key={idx} value={item?._id}>
+                      <SelectItem key={idx} value={item}>
                         {item?.name}
                       </SelectItem>
                     ))
