@@ -23,8 +23,6 @@ const Step3 = ({
     Disorder[]
   >([]);
 
-  console.log(selectedDisorderOptions);
-
   // Function to handle checkbox change
   const handleCheckboxChange = (
     facilityId: number,

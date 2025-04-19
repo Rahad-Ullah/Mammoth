@@ -8,56 +8,88 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { disorderTypes } from "@/constants/disorderTypes";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import AnatomyWrapper from "@/components/page/testDetails/anatomy/anatomyWrapper";
+import { useTestFormContext } from "@/contexts/testFormContext";
 
-interface Disorder {
-  title: string;
-  disorders: string[];
+interface Diease {
+  name: string;
+  disorders: {
+    name: string;
+  }[];
 }
 
 const Step2 = ({
   prevStep,
   nextStep,
+  dieases,
 }: {
   prevStep: () => void;
   nextStep: () => void;
+  dieases: Diease[];
 }) => {
-  const [selectedDisorders, setSelectedDisorders] = useState<Disorder[]>([]);
-  console.log(selectedDisorders);
+  const { formData, setFormData } = useTestFormContext();
+  const [selectedDisorders, setSelectedDisorders] = useState<Diease[]>([]);
 
-  const handleCheckboxChange = (itemTitle, disorderType, checked) => {
+  // handle checkbox selection
+  const handleCheckboxChange = (dieasesIdx: number, disorderIdx: number) => {
     setSelectedDisorders((prevSelected) => {
-      // Check if the item already exists
-      const existingItem = prevSelected.find(
-        (item) => item.title === itemTitle
+      const disease = dieases[dieasesIdx]; // Get the selected disease using its index
+      const disorder = disease.disorders[disorderIdx]; // Get the selected disorder using its index
+
+      // Check if the disease already exists in selectedDisorders
+      const existingDisease = prevSelected.find(
+        (item) => item.name === disease.name
       );
 
-      // If the item doesn't exist, add it
-      if (!existingItem) {
-        return [
-          ...prevSelected,
-          {
-            title: itemTitle,
-            disorders: checked ? [disorderType] : [],
-          },
-        ];
+      if (existingDisease) {
+        // If the disease exists, check if the disorder is already selected
+        const isDisorderSelected = existingDisease.disorders.some(
+          (d) => d.name === disorder.name
+        );
+
+        if (isDisorderSelected) {
+          // If the disorder is already selected, remove it
+          return prevSelected
+            .map((item) =>
+              item.name === disease.name
+                ? {
+                    ...item,
+                    disorders: item.disorders.filter(
+                      (d) => d.name !== disorder.name
+                    ),
+                  }
+                : item
+            )
+            .filter((item) => item.disorders.length > 0); // Remove the disease if no disorders remain
+        } else {
+          // If the disorder is not selected, add it
+          return prevSelected.map((item) =>
+            item.name === disease.name
+              ? {
+                  ...item,
+                  disorders: [...item.disorders, disorder],
+                }
+              : item
+          );
+        }
+      } else {
+        // If the disease does not exist, add it with the selected disorder
+        return [...prevSelected, { name: disease.name, disorders: [disorder] }];
       }
-
-      // If the item exists, update it
-      const updatedItem = {
-        ...existingItem,
-        disorders: checked
-          ? [...existingItem.disorders, disorderType]
-          : existingItem.disorders.filter((type) => type !== disorderType),
-      };
-
-      // Replace the old item with the updated one
-      return prevSelected.map((item) =>
-        item.title === itemTitle ? updatedItem : item
-      );
     });
+  };
+
+  // handle next button
+  const handleNext = () => {
+    setFormData({
+      ...formData,
+      report_info: {
+        ...formData?.report_info,
+        dieases: selectedDisorders,
+      },
+    });
+    nextStep()
   };
 
   return (
@@ -66,53 +98,60 @@ const Step2 = ({
       <div className="flex flex-col-reverse lg:flex-row gap-8">
         <section className="w-full lg:w-2/3">
           <Accordion type="single" collapsible className="w-full grid gap-2">
-            {disorderTypes.painTypes.map((item) => (
-              <AccordionItem
-                key={item.id}
-                value={item.id.toString()}
-                className="border-none"
-              >
-                <div className="flex justify-between items-center gap-2">
-                  <div className="bg-zinc-100 rounded-lg w-full p-4 flex items-center gap-4">
-                    <p className="font-medium flex items-center gap-5">
-                      {item.title}
-                      <span className="text-xs font-medium text-zinc-400">
-                        {item.disorders.length} items
-                      </span>
-                    </p>
+            {dieases?.length > 0 ? (
+              dieases.map((item, idx) => (
+                <AccordionItem
+                  key={idx}
+                  value={item?.name}
+                  className="border-none"
+                >
+                  <div className="flex justify-between items-center gap-2">
+                    <div className="bg-zinc-100 rounded-lg w-full p-4 flex items-center gap-4">
+                      <p className="font-medium flex items-center gap-5">
+                        {item?.name}
+                        <span className="text-xs font-medium text-zinc-400">
+                          {item?.disorders?.length} items
+                        </span>
+                      </p>
+                    </div>
+                    <AccordionTrigger className="bg-zinc-100 p-5 rounded-lg"></AccordionTrigger>
                   </div>
-                  <AccordionTrigger className="bg-zinc-100 p-5 rounded-lg"></AccordionTrigger>
-                </div>
-                <AccordionContent className="p-2 md:p-5 lg:pr-20">
-                  <div className="grid gap-4 md:gap-2">
-                    {item.disorders.map((disorder) => (
-                      <div
-                        key={disorder.id}
-                        className="flex items-center gap-2"
-                      >
-                        <Checkbox
-                          id={disorder.type}
-                          value={disorder.type}
-                          onCheckedChange={(checked) =>
-                            handleCheckboxChange(
-                              item.title,
-                              disorder.type,
-                              checked
-                            )
-                          }
-                        />
-                        <Label
-                          htmlFor={disorder.type}
-                          className="text-sm text-stone-600"
+                  <AccordionContent className="p-2 md:p-5 lg:pr-20">
+                    <div className="grid gap-4 md:gap-2">
+                      {item.disorders.map((disorder, nestedIdx) => (
+                        <div
+                          key={nestedIdx}
+                          className="flex items-center gap-2"
                         >
-                          {disorder.type}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
+                          <Checkbox
+                            id={disorder?.name}
+                            value={disorder?.name}
+                            checked={selectedDisorders.some(
+                              (selectedDisease) =>
+                                selectedDisease.name === item.name &&
+                                selectedDisease.disorders.some(
+                                  (d) => d.name === disorder.name
+                                )
+                            )}
+                            onCheckedChange={() =>
+                              handleCheckboxChange(idx, nestedIdx)
+                            }
+                          />
+                          <Label
+                            htmlFor={disorder?.name}
+                            className="text-sm text-stone-600"
+                          >
+                            {disorder?.name}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))
+            ) : (
+              <p className="text-stone-500 text-center py-8">No data found</p>
+            )}
           </Accordion>
         </section>
         <section className="flex-1">
@@ -125,7 +164,7 @@ const Step2 = ({
         <Button onClick={prevStep} className="md:px-6">
           <ChevronLeft /> Back
         </Button>
-        <Button onClick={nextStep} className="md:px-6">
+        <Button onClick={handleNext} className="md:px-6">
           Next <ChevronRight />
         </Button>
       </div>

@@ -2,6 +2,13 @@
 
 import { createContext, useContext, useState } from "react";
 
+interface IDiease {
+  name: string;
+  disorders: {
+    name: string;
+  }[];
+}
+
 // Define the initial form data structure
 const initialFormData = {
   patient_info: {
@@ -21,7 +28,7 @@ const initialFormData = {
     orderingPhysician: "67d7d5c43ec57598786279af",
   },
   report_info: {
-    dieases: [],
+    dieases: [] as IDiease[],
     medical_terms: [],
     clinical_symptoms: [],
     facility_location: "",

@@ -34,8 +34,6 @@ const Step5 = ({
     { title: string; disorders: Disorder[] }[]
   >([]);
 
-  console.log(selectedDisorders);
-
   // Handle the checkbox change and update selected disorders
   const handleCheckboxChange = (
     accordionTitle: string,
