@@ -8,6 +8,10 @@ interface IDiease {
     name: string;
   }[];
 }
+interface IDiagnosis {
+  content: string;
+  type: string;
+}
 
 // Define the initial form data structure
 const initialFormData = {
@@ -29,7 +33,7 @@ const initialFormData = {
   },
   report_info: {
     dieases: [] as IDiease[],
-    medical_terms: [],
+    medical_terms: [] as IDiagnosis[],
     clinical_symptoms: [],
     facility_location: "",
     ordering_provider: "",
@@ -54,7 +58,7 @@ export const TestFormProvider = ({ children }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [step, setStep] = useState(1);
 
-  // console.log(formData);
+  console.log(formData);
 
   return (
     <FormContext.Provider

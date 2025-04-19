@@ -11,13 +11,14 @@ const AddTestPage = async ({ params }) => {
     tags: ["single-facility"],
   });
 
-  // console.log(facilityRes?.data[0]);
+  // console.log(facilityRes?.data[0]?.reasons);
 
   return (
     <div>
       <AddTestForm
         doctors={doctorsRes?.data}
         dieases={facilityRes?.data[0]?.disorders}
+        medicalTerms={facilityRes?.data[0]?.reasons}
       />
     </div>
   );

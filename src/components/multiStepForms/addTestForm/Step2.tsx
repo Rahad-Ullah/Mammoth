@@ -29,7 +29,9 @@ const Step2 = ({
   dieases: Diease[];
 }) => {
   const { formData, setFormData } = useTestFormContext();
-  const [selectedDisorders, setSelectedDisorders] = useState<Diease[]>([]);
+  const [selectedDisorders, setSelectedDisorders] = useState<Diease[]>(
+    formData?.report_info?.dieases
+  );
 
   // handle checkbox selection
   const handleCheckboxChange = (dieasesIdx: number, disorderIdx: number) => {
