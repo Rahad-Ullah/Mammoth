@@ -29,6 +29,8 @@ const CreateTestModal = ({ facilities }) => {
   const [open, setOpen] = useState(false);
   const [facility, setFacility] = useState<IFacility | null>(null);
   const { formData, setFormData } = useTestFormContext();
+  // set here default facilicy for quick intake
+  const defaultFacility = facilities[0];
 
   const nextStep = () => setStep(step + 1);
   const resetStep = () => setStep(1);
@@ -45,7 +47,9 @@ const CreateTestModal = ({ facilities }) => {
     });
     setOpen(false);
     resetStep();
-    router.push(`/dashboard/tests/add-new-test`);
+    router.push(
+      `/dashboard/tests/add-new-test/${facility?._id || defaultFacility?._id}`
+    );
   };
 
   return (
@@ -93,7 +97,17 @@ const CreateTestModal = ({ facilities }) => {
                 >
                   Full Intake (Recommended)
                 </Button>
-                <Button variant={"outline"} className="w-full">
+                <Button
+                  onClick={() =>
+                    router.push(
+                      `/dashboard/tests/add-new-test/${
+                        facility?._id || defaultFacility?._id
+                      }`
+                    )
+                  }
+                  variant={"outline"}
+                  className="w-full"
+                >
                   Quick Intake
                 </Button>
                 <DialogClose
