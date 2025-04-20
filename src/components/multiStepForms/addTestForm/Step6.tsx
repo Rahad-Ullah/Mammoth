@@ -25,23 +25,22 @@ import {
 } from "@/components/ui/select";
 import { anatomyPointsData } from "@/constants/anatomyPointsData";
 import { Separator } from "@/components/ui/separator";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTestFormContext } from "@/contexts/testFormContext";
+import { myFetch } from "@/utils/myFetch";
+import toast from "react-hot-toast";
+import { revalidate } from "@/helpers/revalidateHelper";
 
 const formSchema = addBiopsySampleFormSchema();
 
-const Step6 = ({
-  prevStep,
-  resetStep,
-}: {
-  prevStep: () => void;
-  resetStep: () => void;
-}) => {
+const Step6 = ({ prevStep, resetStep, facility }) => {
   const { formData, setFormData } = useTestFormContext();
   const [sampleSites, setSampleSites] = React.useState<
     { sample_area: string; sample_side: string; specimen_id: string }[]
-  >([]);
+  >(formData?.biopsy_info);
+  const [icd, setIcd] = useState<string[]>(formData?.report_info?.icd);
+  const [cpt, setCpt] = useState<string[]>(formData?.report_info?.cpt);
   const router = useRouter();
 
   // format a unique list of sample area
@@ -76,17 +75,81 @@ const Step6 = ({
     setSampleSites((prevSites) => prevSites.filter((_, idx) => idx !== index));
   };
 
-  const handleSubmit = () => {
-    setFormData({
+  // handle adding icd
+  const handleAddIcd = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const icdCode = formData.get("icd")?.toString().trim();
+
+    if (!icdCode) return; // Prevent adding empty ICD codes
+
+    setIcd((prevIcd) => [...prevIcd, icdCode]);
+    e.currentTarget.reset();
+  };
+
+  // handle adding cpt
+  const handleAddCpt = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const cptCode = formData.get("cpt")?.toString().trim();
+
+    if (!cptCode) return; // Prevent adding empty ICD codes
+
+    setCpt((prevCpt) => [...prevCpt, cptCode]);
+    e.currentTarget.reset();
+  };
+
+  // handle delete icd
+  const handleDeleteIcd = (index: number) => {
+    setIcd((prevIcd) => prevIcd.filter((_, idx) => idx !== index));
+  };
+
+  // handle delete cpt
+  const handleDeleteCpt = (index: number) => {
+    setCpt((prevCpt) => prevCpt.filter((_, idx) => idx !== index));
+  };
+
+  // handle submit the whole form
+  const handleSubmit = async () => {
+    toast.loading("Submitting...", { id: "intake" });
+    const newFormData = {
       ...formData,
       report_info: {
         ...formData?.report_info,
+        facility_location: facility?._id || "",
+        ordering_provider: facility?.name || "",
+        icd: icd,
+        cpt: cpt,
       },
       biopsy_info: sampleSites,
-    });
-    // resetStep();
-    // router.push(`/dashboard/tests`);
+    };
+    setFormData(newFormData);
+
+    try {
+      const res = await myFetch(`/patient/intake`, {
+        method: "POST",
+        body: newFormData,
+      });
+      console.log(res);
+      if (res?.success) {
+        toast.success(res?.message || "Submitted successfully", {
+          id: "intake",
+        });
+        revalidate("tests");
+        resetStep();
+        // router.push(`/dashboard/tests`);
+      } else {
+        toast.error(res?.message || "Failed to intake", { id: "intake" });
+      }
+    } catch (error) {
+      toast.error("Something went wrong", { id: "intake" });
+      console.error(error);
+    }
   };
+
+  console.log(formData);
   return (
     <div className="grid gap-8">
       {/* Body section */}
@@ -223,30 +286,74 @@ const Step6 = ({
             </Form>
           </div>
 
-          {/* ICD codes */}
           <div className="grid gap-4">
             <h3>
               Please remove any of the following that dont apply and add
               whatever you would like{" "}
             </h3>
+            {/* ICD codes */}
             <div className="bg-muted p-6 rounded-xl grid gap-4">
               <h1 className="font-medium">ICD&apos;s</h1>
-              <ul className="flex items-center gap-4 flex-wrap">
-                <li className="flex items-center gap-2 bg-background p-2 rounded-lg w-fit">
-                  <span>G60.3</span>{" "}
-                  <XIcon
-                    size={20}
-                    className="text-red-500/80 hover:text-destructive cursor-pointer"
-                  />
-                </li>
-                <li className="flex items-center gap-2 bg-background p-2 rounded-lg w-fit">
-                  <span>G60.3</span>{" "}
-                  <XIcon
-                    size={20}
-                    className="text-red-500/80 hover:text-destructive cursor-pointer"
-                  />
-                </li>
-              </ul>
+              {icd?.length > 0 && (
+                <ul className="flex items-center gap-4 flex-wrap">
+                  {icd?.map((item, idx: number) => (
+                    <li
+                      key={idx}
+                      className="flex items-center gap-2 bg-background p-2 rounded-lg w-fit"
+                    >
+                      <span>{item}</span>
+                      <XIcon
+                        onClick={() => handleDeleteIcd(idx)}
+                        size={20}
+                        className="text-red-500/80 hover:text-destructive cursor-pointer"
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <form onSubmit={handleAddIcd} className="flex gap-4">
+                <Input
+                  name="icd"
+                  placeholder="Enter icd code"
+                  className="bg-background"
+                  required
+                />
+                <Button type="submit" className="px-12">
+                  Add
+                </Button>
+              </form>
+            </div>
+            {/* CPT codes */}
+            <div className="bg-muted p-6 rounded-xl grid gap-4">
+              <h1 className="font-medium">CPT&apos;s</h1>
+              {cpt?.length > 0 && (
+                <ul className="flex items-center gap-4 flex-wrap">
+                  {cpt?.map((item, idx: number) => (
+                    <li
+                      key={idx}
+                      className="flex items-center gap-2 bg-background p-2 rounded-lg w-fit"
+                    >
+                      <span>{item}</span>
+                      <XIcon
+                        onClick={() => handleDeleteCpt(idx)}
+                        size={20}
+                        className="text-red-500/80 hover:text-destructive cursor-pointer"
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <form onSubmit={handleAddCpt} className="flex gap-4">
+                <Input
+                  name="cpt"
+                  placeholder="Enter cpt code"
+                  className="bg-background"
+                  required
+                />
+                <Button type="submit" className="px-12">
+                  Add
+                </Button>
+              </form>
             </div>
           </div>
         </section>

@@ -50,6 +50,8 @@ const initialFormData = {
     clinical_symptoms: [] as IClinicalSymptom[],
     facility_location: "",
     ordering_provider: "",
+    icd: [] as string[],
+    cpt: [] as string[],
   },
   biopsy_info: [] as IBiopsySample[],
 };
@@ -69,7 +71,7 @@ const FormContext = createContext<FormContextType | null>(null);
 // Create Provider Component
 export const TestFormProvider = ({ children }) => {
   const [formData, setFormData] = useState(initialFormData);
-  const [step, setStep] = useState(5);
+  const [step, setStep] = useState(6);
 
   // console.log(formData);
 

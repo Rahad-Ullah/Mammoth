@@ -11,7 +11,7 @@ const AddTestPage = async ({ params }) => {
     tags: ["single-facility"],
   });
 
-  // console.log(facilityRes?.data[0]?.clinical_symptoms);
+  // console.log(facilityRes?.data[0]);
 
   return (
     <div>
@@ -20,6 +20,7 @@ const AddTestPage = async ({ params }) => {
         dieases={facilityRes?.data[0]?.disorders}
         medicalTerms={facilityRes?.data[0]?.reasons}
         clinicalSymptoms={facilityRes?.data[0]?.clinical_symptoms}
+        facility={facilityRes?.data[0]}
       />
     </div>
   );

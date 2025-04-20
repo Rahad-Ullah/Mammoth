@@ -14,7 +14,8 @@ const AddTestForm = ({
   doctors = [],
   dieases = [],
   medicalTerms = [],
-  clinicalSymptoms = []
+  clinicalSymptoms = [],
+  facility,
 }) => {
   const { step, setStep } = useTestFormContext();
 
@@ -36,10 +37,34 @@ const AddTestForm = ({
         {step === 2 && (
           <Step2 prevStep={prevStep} nextStep={nextStep} dieases={dieases} />
         )}
-        {step === 3 && <Step3 prevStep={prevStep} nextStep={nextStep} medicalTerms={medicalTerms}/>}
-        {step === 4 && <Step4 prevStep={prevStep} nextStep={nextStep} medicalTerms={medicalTerms}/>}
-        {step === 5 && <Step5 prevStep={prevStep} nextStep={nextStep} clinicalSymptoms={clinicalSymptoms}/>}
-        {step === 6 && <Step6 prevStep={prevStep} resetStep={resetStep} />}
+        {step === 3 && (
+          <Step3
+            prevStep={prevStep}
+            nextStep={nextStep}
+            medicalTerms={medicalTerms}
+          />
+        )}
+        {step === 4 && (
+          <Step4
+            prevStep={prevStep}
+            nextStep={nextStep}
+            medicalTerms={medicalTerms}
+          />
+        )}
+        {step === 5 && (
+          <Step5
+            prevStep={prevStep}
+            nextStep={nextStep}
+            clinicalSymptoms={clinicalSymptoms}
+          />
+        )}
+        {step === 6 && (
+          <Step6
+            prevStep={prevStep}
+            resetStep={resetStep}
+            facility={facility}
+          />
+        )}
       </div>
     </div>
   );
