@@ -139,7 +139,7 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
         });
         revalidate("tests");
         resetStep();
-        // router.push(`/dashboard/tests`);
+        router.push(`/dashboard/tests`);
       } else {
         toast.error(res?.message || "Failed to intake", { id: "intake" });
       }
@@ -149,7 +149,6 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
     }
   };
 
-  console.log(formData);
   return (
     <div className="grid gap-8">
       {/* Body section */}
@@ -246,12 +245,6 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
                           </SelectItem>
                           <SelectItem key="Right" value="Right">
                             Right
-                          </SelectItem>
-                          <SelectItem key="Both" value="Both">
-                            Both
-                          </SelectItem>
-                          <SelectItem key="Middle" value="Middle">
-                            Middle
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -358,7 +351,7 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
           </div>
         </section>
         <section className="flex-1">
-          <AnatomyWrapper testPoints={[]} />
+          <AnatomyWrapper testPoints={sampleSites} />
         </section>
       </div>
 
