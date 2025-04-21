@@ -30,11 +30,13 @@ import Link from "next/link";
 import DashboardTable from "@/components/table";
 import TablePagination from "@/components/table-pagination";
 import columns from "@/components/tableColumns/facilityTableColumns";
-import { TFacility } from "@/types/facility";
+import { IFacility, TFacility } from "@/types/facility";
 import Image from "next/image";
 import { facilityStatuses } from "@/constants/facilityStatuses";
 import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 import { IUser } from "@/types/user";
+import { exportToExcel } from "@/utils/exportToExcel";
+import exportToPDF from "@/utils/exportToPdf";
 
 const FacilitiesTable = ({
   facilities = [],
@@ -79,15 +81,59 @@ const FacilitiesTable = ({
     },
   });
 
+  // handle excel button
+  const exportData = facilities?.map((item: IFacility) => ({
+    Sl_No: item?.facilityId,
+    Name: item?.name,
+    Address: item?.address,
+    Doctors: item?.doctors?.map((item) => item?.name).join(", "),
+    Representative: item?.representative?.name,
+    Status: item?.status,
+  }));
+
+  // handle pdf button
+  const handleExportToPDF = () => {
+    const headers = [
+      "Sl No",
+      "Name",
+      "Address",
+      "Doctors",
+      "Representative",
+      "Status",
+    ];
+
+    const data = exportData.map((item) => [
+      item.Sl_No,
+      item.Name,
+      item.Address,
+      item.Doctors,
+      item.Representative,
+      item.Status,
+    ]);
+
+    exportToPDF({
+      title: "Facilities Table",
+      headers,
+      data,
+      fileName: "FacilitiesTable.pdf",
+    });
+  };
+
   return (
     <div className="w-full bg-white p-4 rounded-xl h-full">
       {/* table top option bar */}
       <section className="flex flex-wrap justify-center md:justify-end gap-4 items-center pb-4">
         {/* PDF button */}
-        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+        <Button
+          onClick={handleExportToPDF}
+          className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary"
+        >
           <Image src={pdfIcon} alt="pdf" width={24} height={24} />
         </Button>
-        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+        <Button
+          onClick={() => exportToExcel("Facilities", exportData)}
+          className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary"
+        >
           <Image src={excelIcon} alt="pdf" width={24} height={24} />
         </Button>
 
