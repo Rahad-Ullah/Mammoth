@@ -28,11 +28,12 @@ import { capitalizeSentence } from "@/utils/capitalizeSentence";
 import DashboardTable from "@/components/table";
 import TablePagination from "@/components/table-pagination";
 import columns from "@/components/tableColumns/testTableColumn";
-import { TTest } from "@/types/test";
+import { ITest, TTest } from "@/types/test";
 import CreateTestModal from "@/components/page/tests/createTestModal";
 import Image from "next/image";
 import { testStatuses } from "@/constants/testStatus";
 import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
+import { exportToExcel } from "@/utils/exportToExcel";
 
 const TestsTable = ({ tests = [], meta, filters, facilitiesData = [] }) => {
   const updateMultiSearchParams = useUpdateMultiSearchParams();
@@ -74,15 +75,30 @@ const TestsTable = ({ tests = [], meta, filters, facilitiesData = [] }) => {
     },
   });
 
+  const exportData = tests?.map((item: ITest) => ({
+    Report_No: item?.report_no,
+    Facility_Name: item?.facility_location?.name,
+    Facility_Location: item?.facility_location?.address,
+    Patient_Name: item?.patient?.name,
+    Physician: item?.doctor?.name,
+    Apply_Date: item?.apply_date?.split("T")[0],
+    Report_Date: item?.report_date?.split("T")[0],
+    Status: item?.status,
+  }));
+
   return (
     <div className="w-full bg-white p-4 rounded-xl h-full">
       {/* table top option bar */}
       <section className="flex flex-wrap justify-center md:justify-end gap-4 items-center pb-4">
-        {/* PDF button */}
+        {/* PDF button for downloading table as pdf */}
         <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
           <Image src={pdfIcon} alt="pdf" width={24} height={24} />
         </Button>
-        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+        {/* Excel button for downloading table as excel */}
+        <Button
+          onClick={() => exportToExcel("Tests", exportData)}
+          className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary"
+        >
           <Image src={excelIcon} alt="pdf" width={24} height={24} />
         </Button>
 
