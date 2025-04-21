@@ -18,7 +18,10 @@ export async function middleware(request: NextRequest) {
 
   // Redirect root path '/' to '/dashboard/tests'
   if (pathname === "/") {
-    return NextResponse.redirect(new URL("/dashboard/tests", request.url));
+    // return NextResponse.redirect(new URL("/dashboard/tests", request.url));
+    const baseUrl = request.url; // Use the request's base URL for redirection
+    const redirectUrl = new URL("/dashboard/tests", baseUrl); // Ensure correct absolute URL
+    return NextResponse.redirect(redirectUrl);
   }
 
   // Get the current user from the session
@@ -52,7 +55,8 @@ export async function middleware(request: NextRequest) {
   }
 
   // Default redirect if access is denied
-  return NextResponse.redirect(new URL("/dashboard/tests", request.url));
+  const defaultRedirectUrl = new URL("/dashboard/tests", request.url);
+  return NextResponse.redirect(defaultRedirectUrl);
 }
 
 // See "Matching Paths" below to learn more
