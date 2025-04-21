@@ -17,12 +17,25 @@ const FacilitiesPage = async ({ searchParams }) => {
     tags: ["facilities"],
   });
 
+  const doctorsRes = await myFetch(`/user/users?role=Doctor&limit=1000000`, {
+    tags: ["users"],
+  });
+
+  const representativeRes = await myFetch(
+    `/user/users?role=Representative&limit=1000000`,
+    {
+      tags: ["users"],
+    }
+  );
+
   return (
     <>
       <FacilitiesTable
         facilities={res?.data}
         meta={res?.pagination}
         filters={{ doctor, representative, status }}
+        doctorsData={doctorsRes?.data}
+        representativeData={representativeRes?.data}
       />
     </>
   );

@@ -31,6 +31,8 @@ import columns from "@/components/tableColumns/billTableColumn";
 import Image from "next/image";
 import { IBill } from "@/types/bill";
 import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
+import { exportToExcel } from "@/utils/exportToExcel";
+import exportToPDF from "@/utils/exportToPdf";
 
 // Extract unique roles from data
 const paymentStatus = ["Paid", "Unpaid"];
@@ -66,15 +68,59 @@ const BillsTable = ({ bills = [], meta, filters }) => {
     },
   });
 
+  // handle excel export data
+  const exportData = bills?.map((item: IBill) => ({
+    Report_No: item?.report?.report_no,
+    Order_Provider: item?.report?.ordering_provider,
+    Physician: item?.report?.doctor?.name,
+    Bill_Date: item?.bill_date?.split("T")[0],
+    Bill_Amount: item?.total_amount,
+    Status: item?.isBilled ? "Paid" : "Unpaid",
+  }));
+
+  // handle pdf button
+  const handleExportToPDF = () => {
+    const headers = [
+      "Report No",
+      "Order Provider",
+      "Physician",
+      "Bill Date",
+      "Bill Amount",
+      "Status",
+    ];
+
+    const data = exportData.map((item) => [
+      item.Report_No,
+      item.Order_Provider,
+      item.Physician,
+      item.Bill_Date,
+      item.Bill_Amount,
+      item.Status,
+    ]);
+
+    exportToPDF({
+      title: "Bills Table",
+      headers,
+      data,
+      fileName: "BillsTable.pdf",
+    });
+  };
+
   return (
     <div className="w-full bg-white p-4 rounded-xl h-full">
       {/* table top option bar */}
       <section className="flex justify-end gap-4 items-center pb-4">
         {/* PDF button */}
-        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+        <Button
+          onClick={handleExportToPDF}
+          className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary"
+        >
           <Image src={pdfIcon} alt="pdf" width={24} height={24} />
         </Button>
-        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+        <Button
+          onClick={() => exportToExcel("Bills Data", exportData)}
+          className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary"
+        >
           <Image src={excelIcon} alt="pdf" width={24} height={24} />
         </Button>
 

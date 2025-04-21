@@ -17,8 +17,12 @@ const TestPage = async ({ searchParams }) => {
     tags: ["tests"],
   });
 
-  const facilitiesRes = await myFetch(`/facility?status=Active`, {
+  const facilitiesRes = await myFetch(`/facility?limit=1000000`, {
     tags: ["facilities"],
+  });
+
+  const usersRes = await myFetch(`/user/users?role=Doctor&limit=1000000`, {
+    tags: ["users"],
   });
 
   return (
@@ -28,6 +32,7 @@ const TestPage = async ({ searchParams }) => {
         meta={res?.pagination}
         filters={{ doctor, facility, status }}
         facilitiesData={facilitiesRes?.data}
+        doctorsData={usersRes?.data}
       />
     </>
   );

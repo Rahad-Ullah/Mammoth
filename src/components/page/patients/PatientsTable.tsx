@@ -34,7 +34,12 @@ import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 import exportToPDF from "@/utils/exportToPdf";
 import { exportToExcel } from "@/utils/exportToExcel";
 
-const PatientsTable = ({ patients = [], meta, filters }) => {
+const PatientsTable = ({
+  patients = [],
+  meta,
+  filters,
+  insuranceData = [],
+}) => {
   const updateMultiSearchParams = useUpdateMultiSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -45,9 +50,7 @@ const PatientsTable = ({ patients = [], meta, filters }) => {
   const [rowSelection, setRowSelection] = React.useState({});
 
   // Extract unique insurances from data
-  const insurances = Array.from(
-    new Set(patients?.map((item: IPatient) => item.insuranceCompany))
-  );
+  const insurances = insuranceData?.map((item: IPatient) => item.name);
 
   // Table Pagination, Sorting, Filtering, Column Visibility, Row Selection
   const table = useReactTable<TPatient>({
@@ -124,7 +127,9 @@ const PatientsTable = ({ patients = [], meta, filters }) => {
               variant="outline"
               className="capitalize shadow text-[#929292]"
             >
-              {filters?.insurance ? `${filters?.insurance}` : "Insurance"}{" "}
+              {filters?.insuranceCompany
+                ? `${filters?.insuranceCompany}`
+                : "Insurance"}{" "}
               <ChevronDown className="text-primary" />
             </Button>
           </DropdownMenuTrigger>
@@ -134,7 +139,7 @@ const PatientsTable = ({ patients = [], meta, filters }) => {
                 updateMultiSearchParams({ insuranceCompany: null, page: null })
               }
             >
-              All Facility
+              All Insurances
             </DropdownMenuItem>
             {insurances.map((item, idx) => (
               <DropdownMenuItem

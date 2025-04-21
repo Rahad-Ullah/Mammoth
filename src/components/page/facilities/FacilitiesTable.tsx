@@ -30,12 +30,19 @@ import Link from "next/link";
 import DashboardTable from "@/components/table";
 import TablePagination from "@/components/table-pagination";
 import columns from "@/components/tableColumns/facilityTableColumns";
-import { IFacility, TFacility } from "@/types/facility";
+import { TFacility } from "@/types/facility";
 import Image from "next/image";
 import { facilityStatuses } from "@/constants/facilityStatuses";
 import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
+import { IUser } from "@/types/user";
 
-const FacilitiesTable = ({ facilities = [], filters, meta }) => {
+const FacilitiesTable = ({
+  facilities = [],
+  filters,
+  meta,
+  doctorsData = [],
+  representativeData = [],
+}) => {
   const updateMultiSearchParams = useUpdateMultiSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -47,9 +54,10 @@ const FacilitiesTable = ({ facilities = [], filters, meta }) => {
 
   // Extract unique roles from data
   const statuses = Array.from(new Set(facilityStatuses.map((item) => item)));
-  const representatives = Array.from(
-    new Set(facilities?.map((item: IFacility) => item?.representative?.name))
-  );
+
+  const doctors = doctorsData?.map((item: IUser) => item?.name);
+
+  const representatives = representativeData?.map((item: IUser) => item?.name);
 
   const table = useReactTable<any>({
     data: facilities || [],
@@ -102,7 +110,7 @@ const FacilitiesTable = ({ facilities = [], filters, meta }) => {
             >
               All Doctor
             </DropdownMenuItem>
-            {representatives.map((item, idx) => (
+            {doctors.map((item, idx) => (
               <DropdownMenuItem
                 key={idx}
                 onClick={() =>

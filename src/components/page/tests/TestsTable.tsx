@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import * as React from "react";
@@ -35,8 +36,15 @@ import { testStatuses } from "@/constants/testStatus";
 import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 import { exportToExcel } from "@/utils/exportToExcel";
 import exportToPDF from "@/utils/exportToPdf";
+import { IUser } from "@/types/user";
 
-const TestsTable = ({ tests = [], meta, filters, facilitiesData = [] }) => {
+const TestsTable = ({
+  tests = [],
+  meta,
+  filters,
+  facilitiesData = [],
+  doctorsData = [],
+}) => {
   const updateMultiSearchParams = useUpdateMultiSearchParams();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -47,14 +55,10 @@ const TestsTable = ({ tests = [], meta, filters, facilitiesData = [] }) => {
   const [rowSelection, setRowSelection] = React.useState({});
 
   // Extract unique statuses from data
-  const doctors = Array.from(
-    new Set(tests?.map((item: TTest) => item?.doctor?.name))
-  );
+  const doctors = doctorsData?.map((item: IUser) => item?.name);
 
   // Extract unique facilities from data
-  const facilities = Array.from(
-    new Set(tests?.map((item: TTest) => item.ordering_provider))
-  );
+  const facilities = facilitiesData?.map((item: any) => item?.name);
 
   const table = useReactTable<TTest>({
     data: tests || [],

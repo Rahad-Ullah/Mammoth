@@ -42,7 +42,7 @@ const Step1 = ({ nextStep, representatives }) => {
 
   // 3. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setFormData(values);
+    setFormData({ ...formData, ...values });
     nextStep();
   }
 

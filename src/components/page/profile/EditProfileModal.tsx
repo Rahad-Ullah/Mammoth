@@ -96,6 +96,7 @@ const EditProfileModal = ({ user }: { user: TUser }) => {
           id: "update-profile",
         });
         revalidate("user-profile");
+        revalidate("users");
       }
     } catch (error) {
       toast.error("Failed to update", {

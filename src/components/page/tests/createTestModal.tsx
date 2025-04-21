@@ -29,8 +29,14 @@ const CreateTestModal = ({ facilities }) => {
   const [open, setOpen] = useState(false);
   const [facility, setFacility] = useState<IFacility | null>(null);
   const { formData, setFormData } = useTestFormContext();
+
+  // filter active facilities
+  const activeFacilities = facilities?.filter(
+    (item) => item?.status === "Active"
+  );
+
   // set here default facilicy for quick intake
-  const defaultFacility = facilities[0];
+  const defaultFacility = activeFacilities[0];
 
   const nextStep = () => setStep(step + 1);
   const resetStep = () => setStep(1);
@@ -141,8 +147,8 @@ const CreateTestModal = ({ facilities }) => {
                   <SelectValue placeholder="Select a facility" />
                 </SelectTrigger>
                 <SelectContent>
-                  {facilities?.length > 0 ? (
-                    facilities?.map((item, idx: number) => (
+                  {activeFacilities?.length > 0 ? (
+                    activeFacilities?.map((item, idx: number) => (
                       <SelectItem key={idx} value={item}>
                         {item?.name}
                       </SelectItem>
