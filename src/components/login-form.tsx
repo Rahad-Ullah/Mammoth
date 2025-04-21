@@ -18,7 +18,7 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { myFetch } from "@/utils/myFetch";
 
 export function LoginForm({
@@ -28,6 +28,7 @@ export function LoginForm({
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { setToken } = useAuthContext();
   const router = useRouter();
+  const redirect = useSearchParams().get("redirect");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     toast.loading("Logging in...", {
@@ -49,7 +50,7 @@ export function LoginForm({
       if (res?.success) {
         toast.success("Login successful", { id: "login" });
         setToken(res?.data?.accessToken);
-        router.push("/dashboard/tests");
+        router.push(`${redirect || "/dashboard/tests"}`);
       } else {
         toast.error(res?.message as string, { id: "login" });
       }
