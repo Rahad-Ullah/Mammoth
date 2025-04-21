@@ -31,6 +31,8 @@ import { IPatient, TPatient } from "@/types/patient";
 import columns from "@/components/tableColumns/patientTableColumn";
 import Image from "next/image";
 import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
+import exportToPDF from "@/utils/exportToPdf";
+import { exportToExcel } from "@/utils/exportToExcel";
 
 const PatientsTable = ({ patients = [], meta, filters }) => {
   const updateMultiSearchParams = useUpdateMultiSearchParams();
@@ -68,15 +70,50 @@ const PatientsTable = ({ patients = [], meta, filters }) => {
     },
   });
 
+  // format data for excel export
+  const exportData = patients?.map((item: IPatient) => ({
+    Sl_No: item?.id,
+    Name: item?.name,
+    Phone: item?.phone,
+    Email: item?.email,
+    Insurance: item?.insuranceCompany,
+  }));
+
+  // handle pdf button
+  const handleExportToPDF = () => {
+    const headers = ["Sl No", "Name", "Phone", "Email", "Insurance"];
+
+    const data = exportData.map((item) => [
+      item.Sl_No,
+      item.Name,
+      item.Phone,
+      item.Email,
+      item.Insurance,
+    ]);
+
+    exportToPDF({
+      title: "Patient Table",
+      headers,
+      data,
+      fileName: "PatientTable.pdf",
+    });
+  };
+
   return (
     <div className="w-full bg-white p-4 rounded-xl h-full">
       {/* table top option bar */}
       <section className="flex flex-wrap justify-center md:justify-end gap-4 items-center pb-4">
         {/* PDF button */}
-        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+        <Button
+          onClick={handleExportToPDF}
+          className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary"
+        >
           <Image src={pdfIcon} alt="pdf" width={24} height={24} />
         </Button>
-        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+        <Button
+          onClick={() => exportToExcel("PatientTable", exportData)}
+          className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary"
+        >
           <Image src={excelIcon} alt="pdf" width={24} height={24} />
         </Button>
 

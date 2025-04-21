@@ -76,6 +76,7 @@ const TestsTable = ({ tests = [], meta, filters, facilitiesData = [] }) => {
     },
   });
 
+  // format data for excel export
   const exportData = tests?.map((item: ITest) => ({
     Report_No: item?.report_no,
     Facility_Name: item?.facility_location?.name,
