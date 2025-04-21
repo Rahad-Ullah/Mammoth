@@ -55,7 +55,7 @@ const pathologistSchema = z.object({
       comment: z.string().optional(),
     })
   ),
-  biopsiesDemonstrate: z.number().min(1, "This field is required."),
+  biopsiesDemonstrate: z.string().min(1, "This field is required."),
   nerveFiberDensity: z.string().min(1, "This field is required."),
   neuropathyType: z.string().min(1, "Please select a neuropathy type."),
 });

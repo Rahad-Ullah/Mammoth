@@ -34,6 +34,7 @@ import Image from "next/image";
 import { testStatuses } from "@/constants/testStatus";
 import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 import { exportToExcel } from "@/utils/exportToExcel";
+import exportToPDF from "@/utils/exportToPdf";
 
 const TestsTable = ({ tests = [], meta, filters, facilitiesData = [] }) => {
   const updateMultiSearchParams = useUpdateMultiSearchParams();
@@ -86,12 +87,47 @@ const TestsTable = ({ tests = [], meta, filters, facilitiesData = [] }) => {
     Status: item?.status,
   }));
 
+  // handle pdf button
+  const handleExportToPDF = () => {
+    const headers = [
+      "Report No",
+      "Facility Name",
+      "Facility Location",
+      "Patient Name",
+      "Physician",
+      "Apply Date",
+      "Report Date",
+      "Status",
+    ];
+
+    const data = exportData.map((item) => [
+      item.Report_No,
+      item.Facility_Name,
+      item.Facility_Location,
+      item.Patient_Name,
+      item.Physician,
+      item.Apply_Date,
+      item.Report_Date,
+      item.Status,
+    ]);
+
+    exportToPDF({
+      title: "Tests Table",
+      headers,
+      data,
+      fileName: "TestsTable.pdf",
+    });
+  };
+
   return (
     <div className="w-full bg-white p-4 rounded-xl h-full">
       {/* table top option bar */}
       <section className="flex flex-wrap justify-center md:justify-end gap-4 items-center pb-4">
         {/* PDF button for downloading table as pdf */}
-        <Button className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary">
+        <Button
+          onClick={handleExportToPDF}
+          className="bg-gradient-to-tl from-[#CEE9FF] to-[#E1E3EB] text-primary"
+        >
           <Image src={pdfIcon} alt="pdf" width={24} height={24} />
         </Button>
         {/* Excel button for downloading table as excel */}
