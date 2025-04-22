@@ -16,7 +16,7 @@ const UserCard = ({ user }: { user: any }) => {
           alt="user image"
           width={200}
           height={200}
-          className="rounded-2xl"
+          className="rounded-2xl size-56 object-cover"
         ></Image>
       </figure>
       <div className="">

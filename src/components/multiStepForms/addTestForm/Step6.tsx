@@ -76,13 +76,13 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
       );
       // If it's not a duplicate, add it to the array
       if (!isDuplicate) {
+        form.resetField("specimen_id");
         return [...prevSites, values];
       }
       // Otherwise, return the original array
       toast.error("Sample already added", {
         id: "intake",
       });
-      form.resetField("specimen_id");
       return prevSites;
     });
   }
@@ -167,7 +167,6 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
         method: "POST",
         body: newFormData,
       });
-      console.log(res);
       if (res?.success) {
         toast.success(res?.message || "Submitted successfully", {
           id: "intake",

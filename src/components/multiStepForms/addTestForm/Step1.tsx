@@ -205,7 +205,7 @@ const Step1 = ({ nextStep, doctors, insurances }) => {
                     </FormControl>
                     <SelectContent>
                       {insurances?.map((insurance, idx: number) => (
-                        <SelectItem key={idx} value={insurance?._id}>
+                        <SelectItem key={idx} value={insurance?.name}>
                           {insurance?.name}
                         </SelectItem>
                       ))}

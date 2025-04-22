@@ -80,7 +80,7 @@ const PatientDetailsPage = async ({ params }: { params: PageParams }) => {
                 </section>
                 {/* Anatomy Image section */}
                 <section>
-                  <AnatomyWrapper testPoints={test.biopsy_samples} />
+                  <AnatomyWrapper testPoints={test.biopsy_sample} />
                 </section>
               </section>
             </AccordionContent>

@@ -1,5 +1,4 @@
 import type { NextRequest } from "next/server";
-
 import { NextResponse } from "next/server";
 import getProfile from "./utils/getProfile";
 
@@ -7,20 +6,21 @@ const authRoutes = ["/login", "/forgot-password"];
 const roleBasedRoutes = {
   USER: ["/dashboard"],
   ADMIN: [/^\/dashboard(\/.*)?$/],
-  // add more role here if needed
+  // add more roles here if needed
 };
 
 type TRole = keyof typeof roleBasedRoutes;
 
-// This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Logging request for debugging
+  console.log("Incoming request:", request.nextUrl.href);
+
   // Redirect root path '/' to '/dashboard/tests'
   if (pathname === "/") {
-    // return NextResponse.redirect(new URL("/dashboard/tests", request.url));
-    const baseUrl = request.url; // Use the request's base URL for redirection
-    const redirectUrl = new URL("/dashboard/tests", baseUrl); // Ensure correct absolute URL
+    const redirectUrl = new URL("/dashboard/tests", request.nextUrl.href);
+    console.log("Redirecting to:", redirectUrl.toString());
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -28,23 +28,21 @@ export async function middleware(request: NextRequest) {
   const user = await getProfile();
 
   if (!user) {
-    // Allow unauthenticated access to auth routes
     if (authRoutes.includes(pathname)) {
       return NextResponse.next();
     } else {
       // Redirect unauthenticated users to login
-      return NextResponse.redirect(
-        new URL(`/login?redirect=${pathname}`, request.url)
-      );
+      const loginRedirectUrl = new URL(`/login?redirect=${pathname}`, request.nextUrl.href);
+      console.log("Unauthenticated redirect:", loginRedirectUrl.toString());
+      return NextResponse.redirect(loginRedirectUrl);
     }
   }
 
   const role = (user.role as string).toUpperCase() as TRole;
 
-  //   Check role-based access
+  // Check role-based access
   if (role && roleBasedRoutes[role]) {
     const allowedRoutes = roleBasedRoutes[role];
-
     const hasAccess = allowedRoutes.some((route) =>
       typeof route === "string" ? pathname === route : pathname.match(route)
     );
@@ -55,11 +53,12 @@ export async function middleware(request: NextRequest) {
   }
 
   // Default redirect if access is denied
-  const defaultRedirectUrl = new URL("/dashboard/tests", request.url);
+  const defaultRedirectUrl = new URL("/dashboard/tests", request.nextUrl.href);
+  console.log("Access denied, redirecting to:", defaultRedirectUrl.toString());
   return NextResponse.redirect(defaultRedirectUrl);
 }
 
-// See "Matching Paths" below to learn more
+// Matching paths configuration
 export const config = {
   matcher: ["/", "/dashboard/:path*", "/login", "/forgot-password"],
 };

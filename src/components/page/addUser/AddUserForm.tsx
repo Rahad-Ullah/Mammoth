@@ -96,6 +96,9 @@ const AddNewUserForm = ({ facilities }) => {
       if (res?.success) {
         toast.success("User added successfully!", { id: "add-user" });
         await revalidate("users");
+        form.reset();
+        setImagePreview(null);
+        setSignaturePreview(null);
       } else {
         toast.error(res?.message || "Failed to add user.", { id: "add-user" });
       }
