@@ -23,7 +23,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 const Step5 = ({ prevStep, resetStep, clinicalSymptoms }) => {
-  const { formData, setFormData } = useFacilityFormContext();
+  const { formData, setFormData, initialFormData } = useFacilityFormContext();
 
   // Initialize local state for formatted diseases
   const [formatedDieses, setFormatedDieses] = useState(
@@ -130,7 +130,7 @@ const Step5 = ({ prevStep, resetStep, clinicalSymptoms }) => {
     );
   };
 
-  // handle next button
+  // handle submit button
   const handleSubmit = async () => {
     const newFormData = { ...formData, clinical_symptoms: formatedDieses };
     setFormData(newFormData);
@@ -149,6 +149,7 @@ const Step5 = ({ prevStep, resetStep, clinicalSymptoms }) => {
         });
         resetStep();
         revalidate("facilities");
+        setFormData(initialFormData); // Reset form data to initial state
       } else {
         toast.error(res.message || "Failed to submit facility", {
           id: "create-facility",

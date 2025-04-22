@@ -35,7 +35,7 @@ import { revalidate } from "@/helpers/revalidateHelper";
 const formSchema = addBiopsySampleFormSchema();
 
 const Step6 = ({ prevStep, resetStep, facility }) => {
-  const { formData, setFormData } = useTestFormContext();
+  const { formData, setFormData, initialFormData } = useTestFormContext();
   const [sampleSites, setSampleSites] = React.useState<
     { sample_area: string; sample_side: string; specimen_id: string }[]
   >(formData?.biopsy_info);
@@ -176,6 +176,7 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
         revalidate("patients");
         revalidate("single-patient");
         resetStep();
+        setFormData(initialFormData); // reset the form data
         router.push(`/dashboard/tests`);
       } else {
         toast.error(res?.message || "Failed to intake", { id: "intake" });
