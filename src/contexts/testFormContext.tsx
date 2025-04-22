@@ -29,20 +29,20 @@ interface IBiopsySample {
 // Define the initial form data structure
 const initialFormData = {
   patient_info: {
-    firstname: "Delware",
-    lastname: "Hossen",
-    email: "delware@gmail.com",
-    phone: "01234567890",
-    address: "Bansree, Dhaka",
-    aptNumber: "12345",
-    gender: "Male",
-    dateOfBirth: "1990-05-15",
-    insuranceCompany: "ABC Health Insurance",
-    memberId: "1234565",
-    reasonsForVisit: ["Routine Checkup", "Mild Fever"] as string[],
-    sensorySymptoms: ["Tingling in Hands"] as string[],
-    ethnicity: "Asian",
-    orderingPhysician: "67d7d5c43ec57598786279af",
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    address: "",
+    aptNumber: "",
+    gender: "",
+    dateOfBirth: "",
+    insuranceCompany: "",
+    memberId: "",
+    reasonsForVisit: [] as string[],
+    sensorySymptoms: [] as string[],
+    ethnicity: "",
+    orderingPhysician: "",
   },
   report_info: {
     dieases: [] as IDiease[],
@@ -71,7 +71,7 @@ const FormContext = createContext<FormContextType | null>(null);
 // Create Provider Component
 export const TestFormProvider = ({ children }) => {
   const [formData, setFormData] = useState(initialFormData);
-  const [step, setStep] = useState(6);
+  const [step, setStep] = useState(1);
 
   // console.log(formData);
 

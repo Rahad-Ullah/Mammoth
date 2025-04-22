@@ -67,7 +67,24 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
-    setSampleSites([...sampleSites, values]);
+    setSampleSites((prevSites) => {
+      // Check if the new value already exists in the array
+      const isDuplicate = prevSites.some(
+        (site) =>
+          site.sample_area === values.sample_area &&
+          site.sample_side === values.sample_side
+      );
+      // If it's not a duplicate, add it to the array
+      if (!isDuplicate) {
+        return [...prevSites, values];
+      }
+      // Otherwise, return the original array
+      toast.error("Sample already added", {
+        id: "intake",
+      });
+      form.resetField("specimen_id");
+      return prevSites;
+    });
   }
 
   // handle delete site
@@ -84,7 +101,16 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
 
     if (!icdCode) return; // Prevent adding empty ICD codes
 
-    setIcd((prevIcd) => [...prevIcd, icdCode]);
+    setIcd((prevIcd) => {
+      if (!prevIcd.includes(icdCode)) {
+        return [...prevIcd, icdCode];
+      }
+      // Show a toast message if it's a duplicate
+      toast.error("ICD code already added", {
+        id: "icd-duplicate",
+      });
+      return prevIcd;
+    });
     e.currentTarget.reset();
   };
 
@@ -97,7 +123,16 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
 
     if (!cptCode) return; // Prevent adding empty ICD codes
 
-    setCpt((prevCpt) => [...prevCpt, cptCode]);
+    setCpt((prevCpt) => {
+      if (!prevCpt.includes(cptCode)) {
+        return [...prevCpt, cptCode];
+      }
+      // Show a toast message if it's a duplicate
+      toast.error("CPT code already added", {
+        id: "cpt-duplicate",
+      });
+      return prevCpt;
+    });
     e.currentTarget.reset();
   };
 
@@ -138,6 +173,8 @@ const Step6 = ({ prevStep, resetStep, facility }) => {
           id: "intake",
         });
         revalidate("tests");
+        revalidate("patients");
+        revalidate("single-patient");
         resetStep();
         router.push(`/dashboard/tests`);
       } else {

@@ -10,8 +10,11 @@ const AddTestPage = async ({ params }) => {
   const facilityRes = await myFetch(`/facility/${id}`, {
     tags: ["single-facility"],
   });
+  const insuranceRes = await myFetch(`/insurance`, {
+    tags: ["insurance"],
+  });
 
-  // console.log(facilityRes?.data[0]);
+  // console.log(insuranceRes?.data);
 
   return (
     <div>
@@ -20,6 +23,7 @@ const AddTestPage = async ({ params }) => {
         dieases={facilityRes?.data[0]?.disorders}
         medicalTerms={facilityRes?.data[0]?.reasons}
         clinicalSymptoms={facilityRes?.data[0]?.clinical_symptoms}
+        insurances={insuranceRes?.data}
         facility={facilityRes?.data[0]}
       />
     </div>

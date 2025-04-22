@@ -15,6 +15,7 @@ const AddTestForm = ({
   dieases = [],
   medicalTerms = [],
   clinicalSymptoms = [],
+  insurances = [],
   facility,
 }) => {
   const { step, setStep } = useTestFormContext();
@@ -33,7 +34,13 @@ const AddTestForm = ({
         <Progress value={(100 / 6) * step} className="h-1 bg-zinc-200" />
       </div>
       <div className="">
-        {step === 1 && <Step1 nextStep={nextStep} doctors={doctors} />}
+        {step === 1 && (
+          <Step1
+            nextStep={nextStep}
+            doctors={doctors}
+            insurances={insurances}
+          />
+        )}
         {step === 2 && (
           <Step2 prevStep={prevStep} nextStep={nextStep} dieases={dieases} />
         )}

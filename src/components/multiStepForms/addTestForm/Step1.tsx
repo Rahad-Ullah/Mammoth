@@ -27,7 +27,7 @@ import React from "react";
 import TagInput from "@/components/tag-input";
 import { ethnicityData } from "@/constants/tests";
 
-const Step1 = ({ nextStep, doctors }) => {
+const Step1 = ({ nextStep, doctors, insurances }) => {
   const formContext = useTestFormContext();
 
   // get the form data from from context
@@ -194,9 +194,23 @@ const Step1 = ({ nextStep, doctors }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Insurance Company</FormLabel>
-                  <FormControl>
-                    <Input placeholder="ABC Health Insurance" {...field} />
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a insurance company" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {insurances?.map((insurance, idx: number) => (
+                        <SelectItem key={idx} value={insurance?._id}>
+                          {insurance?.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
