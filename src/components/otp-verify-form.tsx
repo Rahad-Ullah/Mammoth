@@ -13,7 +13,7 @@ import Image from "next/image";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "./ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import toast from "react-hot-toast";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, redirect } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,6 +39,10 @@ export function OtpVerifyForm({
       oneTimeCode: "",
     },
   });
+
+  if (!email) {
+    redirect("/forgot-password");
+  }
 
   // handle form submit
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
@@ -102,7 +106,7 @@ export function OtpVerifyForm({
           </figure>
           <CardTitle className="text-2xl">Verification code</CardTitle>
           <CardDescription className="pt-2 text-primary-foreground">
-            We sent a reset link to contact@dscode...com. Enter 5 digit code
+            We sent a reset link to <strong>{email}</strong>. Enter 5 digit code
             that is mentioned in the email.
           </CardDescription>
         </CardHeader>
