@@ -4,7 +4,7 @@ import getProfile from "./utils/getProfile";
 
 const authRoutes = ["/login", "/forgot-password"];
 const roleBasedRoutes = {
-  USER: ["/dashboard"],
+  USER: [/^\/dashboard(\/.*)?$/],
   ADMIN: [/^\/dashboard(\/.*)?$/],
   // add more roles here if needed
 };
@@ -14,13 +14,16 @@ type TRole = keyof typeof roleBasedRoutes;
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Logging request for debugging
-  console.log("Incoming request:", request.nextUrl.href);
+  // Construct the origin manually if request.nextUrl.origin is undefined
+  const origin =
+    request.nextUrl.origin ||
+    `${
+      request.headers.get("x-forwarded-proto") || "https"
+    }://${request.headers.get("host")}`;
 
-  // Redirect root path '/' to '/dashboard/tests'
+  // Redirect unauthenticated users to login
   if (pathname === "/") {
-    const redirectUrl = new URL("/dashboard/tests", request.nextUrl.href);
-    console.log("Redirecting to:", redirectUrl.toString());
+    const redirectUrl = new URL("/dashboard/tests", origin); // Use constructed origin
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -31,10 +34,8 @@ export async function middleware(request: NextRequest) {
     if (authRoutes.includes(pathname)) {
       return NextResponse.next();
     } else {
-      // Redirect unauthenticated users to login
-      const loginRedirectUrl = new URL(`/login?redirect=${pathname}`, request.nextUrl.href);
-      console.log("Unauthenticated redirect:", loginRedirectUrl.toString());
-      return NextResponse.redirect(loginRedirectUrl);
+      const loginUrl = new URL(`/login?redirect=${pathname}`, origin); // Use constructed origin
+      return NextResponse.redirect(loginUrl);
     }
   }
 
@@ -43,6 +44,7 @@ export async function middleware(request: NextRequest) {
   // Check role-based access
   if (role && roleBasedRoutes[role]) {
     const allowedRoutes = roleBasedRoutes[role];
+
     const hasAccess = allowedRoutes.some((route) =>
       typeof route === "string" ? pathname === route : pathname.match(route)
     );
@@ -53,12 +55,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // Default redirect if access is denied
-  const defaultRedirectUrl = new URL("/dashboard/tests", request.nextUrl.href);
-  console.log("Access denied, redirecting to:", defaultRedirectUrl.toString());
+  const defaultRedirectUrl = new URL("/dashboard/tests", origin); // Use constructed origin
   return NextResponse.redirect(defaultRedirectUrl);
 }
 
-// Matching paths configuration
 export const config = {
   matcher: ["/", "/dashboard/:path*", "/login", "/forgot-password"],
 };
