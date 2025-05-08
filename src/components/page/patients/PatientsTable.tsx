@@ -21,7 +21,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { capitalizeSentence } from "@/utils/capitalizeSentence";
@@ -33,6 +32,7 @@ import Image from "next/image";
 import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 import exportToPDF from "@/utils/exportToPdf";
 import { exportToExcel } from "@/utils/exportToExcel";
+import { Combobox } from "@/components/ui/combobox";
 
 const PatientsTable = ({
   patients = [],
@@ -121,41 +121,18 @@ const PatientsTable = ({
         </Button>
 
         {/* Insurance Filter Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="capitalize shadow text-[#929292]"
-            >
-              {filters?.insuranceCompany
-                ? `${filters?.insuranceCompany}`
-                : "Insurance"}{" "}
-              <ChevronDown className="text-primary" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem
-              onClick={() =>
-                updateMultiSearchParams({ insuranceCompany: null, page: null })
-              }
-            >
-              All Insurances
-            </DropdownMenuItem>
-            {insurances.map((item, idx) => (
-              <DropdownMenuItem
-                key={idx}
-                onClick={() =>
-                  updateMultiSearchParams({
-                    insuranceCompany: item,
-                    page: null,
-                  })
-                }
-              >
-                {capitalizeSentence(item as string)}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Combobox
+          name={"Insurance Company"}
+          options={insurances?.map((item) => ({
+            label: item,
+            value: item,
+          }))}
+          defaultValue={filters?.insuranceCompany}
+          onValueChange={(value: string) =>
+            updateMultiSearchParams({ page: null, insuranceCompany: value })
+          }
+          className="text-[#929292] shadow"
+        />
 
         {/* Columns Filter Dropdown */}
         <DropdownMenu>
