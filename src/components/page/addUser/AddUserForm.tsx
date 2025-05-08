@@ -58,7 +58,6 @@ const AddNewUserForm = ({ facilities }) => {
       firstname: "",
       lastname: "",
       email: "",
-      password: "",
       phone: "",
       address: "",
       company_name: "",
@@ -179,25 +178,6 @@ const AddNewUserForm = ({ facilities }) => {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="me@example.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* password Field */}
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Enter password"
-                      {...field}
-                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -326,7 +306,7 @@ const AddNewUserForm = ({ facilities }) => {
                             <CommandGroup>
                               {facilities?.map((item) => (
                                 <CommandItem
-                                  value={item?._id}
+                                  value={item?.name}
                                   key={item._id}
                                   onSelect={() => {
                                     form.setValue(

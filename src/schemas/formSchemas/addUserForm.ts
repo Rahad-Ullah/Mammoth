@@ -41,9 +41,6 @@ export const addUserFormSchema = (role: string) => {
       email: z.string().email().min(1, {
         message: "Must be a valid email address.",
       }),
-      password: z.string().min(8, {
-        message: "Must be at least 8 digit.",
-      }),
       phone: z.string().min(10).max(14, {
         message: "Must be a valid phone number.",
       }),
