@@ -37,6 +37,7 @@ import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 import { exportToExcel } from "@/utils/exportToExcel";
 import exportToPDF from "@/utils/exportToPdf";
 import { IUser } from "@/types/user";
+import { Combobox } from "@/components/ui/combobox";
 
 const TestsTable = ({
   tests = [],
@@ -143,81 +144,27 @@ const TestsTable = ({
           <Image src={excelIcon} alt="pdf" width={24} height={24} />
         </Button>
 
-        {/* Doctor Filter Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="capitalize shadow text-[#929292]"
-            >
-              {filters?.doctor ? `${filters?.doctor}` : "Doctor"}{" "}
-              <ChevronDown className="text-primary" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem
-              onClick={() =>
-                updateMultiSearchParams({
-                  page: null,
-                  doctor: null,
-                })
-              }
-            >
-              All Doctors
-            </DropdownMenuItem>
-            {doctors.map((item, idx) => (
-              <DropdownMenuItem
-                key={idx}
-                onClick={() =>
-                  updateMultiSearchParams({
-                    page: null,
-                    doctor: item as string,
-                  })
-                }
-              >
-                {capitalizeSentence(item as string)}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Doctor filetering */}
+        <Combobox
+          name={"Doctor"}
+          options={doctors?.map((item) => ({ label: item, value: item }))}
+          defaultValue={filters?.doctor}
+          onValueChange={(value: string) =>
+            updateMultiSearchParams({ page: null, doctor: value })
+          }
+          className="text-[#929292] shadow"
+        />
 
         {/* Facility Filter Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="capitalize shadow text-[#929292]"
-            >
-              {filters?.facility ? `${filters?.facility}` : "Facility"}{" "}
-              <ChevronDown className="text-primary" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem
-              onClick={() =>
-                updateMultiSearchParams({
-                  page: null,
-                  facility: null,
-                })
-              }
-            >
-              All Facilities
-            </DropdownMenuItem>
-            {facilities.map((item, idx) => (
-              <DropdownMenuItem
-                key={idx}
-                onClick={() =>
-                  updateMultiSearchParams({
-                    page: null,
-                    facility: item as string,
-                  })
-                }
-              >
-                {capitalizeSentence(item as string)}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Combobox
+          name={"Facility"}
+          options={facilities?.map((item) => ({ label: item, value: item }))}
+          defaultValue={filters?.facility}
+          onValueChange={(value: string) =>
+            updateMultiSearchParams({ page: null, facility: value })
+          }
+          className="text-[#929292] shadow"
+        />
 
         {/* Status Filter Dropdown */}
         <DropdownMenu>

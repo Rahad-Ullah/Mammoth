@@ -10,7 +10,7 @@ export const useUpdateMultiSearchParams = () => {
 
     // Iterate over the updates object and set or delete keys
     Object.entries(updates).forEach(([key, value]) => {
-      if (value !== null) {
+      if (value !== null && value !== undefined && value !== "") {
         searchParams.set(key, value); // Add or update the key-value pair
       } else {
         searchParams.delete(key); // Remove the key if the value is null
