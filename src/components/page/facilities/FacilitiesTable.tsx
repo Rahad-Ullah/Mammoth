@@ -37,6 +37,7 @@ import { useUpdateMultiSearchParams } from "@/hooks/useUpdateMultiSearchParams";
 import { IUser } from "@/types/user";
 import { exportToExcel } from "@/utils/exportToExcel";
 import exportToPDF from "@/utils/exportToPdf";
+import { Combobox } from "@/components/ui/combobox";
 
 const FacilitiesTable = ({
   facilities = [],
@@ -138,70 +139,29 @@ const FacilitiesTable = ({
         </Button>
 
         {/* Doctor Filter Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="capitalize shadow text-[#929292]"
-            >
-              {filters?.doctor ? `${filters?.doctor}` : "Doctor"}{" "}
-              <ChevronDown className="text-primary" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem
-              onClick={() =>
-                updateMultiSearchParams({ doctor: null, page: null })
-              }
-            >
-              All Doctor
-            </DropdownMenuItem>
-            {doctors.map((item, idx) => (
-              <DropdownMenuItem
-                key={idx}
-                onClick={() =>
-                  updateMultiSearchParams({ doctor: item, page: null })
-                }
-              >
-                {capitalizeSentence(item as string)}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Combobox
+          name={"Doctor"}
+          options={doctors?.map((item) => ({ label: item, value: item }))}
+          defaultValue={filters?.doctor}
+          onValueChange={(value: string) =>
+            updateMultiSearchParams({ page: null, doctor: value })
+          }
+          className="text-[#929292] shadow"
+        />
 
         {/* Representative Filter Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="capitalize shadow text-[#929292]"
-            >
-              {filters?.representative
-                ? `${filters?.representative}`
-                : "Representative"}{" "}
-              <ChevronDown className="text-primary" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem
-              onClick={() =>
-                updateMultiSearchParams({ representative: null, page: null })
-              }
-            >
-              All Representative
-            </DropdownMenuItem>
-            {representatives.map((item, idx) => (
-              <DropdownMenuItem
-                key={idx}
-                onClick={() =>
-                  updateMultiSearchParams({ representative: item, page: null })
-                }
-              >
-                {capitalizeSentence(item as string)}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Combobox
+          name={"Representative"}
+          options={representatives?.map((item) => ({
+            label: item,
+            value: item,
+          }))}
+          defaultValue={filters?.representative}
+          onValueChange={(value: string) =>
+            updateMultiSearchParams({ page: null, representative: value })
+          }
+          className="text-[#929292] shadow"
+        />
 
         {/* Activity Filter Dropdown */}
         <DropdownMenu>
